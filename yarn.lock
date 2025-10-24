@@ -9,6 +9,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@faker-js/faker@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-10.1.0.tgz#eb72869d01ccbff41a77aa7ac851ce1ac9371129"
+  integrity sha512-C3mrr3b5dRVlKPJdfrAXS8+dq+rq8Qm5SNRazca0JKgw1HQERFmrVb0towvMmw5uu8hHKNiQasMaR/tydf3Zsg==
+
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz#7a0ee601f60f99a20c7c7c5ff0c80388c1189bd6"
@@ -148,6 +153,13 @@
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "^5.0.0"
     "@types/serve-static" "*"
+
+"@types/faker@^6.6.11":
+  version "6.6.11"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-6.6.11.tgz#ef9e9490c96522c7c36f90f00b17a88d78a1bd84"
+  integrity sha512-/m/YZdfPXeM3dnSBz4JDbbYXelBm+onjsX2+LZV1XPJjIOpdhoc8ngws67iyXdLJwLiigOcejBufaDdjuVWy3Q==
+  dependencies:
+    faker "*"
 
 "@types/http-errors@*":
   version "2.0.5"
@@ -542,6 +554,11 @@ exsolve@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/exsolve/-/exsolve-1.0.7.tgz#3b74e4c7ca5c5f9a19c3626ca857309fa99f9e9e"
   integrity sha512-VO5fQUzZtI6C+vx4w/4BWJpg3s/5l+6pRQEHzFRM8WFi4XffSP1Z+4qi7GbjWbvRQEbdIco5mIMq+zX4rPuLrw==
+
+faker@*:
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-6.6.6.tgz#e9529da0109dca4c7c5dbfeaadbd9234af943033"
+  integrity sha512-9tCqYEDHI5RYFQigXFwF1hnCwcWCOJl/hmll0lr5D2Ljjb0o4wphb69wikeJDz5qCEzXCoPvG6ss5SDP6IfOdg==
 
 fast-check@^3.23.1:
   version "3.23.2"

@@ -1,0 +1,18 @@
+model Equipment {
+    id          String   @id @default(uuid())
+    name        String
+    serialNo    String   @unique
+    category    String
+    hospital    Hospital @relation(fields: [hospitalId], references: [id])
+    hospitalId  String
+    assignedTo  User?    @relation(fields: [userId], references: [id])
+    userId      String?  // staff who is responsible
+    category    EquipmentCategory
+    logs        EquipmentLog[]
+    state       EquipmentState
+
+    createdBy String?
+    updatedBy String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
