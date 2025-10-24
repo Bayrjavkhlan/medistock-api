@@ -1,0 +1,41 @@
+{
+  "name": "medistock-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "http": "^0.0.1-security",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "node_modules",
+      "dist",
+      "*.test.ts"
+    ],
+    "watch": [
+      "./src"
+    ],
+    "exec": "ts-node --transpile-only -r tsconfig-paths/register src/app.ts",
+    "ext": "ts"
+  }
+}
