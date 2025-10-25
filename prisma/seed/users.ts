@@ -5,31 +5,35 @@ export async function seedUsers(prisma: PrismaClient) {
 
   const usersData: Prisma.UserCreateInput[] = [
     {
-      email: "admin@system.com",
-      password: "password123",
+      id: "user-1",
+      email: "admin@test.com",
+      password: "A123",
       name: "System Admin",
       roles: { connect: [{ key: EnumUserRole.ADMIN }] },
     },
     {
-      email: "hospital1.admin@central.com",
-      password: "password123",
+      id: "user-2",
+      email: "hadmin1@test.com",
+      password: "H123",
       name: "Central Hospital Admin",
       hospital: { connect: { id: "hosp-1" } },
-      roles: { connect: [{ key: EnumUserRole.ADMIN }] },
+      roles: { connect: [{ key: EnumUserRole.HOSPITAL_ADMIN }] },
     },
     {
-      email: "hospital1.staff1@central.com",
-      password: "password123",
+      id: "user-3",
+      email: "staff1@test.com",
+      password: "S123",
       name: "Central Staff 1",
       hospital: { connect: { id: "hosp-1" } },
       roles: { connect: [{ key: EnumUserRole.STAFF }] },
     },
     {
-      email: "hospital2.admin@northside.com",
-      password: "password123",
+      id: "user-4",
+      email: "staff2@test.com",
+      password: "S123",
       name: "Northside Admin",
       hospital: { connect: { id: "hosp-2" } },
-      roles: { connect: [{ key: EnumUserRole.HOSPITAL_ADMIN }] },
+      roles: { connect: [{ key: EnumUserRole.STAFF }] },
     },
   ];
 

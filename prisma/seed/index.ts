@@ -1,22 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 import { seedRoles } from "./roles";
+import { seedHospitals } from "./hospitals";
+import { seedAddresses } from "./address";
+import { seedUsers } from "./users";
+import { seedEquipment } from "./equipment";
+import { seedEquipmentLogs } from "./equipmentsLog";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("1!");
-
   try {
-    console.log("12!");
+    await seedRoles(prisma);
+    await seedHospitals(prisma);
+    await seedAddresses(prisma);
+    await seedUsers(prisma);
+    await seedEquipment(prisma);
+    await seedEquipmentLogs(prisma);
 
-    await seedRoles();
-    // await seedHospitals(prisma);
-    // await seedAddresses(prisma);
-    // await seedUsers(prisma);
-    // await seedEquipment(prisma);
     console.log("All seed data inserted successfully!");
-  } catch (e) {
-    console.error("Seeding error:", e);
+  } catch (error) {
+    console.error("Seeding error:", error);
   } finally {
     await prisma.$disconnect();
   }

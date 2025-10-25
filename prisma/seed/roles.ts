@@ -1,4 +1,4 @@
-import { PrismaClient, EnumUserRole } from "@prisma/client";
+import { EnumUserRole, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ const roleData: { key: EnumUserRole; name: string }[] = [
   { key: EnumUserRole.STAFF, name: "Staff Member" },
 ];
 
-export const seedRoles = async () => {
+export const seedRoles = async (prisma: PrismaClient) => {
   const upsertTx = roleData.map((role) =>
     prisma.role.upsert({
       where: { key: role.key },
@@ -20,8 +20,3 @@ export const seedRoles = async () => {
   await prisma.$transaction(upsertTx);
   console.log("Roles seeded successfully!");
 };
-
-// Run seed
-seedRoles()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
