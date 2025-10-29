@@ -1,0 +1,16 @@
+model Hospital {
+  id          String  @id @default(uuid())
+  name        String
+  phoneNumber String?
+  email       String?
+
+  address Address?
+  users   User[]
+
+  equipments Equipment[]
+
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
