@@ -18,6 +18,7 @@
     "@as-integrations/express5": "^1.1.2",
     "@faker-js/faker": "^10.1.0",
     "@prisma/client": "5.18.0",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -30,6 +31,7 @@
     "nodemon": "^3.1.10"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.4",

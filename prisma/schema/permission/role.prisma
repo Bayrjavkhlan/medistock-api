@@ -1,0 +1,7 @@
+model Role {
+  id   String       @id @default(uuid())
+  key  EnumUserRole @unique
+  name String
+
+  users User[]
+}

@@ -8,3 +8,14 @@ export const UsersWhereInput = inputObjectType({
     t.nullable.field("roleKey", { type: EnumUserRoleType });
   },
 });
+
+export const UserCreateInput = inputObjectType({
+  name: "UserCreateInput",
+  definition: (t) => {
+    t.nonNull.string("name");
+    t.nonNull.string("email");
+    t.nonNull.string("phone");
+    t.nonNull.list.nonNull.field("roleKeys", { type: EnumUserRoleType });
+    t.nonNull.string("hospitalId");
+  },
+});
