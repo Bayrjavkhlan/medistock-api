@@ -11,7 +11,8 @@
     "prisma:migration": "yarn prisma:generate && yarn prisma migrate dev --create-only",
     "prisma:migrate": "yarn prisma:generate && yarn prisma migrate dev",
     "prisma:seed": "ts-node --transpile-only -r tsconfig-paths/register prisma/seed/index.ts",
-    "type:check": "tsc --noEmit"
+    "type:check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@apollo/server": "^5.0.0",
@@ -35,16 +36,19 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.4",
     "@types/faker": "^6.6.11",
     "@types/node": "^24.9.1",
+    "eslint": "^9.38.0",
     "prisma": "5.18.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2"
   },
   "nodemonConfig": {
     "ignore": [
