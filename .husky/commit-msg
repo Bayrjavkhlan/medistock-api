@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/husky.sh"
 
-yarn commitlint --edit "$1"
+ts-node --esm commitlint.config.ts --edit "$1"
