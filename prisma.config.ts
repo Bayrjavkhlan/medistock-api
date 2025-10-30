@@ -1,4 +1,5 @@
 import path from "node:path";
+// @ts-ignore
 import { defineConfig, env } from "prisma/config";
 import dotenv from "dotenv";
 
