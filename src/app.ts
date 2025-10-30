@@ -1,22 +1,24 @@
-import express, { Express } from "express";
-import cors from "cors";
-import { env } from "@/config";
-import { createServer } from "http";
-import cookieParser from "cookie-parser";
-import { ApolloServer } from "@apollo/server";
-import { schema } from "./graphql/schema";
-import { prisma } from "./graphql/context";
+import "@/lib/dayjs";
 
-import { expressMiddleware } from "@as-integrations/express5";
-import helmet from "helmet";
-import routes from "./routes";
-import { Logger } from "./lib/logger";
+import { ApolloServer } from "@apollo/server";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
 } from "@apollo/server/plugin/landingPage/default";
-import "@/lib/dayjs";
+import { expressMiddleware } from "@as-integrations/express5";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Express } from "express";
+import helmet from "helmet";
+import { createServer } from "http";
+
+import { env } from "@/config";
+
+import { prisma } from "./graphql/context";
+import { schema } from "./graphql/schema";
+import { Logger } from "./lib/logger";
+import routes from "./routes";
 
 const app: Express = express();
 

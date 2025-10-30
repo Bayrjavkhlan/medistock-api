@@ -2,10 +2,21 @@
 
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default tseslint.config(
   {
-    ignores: ["**/node_modules/**", "**/dist/**", "eslint.config.mjs"],
+    ignores: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "eslint.config.mjs",
+      "prisma/generated/**",
+      "prisma/migrations/**",
+      "prisma/seed/**",
+      "tsconfig.json",
+      "prisma.config.ts",
+      "src/graphql/generated/**",
+    ],
   },
 
   eslint.configs.recommended,
@@ -22,10 +33,10 @@ export default tseslint.config(
 
     plugins: {
       "@typescript-eslint": tseslint.plugin,
+      "simple-import-sort": simpleImportSort,
     },
 
     rules: {
-      // --- TypeScript specific ---
       "@typescript-eslint/explicit-module-boundary-types": "error",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
@@ -35,13 +46,11 @@ export default tseslint.config(
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
       "@typescript-eslint/no-unnecessary-condition": "warn",
       "@typescript-eslint/switch-exhaustiveness-check": "warn",
-
-      // --- Promises & async ---
       "no-return-await": "off",
       "@typescript-eslint/return-await": "error",
-
-      // --- General JavaScript ---
       "no-console": "off",
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
     },
   }
 );

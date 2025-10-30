@@ -1,4 +1,5 @@
 import { hashSync } from "bcrypt";
+
 import { env } from "@/config";
 
 const PASS_LENGTH = 8;

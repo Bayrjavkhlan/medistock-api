@@ -1,6 +1,7 @@
-import { EnumUserRoleType } from "@/graphql/typedef";
 import { objectType } from "nexus";
 import { Role } from "nexus-prisma";
+
+import { EnumUserRoleType } from "@/graphql/typedef";
 
 export const RoleObjectType = objectType({
   name: Role.$name,

@@ -1,4 +1,5 @@
 import { queryField } from "nexus";
+
 import { UsersObjectType } from "../types";
 
 export const Users = queryField("users", {

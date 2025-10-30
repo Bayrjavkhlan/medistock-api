@@ -1,5 +1,6 @@
-import { EnumUserRoleType } from "@/graphql/typedef/enum.types";
 import { inputObjectType } from "nexus";
+
+import { EnumUserRoleType } from "@/graphql/typedef/enum.types";
 
 export const UsersWhereInput = inputObjectType({
   name: "UsersWhereInput",

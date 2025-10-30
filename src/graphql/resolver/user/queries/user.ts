@@ -1,4 +1,5 @@
 import { nonNull, queryField, stringArg } from "nexus";
+
 import { UserObjectType } from "../types/object.types";
 
 export const UserDetail = queryField("userDetail", {

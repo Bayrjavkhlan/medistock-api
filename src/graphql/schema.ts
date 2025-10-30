@@ -1,5 +1,6 @@
 import { makeSchema } from "nexus";
 import { join } from "path";
+
 import * as resolvers from "./resolver";
 import * as types from "./typedef";
 

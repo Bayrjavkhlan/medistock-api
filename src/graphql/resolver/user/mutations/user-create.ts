@@ -1,6 +1,7 @@
+import { mutationField, nonNull } from "nexus";
+
 import { checkDuplicateUser } from "@/utils/checkDuplicateUser";
 import { generatePassword } from "@/utils/generatePassword";
-import { mutationField, nonNull } from "nexus";
 
 export const userCreate = mutationField("userCreate", {
   type: "Boolean",
@@ -17,18 +18,19 @@ export const userCreate = mutationField("userCreate", {
 
     const { passwordHashed } = generatePassword(email);
 
-    const data: any = {
-      name,
-      email,
-      phone,
-      password: passwordHashed,
-      roles: {
-        connect: roleKeys.map((key: string) => ({ key })),
+    await ctx.prisma.user.create({
+      data: {
+        name,
+        email,
+        phone,
+        password: passwordHashed,
+        roles: {
+          connect: roleKeys.map((key) => ({ key })),
+        },
+        ...(hospitalId && { hospital: { connect: { id: hospitalId } } }),
       },
-      ...(hospitalId && { hospital: { connect: { id: hospitalId } } }),
-    };
+    });
 
-    const userCreated = await ctx.prisma.user.create({ data });
-    return !!userCreated;
+    return true;
   },
 });

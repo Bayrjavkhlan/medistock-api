@@ -1,8 +1,8 @@
 import { GraphQLScalarType } from "graphql";
 import {
-  JSONResolver,
   DateTimeResolver,
   EmailAddressResolver,
+  JSONResolver,
 } from "graphql-scalars";
 import { asNexusMethod } from "nexus";
 

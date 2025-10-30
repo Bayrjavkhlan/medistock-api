@@ -1,6 +1,8 @@
 import { arg, mutationField, nonNull, stringArg } from "nexus";
-import { UserCreateInput } from "../types";
+
 import { checkDuplicateUser } from "@/utils/checkDuplicateUser";
+
+import { UserCreateInput } from "../types";
 
 export const UserUpdate = mutationField("userUpdate", {
   type: "Boolean",
