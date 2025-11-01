@@ -16,7 +16,9 @@ export const userCreate = mutationField("userCreate", {
       throw new Error("User with this email or phone already exists.");
     }
 
-    const { passwordHashed } = generatePassword(email);
+    const { password, passwordHashed } = generatePassword(email);
+
+    console.log("password:\t", password);
 
     await ctx.prisma.user.create({
       data: {

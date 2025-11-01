@@ -1,7 +1,83 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  EnumUserRole,
+  Hospital,
+  PrismaClient,
+  Role,
+  User,
+} from "@prisma/client";
+import { Request, Response } from "express";
+import { TokenExpiredError } from "jsonwebtoken";
 
-export const prisma = new PrismaClient();
+import { env } from "@/config";
+import { verifyAccessToken } from "@/lib/auth/jwt";
+import { prisma } from "@/lib/prisma";
+
+export type TUser = {
+  user: User & { roles: Role[] };
+  hospital: Hospital;
+  rolekey: EnumUserRole;
+};
+
+type CreateContext = {
+  req: Request;
+  res: Response;
+};
 
 export type Context = {
+  req: Request;
+  res: Response;
   prisma: PrismaClient;
+  reqUser: TUser | null;
 };
+
+const verifyToken = (req: Request) => {
+  const headerToken =
+    req.headers.authorization && req.headers.authorization.split("Bearer ")[1];
+  const token = req.cookies[env.AUTH_TOKEN_KEY] || headerToken;
+
+  if (token) {
+    try {
+      const { userId } = verifyAccessToken(token);
+      return userId;
+    } catch (error) {
+      const tokenExpires = error instanceof TokenExpiredError;
+      if (tokenExpires) throw new Error("Access token has expired");
+      throw new Error("Invalid access token");
+    }
+  }
+  return undefined;
+};
+
+export const findRequestUser = async (
+  userId?: string
+): Promise<TUser | null> => {
+  if (!userId) return null;
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      hospital: true,
+      roles: true,
+    },
+  });
+  if (!user) return null;
+
+  const rolekey: EnumUserRole = user.roles[0]!.key;
+  return {
+    user,
+    hospital: user.hospital!,
+    rolekey,
+  };
+};
+
+const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
+  const userId = verifyToken(req);
+  const reqUser = await findRequestUser(userId);
+  return {
+    req,
+    res,
+    prisma,
+    reqUser,
+  };
+};
+
+export { createContext };

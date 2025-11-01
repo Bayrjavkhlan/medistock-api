@@ -15,7 +15,7 @@ import { createServer } from "http";
 
 import { env } from "@/config";
 
-import { prisma } from "./graphql/context";
+import { createContext } from "./graphql/context";
 import { schema } from "./graphql/schema";
 import { Logger } from "./lib/logger";
 import routes from "./routes";
@@ -63,7 +63,7 @@ server.start().then(() => {
     cors<cors.CorsRequest>(corsOptions),
     express.json({ limit: "20mb" }),
     expressMiddleware(server, {
-      context: async ({ req, res }) => ({ prisma, req, res }),
+      context: async ({ req, res }) => createContext({ req, res }),
     })
   );
 });
