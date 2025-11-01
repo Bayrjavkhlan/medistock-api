@@ -29,7 +29,9 @@ export const userCreate = mutationField("userCreate", {
         roles: {
           connect: roleKeys.map((key) => ({ key })),
         },
-        ...(hospitalId && { hospital: { connect: { id: hospitalId } } }),
+        ...(hospitalId && {
+          hospital: { connect: { id: hospitalId } },
+        }),
       },
     });
 

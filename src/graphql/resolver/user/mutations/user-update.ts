@@ -36,7 +36,9 @@ export const UserUpdate = mutationField("userUpdate", {
           set: [],
           connect: roleKeys.map((key) => ({ key })),
         },
-        ...(hospitalId && { hospital: { connect: { id: hospitalId } } }),
+        ...(hospitalId && {
+          hospital: { connect: { id: hospitalId } },
+        }),
       },
     });
 
