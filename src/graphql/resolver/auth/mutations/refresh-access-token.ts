@@ -3,7 +3,7 @@ import {
   generateAccessToken,
   setAuthCookies,
   verifyAccessToken,
-} from "lib/auth/jwt";
+} from "@/lib/auth";
 import { mutationField, nonNull, stringArg } from "nexus";
 
 import { env } from "@/config";

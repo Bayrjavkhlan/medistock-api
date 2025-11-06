@@ -3,7 +3,7 @@ import { arg, mutationField, nonNull } from "nexus";
 
 import { env } from "@/config";
 import { findRequestUser } from "@/graphql/context";
-import { generateAccessToken, setAuthCookies } from "@/lib/auth/jwt";
+import { generateAccessToken, setAuthCookies } from "@/lib/auth";
 
 import { LoginInput, LoginPayload } from "../types";
 

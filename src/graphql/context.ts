@@ -9,7 +9,7 @@ import { Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
 import { env } from "@/config";
-import { verifyAccessToken } from "@/lib/auth/jwt";
+import { verifyAccessToken } from "@/lib/auth";
 import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
 
