@@ -30,29 +30,31 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
   );
 
   const user = ctx.reqUser;
+  console.log("user:\t", user);
+  const role = user?.user?.roles[0]?.name;
+  const hospitalId = user?.hospital?.id;
 
-  switch (user.rolekey) {
+  switch (role) {
     case "ADMIN":
       can("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
       break;
 
     case "HOSPITAL_ADMIN":
-      can(["create", "read", "update", "delete"], "User", {
-        hospitalId: user.hospital.id,
-      });
-      can(["create", "read", "update", "delete"], "Equipment", {
-        hospitalId: user.hospital.id,
-      });
+      if (!hospitalId) throw new Error("HospitalAdmin must have a hospital");
+      can(["create", "read", "update", "delete"], "User", { hospitalId });
+      can(["create", "read", "update", "delete"], "Equipment", { hospitalId });
       can(["create", "read", "update", "delete"], "EquipmentLog", {
-        equipment: {
-          hospitalId: user.hospital.id,
-        },
+        equipment: { hospitalId },
       });
       break;
 
     case "STAFF":
-      can("read", "Equipment", { hospitalId: user.hospital.id });
-      can("update", "EquipmentLog", { userId: user.user.id });
+      if (hospitalId) can("read", "Equipment", { hospitalId });
+      if (user?.user?.id)
+        can("update", "EquipmentLog", { userId: user.user.id });
+      break;
+    case undefined:
+      cannot("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
       break;
 
     default:
@@ -61,23 +63,4 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
   }
 
   return build();
-};
-
-export const getPrismaWhere = <T>(
-  ability: AppAbility,
-  action: Action,
-  model: ModelName
-): T => {
-  const conditions = accessibleBy(ability, action)[model] as
-    | Record<string, any>
-    | undefined;
-
-  const safeConditions = conditions || {};
-
-  if (Array.isArray((safeConditions as any).OR)) {
-    return { OR: (safeConditions as any).OR } as T;
-  }
-
-  const { OR: _omit, ...rest } = safeConditions;
-  return rest as T;
 };

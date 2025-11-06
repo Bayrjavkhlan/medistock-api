@@ -1,13 +1,14 @@
+import { EnumUserRole } from "@prisma/client";
 import { TokenExpiredError } from "jsonwebtoken";
+import { mutationField, nonNull, stringArg } from "nexus";
+
+import { env } from "@/config";
+import { findRequestUser } from "@/graphql/context";
 import {
   generateAccessToken,
   setAuthCookies,
   verifyAccessToken,
 } from "@/lib/auth";
-import { mutationField, nonNull, stringArg } from "nexus";
-
-import { env } from "@/config";
-import { findRequestUser } from "@/graphql/context";
 
 import { LoginPayload } from "../types";
 
@@ -19,31 +20,30 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
       const { userId } = verifyAccessToken(refreshToken);
       const ctxUser = await findRequestUser(userId);
 
-      if (!ctxUser) throw new Error("Invalid user");
+      if (!ctxUser || !ctxUser.user) throw new Error("Invalid user context");
 
       const { accessToken, refreshToken: newRefreshToken } =
-        generateAccessToken(ctxUser.user!.id!);
-      setAuthCookies(ctx.res, true, accessToken);
+        await generateAccessToken(ctxUser.user.id);
 
-      const { user: dbUser, hospital, rolekey } = ctxUser;
+      setAuthCookies(ctx.res, true, accessToken);
 
       return {
         user: {
-          id: dbUser.id,
-          email: dbUser.email,
-          name: dbUser.name,
-          phone: dbUser.phone,
-          roles: dbUser.roles,
-          roleKey: rolekey,
-          hospital,
+          id: ctxUser.user.id,
+          email: ctxUser.user.email,
+          name: ctxUser.user.name,
+          phone: ctxUser.user.phone,
+          roles: ctxUser.user.roles,
+          roleKey: ctxUser.user.roles[0]?.name as EnumUserRole,
+          hospital: ctxUser.hospital,
         },
         accessToken,
         refreshToken: newRefreshToken,
         accessTokenExpiresAt: String(Date.now() + env.AUTH_TOKEN_EXPIRE),
       };
-    } catch (error) {
-      const tokenExpires = error instanceof TokenExpiredError;
-      if (tokenExpires) throw new Error("refresh token expired");
+    } catch (err) {
+      if (err instanceof TokenExpiredError)
+        throw new Error("Refresh token expired");
       throw new Error("Invalid refresh token");
     }
   },

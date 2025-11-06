@@ -1,10 +1,4 @@
-import {
-  EnumUserRole,
-  Hospital,
-  PrismaClient,
-  Role,
-  User,
-} from "@prisma/client";
+import { Hospital, PrismaClient, Role, User } from "@prisma/client";
 import { Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
@@ -14,9 +8,8 @@ import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
 
 export type TUser = {
-  user: User & { roles: Role[] };
-  hospital: Hospital;
-  rolekey: EnumUserRole;
+  user: (User & { roles: Role[] }) | null;
+  hospital: Hospital | null;
 };
 
 type CreateContext = {
@@ -28,7 +21,7 @@ export type Context = {
   req: Request;
   res: Response;
   prisma: PrismaClient;
-  reqUser: TUser;
+  reqUser: TUser | null;
   caslAbility: AppAbility;
 };
 
@@ -63,21 +56,15 @@ export const findRequestUser = async (
   });
   if (!user) return null;
 
-  const rolekey: EnumUserRole = user.roles[0]!.key;
   return {
     user,
     hospital: user.hospital!,
-    rolekey,
   };
 };
 
 const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
   const userId = verifyToken(req);
   const reqUser = await findRequestUser(userId);
-
-  if (!reqUser) {
-    throw new Error("Req user not found");
-  }
   const caslAbility = createAbilities({ reqUser });
 
   return {

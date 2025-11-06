@@ -40,7 +40,9 @@ const signAccessToken = (
 const signRefreshToken = ({ userId }: TokenPayload, jwtid: string): string =>
   signToken({ userId }, { expiresIn: REFRESH_TOKEN_EXPIRE, jwtid });
 
-export const generateAccessToken = (userId: string): LoginPayload => {
+export const generateAccessToken = async (
+  userId: string
+): Promise<LoginPayload> => {
   const jwtid = uuidv4();
   const accessToken = signAccessToken({ userId }, jwtid);
   const refreshToken = signRefreshToken({ userId }, jwtid);
