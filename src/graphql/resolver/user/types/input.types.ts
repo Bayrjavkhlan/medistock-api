@@ -1,6 +1,10 @@
 import { inputObjectType } from "nexus";
+import { User } from "nexus-prisma";
 
-import { EnumUserRoleType } from "@/graphql/typedef/enum.types";
+import {
+  EnumSortOrderType,
+  EnumUserRoleType,
+} from "@/graphql/typedef/enum.types";
 
 export const UsersWhereInput = inputObjectType({
   name: "UsersWhereInput",
@@ -18,5 +22,12 @@ export const UserCreateInput = inputObjectType({
     t.nonNull.string("phone");
     t.nonNull.list.nonNull.field("roleKeys", { type: EnumUserRoleType });
     t.nonNull.string("hospitalId");
+  },
+});
+
+export const UsersOrderByInput = inputObjectType({
+  name: "UsersOrderByInput",
+  definition: (t) => {
+    t.nullable.field(User.name.name, { type: EnumSortOrderType });
   },
 });

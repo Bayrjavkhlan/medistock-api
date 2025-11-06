@@ -10,6 +10,7 @@ import { TokenExpiredError } from "jsonwebtoken";
 
 import { env } from "@/config";
 import { verifyAccessToken } from "@/lib/auth/jwt";
+import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
 
 export type TUser = {
@@ -27,7 +28,8 @@ export type Context = {
   req: Request;
   res: Response;
   prisma: PrismaClient;
-  reqUser: TUser | null;
+  reqUser: TUser;
+  caslAbility: AppAbility;
 };
 
 const verifyToken = (req: Request) => {
@@ -72,11 +74,18 @@ export const findRequestUser = async (
 const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
   const userId = verifyToken(req);
   const reqUser = await findRequestUser(userId);
+
+  if (!reqUser) {
+    throw new Error("Req user not found");
+  }
+  const caslAbility = createAbilities({ reqUser });
+
   return {
     req,
     res,
     prisma,
     reqUser,
+    caslAbility,
   };
 };
 
