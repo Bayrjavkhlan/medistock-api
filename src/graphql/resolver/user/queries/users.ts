@@ -17,10 +17,8 @@ export const Users = queryField("users", {
   resolve: async (_parent, _args, ctx) => {
     const { where, orderBy, take, skip } = _args;
 
-    const criteria = accessibleBy(
-      ctx.caslAbility,
-      "read"
-    ) as Prisma.UserWhereInput;
+    const criteria = accessibleBy(ctx.caslAbility, "read")
+      .User as Prisma.UserWhereInput;
 
     if (where?.roleKey) criteria.roles = { some: { key: where.roleKey } };
     if (where?.search) {

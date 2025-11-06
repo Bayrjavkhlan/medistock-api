@@ -31,15 +31,26 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
 
   const user = ctx.reqUser;
   console.log("user:\t", user);
-  const role = user?.user?.roles[0]?.name;
+  const role = user?.user?.roles[0]?.key;
+  console.log("role:\t", role);
   const hospitalId = user?.hospital?.id;
 
   switch (role) {
     case "ADMIN":
-      can("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
+      console.log(
+        "admin casl---------------------------------------------------"
+      );
+
+      can(
+        ["create", "read", "update", "delete"],
+        ["User", "Equipment", "EquipmentLog", "Hospital"]
+      );
       break;
 
     case "HOSPITAL_ADMIN":
+      console.log(
+        "hospital_admin ajilljiiinaa\n----------------------------------------------------------------"
+      );
       if (!hospitalId) throw new Error("HospitalAdmin must have a hospital");
       can(["create", "read", "update", "delete"], "User", { hospitalId });
       can(["create", "read", "update", "delete"], "Equipment", { hospitalId });
@@ -49,15 +60,27 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
       break;
 
     case "STAFF":
+      console.log(
+        "staff casl---------------------------------------------------"
+      );
+
       if (hospitalId) can("read", "Equipment", { hospitalId });
       if (user?.user?.id)
         can("update", "EquipmentLog", { userId: user.user.id });
       break;
     case undefined:
+      console.log(
+        "undefined casl---------------------------------------------------"
+      );
+
       cannot("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
       break;
 
     default:
+      console.log(
+        "default casl---------------------------------------------------"
+      );
+
       cannot("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
       break;
   }
