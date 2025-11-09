@@ -1,3 +1,4 @@
+import { EnumUserRole } from "@prisma/client";
 import { mutationField, nonNull } from "nexus";
 
 import { Errors } from "@/errors";
@@ -20,6 +21,16 @@ export const userCreate = mutationField("userCreate", {
     const { password, passwordHashed } = generatePassword(email);
 
     console.log("password:\t", password);
+
+    if (!ctx.reqUser || !ctx.reqUser.user || !ctx.reqUser.user.roles[0]?.key) {
+      throw Errors.Auth.NOT_AUTHORIZED();
+    }
+
+    if (roleKeys.includes("ADMIN") || roleKeys.includes("HOSPITAL_ADMIN")) {
+      if (ctx.reqUser.user.roles[0].key !== EnumUserRole.ADMIN) {
+        throw Errors.System.ACCESS_DENIED();
+      }
+    }
 
     await ctx.prisma.user.create({
       data: {

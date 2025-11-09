@@ -1,6 +1,12 @@
 import { AbilityBuilder, PureAbility } from "@casl/ability";
 import { createPrismaAbility, PrismaQuery, Subjects } from "@casl/prisma";
-import { Equipment, EquipmentLog, Hospital, User } from "@prisma/client";
+import {
+  EnumUserRole,
+  Equipment,
+  EquipmentLog,
+  Hospital,
+  User,
+} from "@prisma/client";
 
 import { Errors } from "@/errors";
 import { Context } from "@/graphql/context";
@@ -24,17 +30,11 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
   );
 
   const user = ctx.reqUser;
-  console.log("user:\t", user);
   const role = user?.user?.roles[0]?.key;
-  console.log("role:\t", role);
   const hospitalId = user?.hospital?.id;
 
   switch (role) {
     case "ADMIN":
-      console.log(
-        "admin casl---------------------------------------------------"
-      );
-
       can(
         ["create", "read", "update", "delete"],
         ["User", "Equipment", "EquipmentLog", "Hospital"]
@@ -42,40 +42,39 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
       break;
 
     case "HOSPITAL_ADMIN":
-      console.log(
-        "hospital_admin ajilljiiinaa\n----------------------------------------------------------------"
-      );
       if (!hospitalId)
         throw Errors.Hospital.HOSPITAL_ADMIN_NO_ASSOCIATED_HOSPITAL();
-      can(["create", "read", "update", "delete"], "User", { hospitalId });
+
+      can("create", "User", {
+        hospitalId,
+        roles: { some: { key: EnumUserRole.STAFF } },
+      });
+      can(["read", "update", "delete"], "User", { hospitalId });
+
       can(["create", "read", "update", "delete"], "Equipment", { hospitalId });
+
       can(["create", "read", "update", "delete"], "EquipmentLog", {
         equipment: { hospitalId },
       });
       break;
 
     case "STAFF":
-      console.log(
-        "staff casl---------------------------------------------------"
-      );
+      if (hospitalId) {
+        can("read", "Equipment", { hospitalId });
 
-      if (hospitalId) can("read", "Equipment", { hospitalId });
-      if (user?.user?.id)
-        can("update", "EquipmentLog", { userId: user.user.id });
-      break;
-    case undefined:
-      console.log(
-        "undefined casl---------------------------------------------------"
-      );
+        if (user.user?.id) {
+          can("update", "Equipment", { userId: user.user.id });
+          can(["create", "read", "update"], "EquipmentLog", {
+            userId: user.user.id,
+          });
+        }
+      }
 
-      cannot("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
+      cannot("delete", ["User", "Equipment", "EquipmentLog"]);
       break;
 
     default:
-      console.log(
-        "default casl---------------------------------------------------"
-      );
-
+    case undefined:
       cannot("all", ["User", "Equipment", "EquipmentLog", "Hospital"]);
       break;
   }

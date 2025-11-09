@@ -13,7 +13,7 @@ export const UserErrorMap: CustomError = {
   },
   DUPLICATED_USER_EMAIL: {
     code: "DUPLICATED_USER_EMAIL",
-    message: "Давхардсан имэйл байна",
+    message: "Бүртгэлтэй хэрэглэгч байна",
   },
   USER_NOT_FOUND: {
     code: "USER_NOT_FOUND",
