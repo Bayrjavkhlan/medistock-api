@@ -17,7 +17,7 @@ import { env } from "@/config";
 
 import { formatError } from "./errors";
 import { createContext } from "./graphql/context";
-import { schema } from "./graphql/schema";
+import { schemaWithMiddleware } from "./graphql/schema";
 import { Logger } from "./lib/logger";
 import routes from "./routes";
 
@@ -40,7 +40,7 @@ app.use("/", routes);
 const httpServer = createServer(app);
 
 const server = new ApolloServer({
-  schema: schema,
+  schema: schemaWithMiddleware,
   plugins: [
     {
       async serverWillStart() {

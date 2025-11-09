@@ -11,9 +11,18 @@ import {
 import { Errors } from "@/errors";
 import { Context } from "@/graphql/context";
 
-export type Action = "all" | "create" | "read" | "update" | "delete";
-
 export type ModelName = "User" | "Equipment" | "EquipmentLog" | "Hospital";
+
+export const accessibleBy = (
+  ability: AppAbility,
+  action: Action,
+  modelName: ModelName
+): void => {
+  if (!ability.can(action, modelName)) {
+    throw new Error(`Та ${action} үйлдэл ${modelName} дээр хийх эрхгүй байна`);
+  }
+};
+export type Action = "all" | "create" | "read" | "update" | "delete";
 
 export type AppSubjects = Subjects<{
   User: User;

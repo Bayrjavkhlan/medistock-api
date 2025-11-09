@@ -1,6 +1,9 @@
+import { applyMiddleware } from "graphql-middleware";
 import { makeSchema } from "nexus";
 import { join } from "path";
 
+import { errorMiddleware } from "./middleware/Error.middleware";
+import { shieldMiddleware } from "./middleware/Shield.middleware";
 import * as resolvers from "./resolver";
 import * as types from "./typedef";
 
@@ -24,4 +27,10 @@ const schema = makeSchema({
   },
 });
 
-export { schema };
+const schemaWithMiddleware = applyMiddleware(
+  schema,
+  errorMiddleware,
+  shieldMiddleware
+);
+
+export { schema,schemaWithMiddleware };
