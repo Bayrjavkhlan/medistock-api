@@ -15,6 +15,7 @@ import { createServer } from "http";
 
 import { env } from "@/config";
 
+import { formatError } from "./errors";
 import { createContext } from "./graphql/context";
 import { schema } from "./graphql/schema";
 import { Logger } from "./lib/logger";
@@ -55,6 +56,7 @@ const server = new ApolloServer({
       ? ApolloServerPluginLandingPageProductionDefault()
       : ApolloServerPluginLandingPageLocalDefault(),
   ],
+  formatError,
 });
 
 server.start().then(() => {

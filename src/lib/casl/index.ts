@@ -1,14 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AbilityBuilder, PureAbility } from "@casl/ability";
-import {
-  accessibleBy,
-  createPrismaAbility,
-  PrismaQuery,
-  Subjects,
-} from "@casl/prisma";
+import { createPrismaAbility, PrismaQuery, Subjects } from "@casl/prisma";
 import { Equipment, EquipmentLog, Hospital, User } from "@prisma/client";
 
+import { Errors } from "@/errors";
 import { Context } from "@/graphql/context";
 
 export type Action = "all" | "create" | "read" | "update" | "delete";
@@ -51,7 +45,8 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
       console.log(
         "hospital_admin ajilljiiinaa\n----------------------------------------------------------------"
       );
-      if (!hospitalId) throw new Error("HospitalAdmin must have a hospital");
+      if (!hospitalId)
+        throw Errors.Hospital.HOSPITAL_ADMIN_NO_ASSOCIATED_HOSPITAL();
       can(["create", "read", "update", "delete"], "User", { hospitalId });
       can(["create", "read", "update", "delete"], "Equipment", { hospitalId });
       can(["create", "read", "update", "delete"], "EquipmentLog", {

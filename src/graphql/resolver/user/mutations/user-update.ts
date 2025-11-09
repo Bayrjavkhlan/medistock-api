@@ -1,5 +1,6 @@
 import { arg, mutationField, nonNull, stringArg } from "nexus";
 
+import { Errors } from "@/errors";
 import { checkDuplicateUser } from "@/utils/checkDuplicateUser";
 
 import { UserCreateInput } from "../types";
@@ -16,14 +17,14 @@ export const UserUpdate = mutationField("userUpdate", {
     });
 
     if (!user) {
-      throw new Error("User not found.");
+      throw Errors.User.USER_NOT_FOUND;
     }
 
     const { name, email, phone, roleKeys, hospitalId } = input;
 
     const existingUser = await checkDuplicateUser(ctx.prisma, email, phone);
     if (existingUser) {
-      throw new Error("User with this email or phone already exists.");
+      throw Errors.User.DUPLICATED_USER_EMAIL();
     }
 
     await ctx.prisma.user.update({

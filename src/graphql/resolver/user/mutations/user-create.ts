@@ -1,5 +1,6 @@
 import { mutationField, nonNull } from "nexus";
 
+import { Errors } from "@/errors";
 import { checkDuplicateUser } from "@/utils/checkDuplicateUser";
 import { generatePassword } from "@/utils/generatePassword";
 
@@ -13,7 +14,7 @@ export const userCreate = mutationField("userCreate", {
 
     const existingUser = await checkDuplicateUser(ctx.prisma, email, phone);
     if (existingUser) {
-      throw new Error("User with this email or phone already exists.");
+      throw Errors.User.DUPLICATED_USER_EMAIL();
     }
 
     const { password, passwordHashed } = generatePassword(email);

@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
 import { env } from "@/config";
+import { Errors } from "@/errors";
 import { verifyAccessToken } from "@/lib/auth";
 import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
@@ -36,8 +37,8 @@ const verifyToken = (req: Request) => {
       return userId;
     } catch (error) {
       const tokenExpires = error instanceof TokenExpiredError;
-      if (tokenExpires) throw new Error("Access token has expired");
-      throw new Error("Invalid access token");
+      if (tokenExpires) throw Errors.Auth.ACCESS_TOKEN_EXPIRED();
+      throw Errors.Auth.INVALID_ACCESS_TOKEN();
     }
   }
   return undefined;

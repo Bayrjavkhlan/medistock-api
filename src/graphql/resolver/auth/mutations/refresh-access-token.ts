@@ -3,6 +3,7 @@ import { TokenExpiredError } from "jsonwebtoken";
 import { mutationField, nonNull, stringArg } from "nexus";
 
 import { env } from "@/config";
+import { Errors } from "@/errors";
 import { findRequestUser } from "@/graphql/context";
 import {
   generateAccessToken,
@@ -20,7 +21,8 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
       const { userId } = verifyAccessToken(refreshToken);
       const ctxUser = await findRequestUser(userId);
 
-      if (!ctxUser || !ctxUser.user) throw new Error("Invalid user context");
+      if (!ctxUser || !ctxUser.user)
+        throw Errors.Auth.WRONG_USERNAME_PASSWORD();
 
       const { accessToken, refreshToken: newRefreshToken } =
         await generateAccessToken(ctxUser.user.id);
@@ -43,8 +45,8 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
       };
     } catch (err) {
       if (err instanceof TokenExpiredError)
-        throw new Error("Refresh token expired");
-      throw new Error("Invalid refresh token");
+        throw Errors.Auth.REFRESH_TOKEN_EXPIRED();
+      throw Errors.Auth.INVALID_REFRESH_TOKEN();
     }
   },
 });

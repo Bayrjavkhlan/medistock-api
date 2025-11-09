@@ -3,6 +3,7 @@ import { compareSync } from "bcrypt";
 import { arg, mutationField, nonNull } from "nexus";
 
 import { env } from "@/config";
+import { Errors } from "@/errors";
 import { findRequestUser } from "@/graphql/context";
 import { generateAccessToken, setAuthCookies } from "@/lib/auth";
 
@@ -22,13 +23,13 @@ export const Login = mutationField("login", {
     });
 
     if (!user || !user.roles.length)
-      throw new Error("Invalid email or password");
+      throw Errors.Auth.WRONG_USERNAME_PASSWORD();
 
     const isPasswordValid = compareSync(password, user.password);
-    if (!isPasswordValid) throw new Error("Invalid email or password");
+    if (!isPasswordValid) throw Errors.Auth.WRONG_USERNAME_PASSWORD();
 
     const ctxUser = await findRequestUser(user.id);
-    if (!ctxUser || !ctxUser.user) throw new Error("Invalid user context");
+    if (!ctxUser || !ctxUser.user) throw Errors.Auth.WRONG_USERNAME_PASSWORD();
 
     const { accessToken, refreshToken } = await generateAccessToken(user.id);
     setAuthCookies(ctx.res, true, accessToken);

@@ -23,7 +23,6 @@
     "strict": true,
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
 
