@@ -2,6 +2,7 @@ import {
   ApolloServerErrorCode,
   unwrapResolverError,
 } from "@apollo/server/errors";
+import { ForbiddenError } from "@casl/ability";
 import { GraphQLFormattedError } from "graphql";
 
 type CustomError = {
@@ -17,9 +18,8 @@ export const formatError = (
 
   console.error("Error:", originalError);
 
-  // Use originalError.message if available, fallback to formattedError.message, then generic
   const baseMessage =
-    originalError?.message ||
+    originalError.message ||
     formattedError.message ||
     "Тодорхойгүй алдаа гарлаа. Администраторт хандана уу.";
 
@@ -39,12 +39,22 @@ export const formatError = (
     exception,
   };
 
-  // Custom handling for certain codes
+  if (originalError instanceof ForbiddenError) {
+    return {
+      ...baseError,
+      extensions: {
+        ...extensions,
+        code: "FORBIDDEN",
+        message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
+      },
+    };
+  }
+
   switch (extensions.code) {
     case ApolloServerErrorCode.BAD_USER_INPUT:
       return {
         ...baseError,
-        message: baseMessage, // original message preserved
+        message: baseMessage,
         extensions: {
           ...extensions,
           message: baseMessage,
@@ -58,7 +68,7 @@ export const formatError = (
         ...baseError,
         extensions: {
           ...extensions,
-          message: baseMessage,
+          message: "Алдаатай query байна.",
         },
       };
     case "UNAUTHENTICATED":
@@ -66,7 +76,7 @@ export const formatError = (
         ...baseError,
         extensions: {
           ...extensions,
-          message: baseMessage,
+          message: "Энэ үйлдлийг хийхийн тулд нэвтрэх шаардлагатай байна.",
         },
       };
     case "FORBIDDEN":
@@ -74,7 +84,7 @@ export const formatError = (
         ...baseError,
         extensions: {
           ...extensions,
-          message: baseMessage,
+          message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
         },
       };
     default:
