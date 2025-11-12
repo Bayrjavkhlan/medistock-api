@@ -32,8 +32,8 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
       return {
         user: {
           id: ctxUser.user.id,
-          email: ctxUser.user.email,
           name: ctxUser.user.name,
+          email: ctxUser.user.email,
           phone: ctxUser.user.phone,
           roles: ctxUser.user.roles,
           roleKey: ctxUser.user.roles[0]?.key as EnumUserRole,

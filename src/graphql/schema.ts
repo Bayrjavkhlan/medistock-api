@@ -33,4 +33,4 @@ const schemaWithMiddleware = applyMiddleware(
   shieldMiddleware
 );
 
-export { schema,schemaWithMiddleware };
+export { schema, schemaWithMiddleware };

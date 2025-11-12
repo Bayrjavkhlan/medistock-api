@@ -4,13 +4,11 @@ export const prisma = new PrismaClient();
 
 export const pagination = (
   take: number,
-  skip: number
-): { take: number; skip: number } => {
-  return {
-    take,
-    skip: skip <= 0 ? 0 : take * (skip - 1),
-  };
-};
+  page: number
+): { take: number; skip: number } => ({
+  take,
+  skip: page * take,
+});
 
 type SortDirection = "asc" | "desc";
 

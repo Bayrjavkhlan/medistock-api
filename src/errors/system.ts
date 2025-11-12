@@ -11,29 +11,29 @@ export const SystemErrorMap = {
   },
   PERMISSION_DENIED: {
     code: "PERMISSION_DENIED",
-    message: "Хандах эрхгүй",
+    message: "Хандах эрхгүй permission",
   },
   ACCESS_DENIED: {
     code: "ACCESS_DENIED",
-    message: "Хандах эрхгүй",
+    message: "Хандах эрхгүй access",
   },
 };
 
 export const SystemErrors = {
   INTERNAL_SERVER_ERROR: (): GraphQLError =>
     new GraphQLError(SystemErrorMap.INTERNAL_SERVER_ERROR.message, {
-      extensions: SystemErrorMap.INTERNAL_SERVER_ERROR,
+      extensions: { code: SystemErrorMap.INTERNAL_SERVER_ERROR.code },
     }),
   DATA_NOT_FOUND: (): GraphQLError =>
     new GraphQLError(SystemErrorMap.DATA_NOT_FOUND.message, {
-      extensions: SystemErrorMap.DATA_NOT_FOUND,
+      extensions: { code: SystemErrorMap.DATA_NOT_FOUND.code },
     }),
   PERMISSION_DENIED: (): GraphQLError =>
     new GraphQLError(SystemErrorMap.PERMISSION_DENIED.message, {
-      extensions: SystemErrorMap.PERMISSION_DENIED,
+      extensions: { code: SystemErrorMap.PERMISSION_DENIED.code },
     }),
   ACCESS_DENIED: (): GraphQLError =>
     new GraphQLError(SystemErrorMap.ACCESS_DENIED.message, {
-      extensions: SystemErrorMap.ACCESS_DENIED,
+      extensions: { code: SystemErrorMap.ACCESS_DENIED.code },
     }),
 };

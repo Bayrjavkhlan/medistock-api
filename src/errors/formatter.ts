@@ -15,85 +15,51 @@ export const formatError = (
   error: unknown
 ): GraphQLFormattedError => {
   const originalError = unwrapResolverError(error) as CustomError;
+  console.error("GraphQL Error:", originalError);
 
-  console.error("Error:", originalError);
-
-  const baseMessage =
+  const message =
     originalError.message ||
     formattedError.message ||
     "Тодорхойгүй алдаа гарлаа. Администраторт хандана уу.";
 
-  const baseError = {
-    message: baseMessage,
-    path: formattedError.path,
-  };
-
-  const exception: Record<string, unknown> =
-    typeof originalError === "object" ? { ...originalError } : {};
-
-  delete exception.extensions;
-  delete exception.stacktrace;
-
-  const extensions: Record<string, unknown> = {
-    code: formattedError.extensions?.code || "INTERNAL_SERVER_ERROR",
-    exception,
-  };
+  let code =
+    formattedError.extensions?.code ||
+    originalError.code ||
+    "INTERNAL_SERVER_ERROR";
 
   if (originalError instanceof ForbiddenError) {
+    code = "FORBIDDEN";
     return {
-      ...baseError,
-      extensions: {
-        ...extensions,
-        code: "FORBIDDEN",
-        message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
-      },
+      message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
+      extensions: { code },
     };
   }
 
-  switch (extensions.code) {
-    case ApolloServerErrorCode.BAD_USER_INPUT:
+  switch (code) {
+    case "PERMISSION_DENIED":
+    case "UNAUTHORIZED":
+    case "FORBIDDEN":
       return {
-        ...baseError,
-        message: baseMessage,
-        extensions: {
-          ...extensions,
-          message: baseMessage,
-          details:
-            originalError.details ||
-            "Оруулсан мэдээллээ шалгаад дахин оролдоно уу.",
-        },
-      };
-    case ApolloServerErrorCode.PERSISTED_QUERY_NOT_FOUND:
-      return {
-        ...baseError,
-        extensions: {
-          ...extensions,
-          message: "Алдаатай query байна.",
-        },
+        message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
+        extensions: { code },
       };
     case "UNAUTHENTICATED":
       return {
-        ...baseError,
-        extensions: {
-          ...extensions,
-          message: "Энэ үйлдлийг хийхийн тулд нэвтрэх шаардлагатай байна.",
-        },
+        message: "Та нэвтрээгүй байна. Нэвтрэх шаардлагатай.",
+        extensions: { code },
       };
-    case "FORBIDDEN":
+    case ApolloServerErrorCode.BAD_USER_INPUT:
       return {
-        ...baseError,
+        message,
         extensions: {
-          ...extensions,
-          message: "Таньд энэ үйлдлийг хийх эрх байхгүй байна.",
+          code,
+          details: originalError.details,
         },
       };
     default:
       return {
-        ...baseError,
-        extensions: {
-          ...extensions,
-          message: baseMessage,
-        },
+        message,
+        extensions: { code },
       };
   }
 };

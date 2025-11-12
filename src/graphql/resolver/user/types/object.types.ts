@@ -24,6 +24,6 @@ export const UsersObjectType = objectType({
   name: "UserObjectType",
   definition(t) {
     t.list.nonNull.field("data", { type: UserObjectType });
-    t.int("count");
+    t.nonNull.int("count");
   },
 });

@@ -27,7 +27,8 @@ export const UserCreateInput = inputObjectType({
 
 export const UsersOrderByInput = inputObjectType({
   name: "UsersOrderByInput",
-  definition: (t) => {
+  definition(t) {
     t.nullable.field(User.name.name, { type: EnumSortOrderType });
+    t.nullable.field(User.email.name, { type: EnumSortOrderType });
   },
 });
