@@ -9,6 +9,10 @@ export const HospitalErrorMap = {
     code: "HOSPITAL_ADMIN_NO_ASSOCIATED_HOSPITAL",
     message: "Эмнэлгийн админд хамааралтай эмнэлэг олдсонгүй",
   },
+  DUPLICATE_HOSPITAL: {
+    code: "DUPLICATE_HOSPITAL",
+    message: "Бүртгэлтэй эмнэлэг байна",
+  },
 };
 
 export const HospitalErrors = {
@@ -23,4 +27,8 @@ export const HospitalErrors = {
         extensions: HospitalErrorMap.HOSPITAL_ADMIN_NO_ASSOCIATED_HOSPITAL,
       }
     ),
+  DUPLICATE_HOSPITAL: (): GraphQLError =>
+    new GraphQLError(HospitalErrorMap.DUPLICATE_HOSPITAL.message, {
+      extensions: HospitalErrorMap.DUPLICATE_HOSPITAL,
+    }),
 };

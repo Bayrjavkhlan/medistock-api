@@ -13,15 +13,6 @@ import { Context } from "@/graphql/context";
 
 export type ModelName = "User" | "Equipment" | "EquipmentLog" | "Hospital";
 
-export const accessibleBy = (
-  ability: AppAbility,
-  action: Action,
-  modelName: ModelName
-): void => {
-  if (!ability.can(action, modelName)) {
-    throw new Error(`Та ${action} үйлдэл ${modelName} дээр хийх эрхгүй байна`);
-  }
-};
 export type Action = "all" | "create" | "read" | "update" | "delete";
 
 export type AppSubjects = Subjects<{
@@ -32,6 +23,26 @@ export type AppSubjects = Subjects<{
 }>;
 
 export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
+
+export const accessibleBy = (
+  ability: AppAbility,
+  action: Action,
+  modelName: ModelName
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any => {
+  if (!ability.can(action, modelName)) {
+    throw Errors.System.PERMISSION_DENIED();
+  }
+
+  const rules = ability.rulesFor(action, modelName);
+
+  return rules.reduce((acc, rule) => {
+    if (rule.conditions && typeof rule.conditions === "object") {
+      return { ...acc, ...rule.conditions };
+    }
+    return acc;
+  }, {});
+};
 
 export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
   const { can, cannot, build } = new AbilityBuilder<AppAbility>(
@@ -65,6 +76,7 @@ export const createAbilities = (ctx: Pick<Context, "reqUser">): AppAbility => {
       can(["create", "read", "update", "delete"], "EquipmentLog", {
         equipment: { hospitalId },
       });
+      can(["read", "update"], "Hospital", { id: hospitalId });
       break;
 
     case "STAFF":

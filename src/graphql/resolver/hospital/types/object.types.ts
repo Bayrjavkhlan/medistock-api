@@ -14,7 +14,15 @@ export const HospitalObjectType = objectType({
   },
 });
 
-const AddressObjectType = objectType({
+export const HospitalsObjectType = objectType({
+  name: HospitalObjectType.name + "s",
+  definition(t) {
+    t.list.nonNull.field("data", { type: HospitalObjectType });
+    t.nonNull.int("count");
+  },
+});
+
+export const AddressObjectType = objectType({
   name: Address.$name,
   definition(t) {
     t.string(Address.id.name);
@@ -24,5 +32,13 @@ const AddressObjectType = objectType({
     t.nullable.field(Hospital.name.name, { type: HospitalObjectType });
     t.dateTime(Address.createdAt.name);
     t.dateTime(Address.updatedAt.name);
+  },
+});
+
+export const HospitalOptionObjectType = objectType({
+  name: "HospitalOption",
+  definition(t) {
+    t.string(Hospital.name.name);
+    t.string(Hospital.id.name);
   },
 });

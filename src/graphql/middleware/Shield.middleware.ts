@@ -37,12 +37,17 @@ const permissions: Permissions = {
     currentUser: isAuthenticated,
     userDetail: and(isAuthenticated, accessRequired("read", "User")),
     users: and(isAuthenticated, accessRequired("read", "User")),
+    HospitalDetail: and(isAuthenticated, accessRequired("read", "Hospital")),
+    hospitals: and(isAuthenticated, accessRequired("read", "Hospital")),
+    hospitalOption: and(isAuthenticated, accessRequired("read", "Hospital")),
   },
   Mutation: {
     login: allow,
     refreshAccessToken: allow,
     userCreate: and(isAuthenticated, accessRequired("create", "User")),
     userUpdate: and(isAuthenticated, accessRequired("update", "User")),
+    hospitalCreate: and(isAuthenticated, accessRequired("create", "Hospital")),
+    hospitalUpdate: and(isAuthenticated, accessRequired("update", "Hospital")),
   },
 };
 
