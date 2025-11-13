@@ -13,6 +13,10 @@ export const HospitalErrorMap = {
     code: "DUPLICATE_HOSPITAL",
     message: "Бүртгэлтэй эмнэлэг байна",
   },
+  STAFF_NOT_IN_HOSPITAL: {
+    code: "STAFF_NOT_IN_HOSPITAL",
+    message: "Ажилтан тухайн эмнэлэгт харьяалагдаагүй байна",
+  },
 };
 
 export const HospitalErrors = {
@@ -30,5 +34,9 @@ export const HospitalErrors = {
   DUPLICATE_HOSPITAL: (): GraphQLError =>
     new GraphQLError(HospitalErrorMap.DUPLICATE_HOSPITAL.message, {
       extensions: HospitalErrorMap.DUPLICATE_HOSPITAL,
+    }),
+  STAFF_NOT_IN_HOSPITAL: (): GraphQLError =>
+    new GraphQLError(HospitalErrorMap.STAFF_NOT_IN_HOSPITAL.message, {
+      extensions: HospitalErrorMap.STAFF_NOT_IN_HOSPITAL,
     }),
 };

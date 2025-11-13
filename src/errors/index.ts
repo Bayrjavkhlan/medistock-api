@@ -1,4 +1,5 @@
 import { AuthErrorMap, AuthErrors } from "./auth";
+import { EquipmentErrorMap, EquipmentErrors } from "./equipment";
 import { HospitalErrorMap, HospitalErrors } from "./hospital";
 import { SystemErrorMap, SystemErrors } from "./system";
 import { UserErrorMap, UserErrors } from "./user";
@@ -10,6 +11,7 @@ export const ErrorMap = {
   ...UserErrorMap,
   ...SystemErrorMap,
   ...HospitalErrorMap,
+  ...EquipmentErrorMap,
 };
 
 export const Errors = {
@@ -17,4 +19,5 @@ export const Errors = {
   User: UserErrors,
   System: SystemErrors,
   Hospital: HospitalErrors,
+  Equipment: EquipmentErrors,
 };

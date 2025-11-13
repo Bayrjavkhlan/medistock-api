@@ -8,14 +8,14 @@ export const HospitalsWhereInput = inputObjectType({
   },
 });
 
-export const HospitalWhereInput = inputObjectType({
-  name: "HospitalWhereInput",
-  definition: (t) => {
-    t.nonNull.string("name");
-    t.nonNull.string("email");
-    t.nonNull.string("phone");
-  },
-});
+// export const HospitalWhereInput = inputObjectType({
+//   name: "HospitalWhereInput",
+//   definition: (t) => {
+//     t.nonNull.string("name");
+//     t.nonNull.string("email");
+//     t.nonNull.string("phone");
+//   },
+// });
 
 export const HospitalCreateInput = inputObjectType({
   name: "HospitalCreateInput",
