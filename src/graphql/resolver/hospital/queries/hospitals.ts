@@ -20,9 +20,9 @@ export const Hospitals = queryField("hospitals", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { name: { contains: search } },
-        { email: { contains: search } },
-        { phoneNumber: { contains: search } },
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { phoneNumber: { contains: search, mode: "insensitive" } },
       ];
     }
     if (where?.address) {

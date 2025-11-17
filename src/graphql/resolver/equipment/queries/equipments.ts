@@ -19,9 +19,22 @@ export const Equipments = queryField("equipments", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { name: { contains: search } },
-        { serialNumber: { contains: search } },
-        { modelNumber: { contains: search } },
+        { name: { contains: search, mode: "insensitive" } },
+        { serialNo: { contains: search, mode: "insensitive" } },
+        {
+          assignedTo: {
+            is: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          },
+        },
+        {
+          hospital: {
+            is: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          },
+        },
       ];
     }
 

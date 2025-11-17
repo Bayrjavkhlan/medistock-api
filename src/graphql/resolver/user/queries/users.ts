@@ -23,9 +23,9 @@ export const Users = queryField("users", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { name: { contains: search } },
-        { email: { contains: search } },
-        { phone: { contains: search } },
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search, mode: "insensitive" } },
       ];
     }
 
