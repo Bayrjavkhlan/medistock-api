@@ -4,7 +4,7 @@ import { Errors } from "@/errors";
 
 import { EquipmentCreateInput } from "../types";
 
-export const equipmentUpdate = mutationField("equipmentUpdate", {
+export const EquipmentUpdate = mutationField("equipmentUpdate", {
   type: "Boolean",
   args: {
     id: nonNull("String"),
@@ -28,12 +28,10 @@ export const equipmentUpdate = mutationField("equipmentUpdate", {
       targetHospitalId = hospitalId;
     }
 
-    if (userId !== null) {
-      const user = await ctx.prisma.user.findFirst({
-        where: { id: userId, hospitalId: targetHospitalId },
-      });
-      if (!user) throw Errors.Hospital.STAFF_NOT_IN_HOSPITAL();
-    }
+    const user = await ctx.prisma.user.findFirst({
+      where: { id: userId, hospitalId: targetHospitalId },
+    });
+    if (!user) throw Errors.Hospital.STAFF_NOT_IN_HOSPITAL();
 
     if (serialNo && serialNo !== equipment.serialNo) {
       const existing = await ctx.prisma.equipment.findUnique({

@@ -4,7 +4,7 @@ import { Errors } from "@/errors";
 
 import { EquipmentCreateInput } from "../types";
 
-export const equipmentCreate = mutationField("equipmentCreate", {
+export const EquipmentCreate = mutationField("equipmentCreate", {
   type: "Boolean",
   args: {
     input: nonNull(EquipmentCreateInput),

@@ -4,7 +4,7 @@ import { accessibleBy } from "@/lib/casl";
 
 import { HospitalObjectType } from "../types";
 
-export const HospitalDetail = queryField("HospitalDetail", {
+export const HospitalDetail = queryField("hospitalDetail", {
   type: HospitalObjectType,
   args: { id: nonNull(stringArg()) },
   resolve: async (_parent, { id }, ctx) => {

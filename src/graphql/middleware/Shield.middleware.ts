@@ -37,9 +37,16 @@ const permissions: Permissions = {
     currentUser: isAuthenticated,
     userDetail: and(isAuthenticated, accessRequired("read", "User")),
     users: and(isAuthenticated, accessRequired("read", "User")),
-    HospitalDetail: and(isAuthenticated, accessRequired("read", "Hospital")),
+    hospitalDetail: and(isAuthenticated, accessRequired("read", "Hospital")),
     hospitals: and(isAuthenticated, accessRequired("read", "Hospital")),
     hospitalOption: and(isAuthenticated, accessRequired("read", "Hospital")),
+    equipmentDetail: and(isAuthenticated, accessRequired("read", "Equipment")),
+    equipments: and(isAuthenticated, accessRequired("read", "Equipment")),
+    equipmentLogDetail: and(
+      isAuthenticated,
+      accessRequired("read", "EquipmentLog")
+    ),
+    equipmentLogs: and(isAuthenticated, accessRequired("read", "EquipmentLog")),
   },
   Mutation: {
     login: allow,
@@ -48,6 +55,22 @@ const permissions: Permissions = {
     userUpdate: and(isAuthenticated, accessRequired("update", "User")),
     hospitalCreate: and(isAuthenticated, accessRequired("create", "Hospital")),
     hospitalUpdate: and(isAuthenticated, accessRequired("update", "Hospital")),
+    equipmentCreate: and(
+      isAuthenticated,
+      accessRequired("create", "Equipment")
+    ),
+    equipmentUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "Equipment")
+    ),
+    equipmentLogCreate: and(
+      isAuthenticated,
+      accessRequired("create", "EquipmentLog")
+    ),
+    equipmentLogUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "EquipmentLog")
+    ),
   },
 };
 

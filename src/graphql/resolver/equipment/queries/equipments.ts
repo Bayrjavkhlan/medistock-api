@@ -27,7 +27,7 @@ export const Equipments = queryField("equipments", {
 
     const equipments = await ctx.prisma.equipment.findMany({
       where: criteria,
-      include: { hospital: true, logs: true },
+      include: { hospital: true, logs: true, assignedTo: true },
       skip,
       take,
     });

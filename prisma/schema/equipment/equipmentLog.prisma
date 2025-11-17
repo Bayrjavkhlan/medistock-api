@@ -6,6 +6,8 @@ model EquipmentLog {
   performedBy User   @relation("PerformedLogs", fields: [userId], references: [id])
   userId      String
 
+  description String
+
   createdBy String?
   updatedBy String?
   createdAt DateTime @default(now())

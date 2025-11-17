@@ -44,6 +44,7 @@ CREATE TABLE "EquipmentLog" (
     "id" TEXT NOT NULL,
     "equipmentId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "createdBy" TEXT,
     "updatedBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -67,6 +68,15 @@ CREATE TABLE "Hospital" (
 );
 
 -- CreateTable
+CREATE TABLE "Role" (
+    "id" TEXT NOT NULL,
+    "key" "EnumUserRole" NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -83,15 +93,6 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Role" (
-    "id" TEXT NOT NULL,
-    "key" "EnumUserRole" NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "_RoleToUser" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -104,10 +105,10 @@ CREATE UNIQUE INDEX "Address_hospitalId_key" ON "Address"("hospitalId");
 CREATE UNIQUE INDEX "Equipment_serialNo_key" ON "Equipment"("serialNo");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "Role_key_key" ON "Role"("key");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Role_key_key" ON "Role"("key");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_RoleToUser_AB_unique" ON "_RoleToUser"("A", "B");
