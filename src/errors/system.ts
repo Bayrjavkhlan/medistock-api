@@ -17,6 +17,11 @@ export const SystemErrorMap = {
     code: "ACCESS_DENIED",
     message: "Хандах эрхгүй access",
   },
+  TOO_MANY_REQUESTS: {
+    code: "TOO_MANY_REQUESTS",
+    message: "Хэт олон хүсэлт илгээлээ. Түр хүлээгээд дахин оролдоно уу.",
+    httpStatus: 429,
+  },
 };
 
 export const SystemErrors = {
@@ -35,5 +40,12 @@ export const SystemErrors = {
   ACCESS_DENIED: (): GraphQLError =>
     new GraphQLError(SystemErrorMap.ACCESS_DENIED.message, {
       extensions: { code: SystemErrorMap.ACCESS_DENIED.code },
+    }),
+  TOO_MANY_REQUESTS: (): GraphQLError =>
+    new GraphQLError(SystemErrorMap.TOO_MANY_REQUESTS.message, {
+      extensions: {
+        code: SystemErrorMap.TOO_MANY_REQUESTS.code,
+        http: { status: SystemErrorMap.TOO_MANY_REQUESTS.httpStatus },
+      },
     }),
 };
