@@ -30,7 +30,6 @@ export async function seedStaffs(prisma: PrismaClient) {
       phone: "00000003",
       hospital: { connect: { id: "hosp-1" } },
       roles: { connect: [{ key: EnumStaffRole.STAFF }] },
-      equipmentsAssigned: {connect: { id: "eq-1"}}
     },
     {
       id: "staff-4",
@@ -40,7 +39,6 @@ export async function seedStaffs(prisma: PrismaClient) {
       phone: "00000004",
       hospital: { connect: { id: "hosp-2" } },
       roles: { connect: [{ key: EnumStaffRole.STAFF }] },
-      equipmentsAssigned: {connect: { id: "eq-2"}}
     },
   ];
 
