@@ -1,0 +1,38 @@
+name: CI – Lint, Type Check, Format & Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.4"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Format check (prettier)
+        run: yarn format:check
+
+      - name: Lint check (eslint)
+        run: yarn lint 
+
+      - name: TypeScript type check
+        run: yarn type:check
+
+      - name: Build (compile to JS)
+        run: yarn build
+
+
