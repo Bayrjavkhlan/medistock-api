@@ -1,4 +1,4 @@
-name: CI – Lint, Type Check, Format & Build
+name: CI – Lint, Format, Type Check & Build
 
 on:
   push:
@@ -23,16 +23,20 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Format check (prettier)
+      - name: Generate Prisma client
+        run: yarn prisma generate
+
+      - name: Generate Nexus types
+        run: yarn generate:nexus
+
+      - name: Format check
         run: yarn format:check
 
-      - name: Lint check (eslint)
-        run: yarn lint 
+      - name: Lint
+        run: yarn lint
 
-      - name: TypeScript type check
+      - name: Type check
         run: yarn type:check
 
-      - name: Build (compile to JS)
+      - name: Build
         run: yarn build
-
-
