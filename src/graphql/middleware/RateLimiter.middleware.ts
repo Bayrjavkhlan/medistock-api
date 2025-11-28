@@ -26,18 +26,19 @@ export const rateLimit = (userLimit = 100, globalLimit = 10_000): IRule => {
     const opType = info.parentType.name;
     const operationKey = `${opType}.${field}`;
 
-    const userId = ctx.reqUser?.user?.id.toString() ?? "anonymous";
+    const staffId = ctx.reqStaff?.staff?.id.toString() ?? "anonymous";
 
-    const userKey = `rate:user:${userId}:${operationKey}`;
+    const staffKey = `rate:user:${staffId}:${operationKey}`;
     const globalKey = `rate:global:${operationKey}`;
 
-    const userBucket = getBucket(userKey);
+    const staffBucket = getBucket(staffKey);
     const globalBucket = getBucket(globalKey);
 
-    const userExceeded = userId !== "anonymous" && userBucket.count > userLimit;
+    const staffExceeded =
+      staffId !== "anonymous" && staffBucket.count > userLimit;
     const globalExceeded = globalBucket.count > globalLimit;
 
-    if (userExceeded || globalExceeded) {
+    if (staffExceeded || globalExceeded) {
       throw SystemErrors.TOO_MANY_REQUESTS();
     }
 

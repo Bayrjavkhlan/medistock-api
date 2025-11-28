@@ -16,6 +16,7 @@ export async function seedEquipment(prisma: PrismaClient) {
       category: EquipmentCategory.IMAGING_MRI,
       state: EquipmentState.AVAILABLE,
       hospital: { connect: { id: "hosp-1" } },
+      assignedTo: {connect: {id: "staff-3"}}
     },
     {
       id: "eq-2",
@@ -24,7 +25,7 @@ export async function seedEquipment(prisma: PrismaClient) {
       category: EquipmentCategory.VENTILATOR,
       state: EquipmentState.ASSIGNED,
       hospital: { connect: { id: "hosp-1" } },
-      assignedTo: { connect: { email: "staff1@test.com" } },
+      assignedTo: {connect: {id: "staff-3"}}
     },
     {
       id: "eq-3",
@@ -33,6 +34,7 @@ export async function seedEquipment(prisma: PrismaClient) {
       category: EquipmentCategory.IMAGING_X_RAY,
       state: EquipmentState.IN_MAINTENANCE,
       hospital: { connect: { id: "hosp-2" } },
+      assignedTo: {connect: {id: "staff-4"}}
     },
   ];
 

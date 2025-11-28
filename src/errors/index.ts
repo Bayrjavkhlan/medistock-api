@@ -2,14 +2,14 @@ import { AuthErrorMap, AuthErrors } from "./auth";
 import { EquipmentErrorMap, EquipmentErrors } from "./equipment";
 import { EquipmentLogErrorMap, EquipmentLogErrors } from "./equipmentLog";
 import { HospitalErrorMap, HospitalErrors } from "./hospital";
+import { StaffErrorMap, StaffErrors } from "./staff";
 import { SystemErrorMap, SystemErrors } from "./system";
-import { UserErrorMap, UserErrors } from "./user";
 
 export * from "@/errors/formatter";
 
 export const ErrorMap = {
   ...AuthErrorMap,
-  ...UserErrorMap,
+  ...StaffErrorMap,
   ...SystemErrorMap,
   ...HospitalErrorMap,
   ...EquipmentErrorMap,
@@ -18,7 +18,7 @@ export const ErrorMap = {
 
 export const Errors = {
   Auth: AuthErrors,
-  User: UserErrors,
+  Staff: StaffErrors,
   System: SystemErrors,
   Hospital: HospitalErrors,
   Equipment: EquipmentErrors,

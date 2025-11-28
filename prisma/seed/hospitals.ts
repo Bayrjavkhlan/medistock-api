@@ -1,18 +1,20 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+// src/prisma/seed/hospitals.ts  (or wherever you keep it)
+
+import { PrismaClient } from "@prisma/client";
 
 export async function seedHospitals(prisma: PrismaClient) {
-  console.log("Seeding hospitals...");
+  console.log("Seeding hospitals + addresses...");
 
-  const hospitalData: Prisma.HospitalCreateInput[] = [
+  const hospitalData = [
     {
       id: "hosp-1",
       name: "Central Hospital",
-      phoneNumber: "70123456",
+      phone: "70123456",
       email: "contact@centralhospital.com",
       address: {
         create: {
-          address1: "123 Main St",
-          address2: "Building A",
+          id: "addr-1",
+          address1: "123 Peace Avenue",
           province: "Ulaanbaatar",
         },
       },
@@ -20,44 +22,37 @@ export async function seedHospitals(prisma: PrismaClient) {
     {
       id: "hosp-2",
       name: "Northside Medical Center",
-      phoneNumber: "70123457",
+      phone: "70123457",
       email: "contact@northside.com",
       address: {
         create: {
-          address1: "456 North Ave",
-          address2: null,
+          id: "addr-2",
+          address1: "456 Freedom Street",
+          address2: "Building B, Floor 2",
           province: "Ulaanbaatar",
         },
       },
     },
   ];
 
-  try {
-    const upsertTx = hospitalData.map((hospital) =>
-      prisma.hospital.upsert({
-        where: { id: hospital.id },
-        create: hospital,
-        update: {
-          name: hospital.name,
-          phoneNumber: hospital.phoneNumber,
-          email: hospital.email,
-          address: {
-            upsert: {
-              create: hospital.address!.create!,
-              update: hospital.address!.create!,
-            },
+  const upserts = hospitalData.map((hospital) =>
+    prisma.hospital.upsert({
+      where: { id: hospital.id },
+      update: {
+        name: hospital.name,
+        phone: hospital.phone,
+        email: hospital.email,
+        address: {
+          upsert: {
+            create: hospital.address.create,
+            update: hospital.address.create,
           },
         },
-      })
-    );
+      },
+      create: hospital,
+    })
+  );
 
-    await prisma.$transaction(upsertTx);
-    console.log("Hospitals seeded successfully!");
-  } catch (error) {
-    console.error("Error seeding hospitals:", error);
-  } finally {
-    await prisma.$disconnect();
-  }
+  await prisma.$transaction(upserts);
+  console.log("Hospitals + addresses seeded perfectly!");
 }
-
-// Run independently

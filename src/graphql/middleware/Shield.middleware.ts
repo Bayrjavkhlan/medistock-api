@@ -19,7 +19,7 @@ const isAuthenticated = rule({ cache: "contextual" })(async (
   _arg: any,
   ctx: Context
 ) => {
-  const isAuthenticated = Boolean(ctx.reqUser?.user?.id);
+  const isAuthenticated = Boolean(ctx.reqStaff?.staff?.id);
   if (!isAuthenticated) throw Errors.Auth.NOT_AUTHORIZED();
   return isAuthenticated;
 });
@@ -45,9 +45,13 @@ const rl = {
 
 const permissions: Permissions = {
   Query: {
-    currentUser: and(isAuthenticated, rl.generous),
-    userDetail: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
-    users: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
+    currentStaff: and(isAuthenticated, rl.generous),
+    staffDetail: and(
+      isAuthenticated,
+      accessRequired("read", "Staff"),
+      rl.normal
+    ),
+    staffs: and(isAuthenticated, accessRequired("read", "Staff"), rl.normal),
     hospitalDetail: and(
       isAuthenticated,
       accessRequired("read", "Hospital"),
@@ -87,14 +91,14 @@ const permissions: Permissions = {
   Mutation: {
     login: and(allow, rl.login),
     refreshAccessToken: and,
-    userCreate: and(
+    staffCreate: and(
       isAuthenticated,
-      accessRequired("create", "User"),
+      accessRequired("create", "Staff"),
       rl.strict
     ),
-    userUpdate: and(
+    staffUpdate: and(
       isAuthenticated,
-      accessRequired("update", "User"),
+      accessRequired("update", "Staff"),
       rl.normal
     ),
     hospitalCreate: and(

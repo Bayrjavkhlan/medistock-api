@@ -11,7 +11,7 @@ export const HospitalUpdate = mutationField("hospitalUpdate", {
     input: nonNull(HospitalCreateInput),
   },
   resolve: async (_, { id, input }, ctx) => {
-    const { name, email, phoneNumber, address } = input;
+    const { name, email, phone, address } = input;
 
     const hospital = await ctx.prisma.hospital.findFirst({
       where: { id },
@@ -23,11 +23,9 @@ export const HospitalUpdate = mutationField("hospitalUpdate", {
 
     const existing = await ctx.prisma.hospital.findFirst({
       where: {
-        OR: [
-          { name },
-          email ? { email } : {},
-          phoneNumber ? { phoneNumber } : {},
-        ].filter(Boolean),
+        OR: [{ name }, email ? { email } : {}, phone ? { phone } : {}].filter(
+          Boolean
+        ),
       },
     });
     if (existing) throw Errors.Hospital.DUPLICATE_HOSPITAL();
@@ -37,7 +35,7 @@ export const HospitalUpdate = mutationField("hospitalUpdate", {
       data: {
         name,
         email,
-        phoneNumber,
+        phone,
         address: {
           update: {
             address1: address.address1,
@@ -45,7 +43,7 @@ export const HospitalUpdate = mutationField("hospitalUpdate", {
             province: address.province,
           },
         },
-        updatedBy: ctx.reqUser?.user?.id,
+        updatedBy: ctx.reqStaff?.staff?.id,
       },
     });
 

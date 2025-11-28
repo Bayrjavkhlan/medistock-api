@@ -4,20 +4,24 @@ import { arg, intArg, nonNull, nullable, queryField } from "nexus";
 import { accessibleBy } from "@/lib/casl";
 import { buildOrderBy, pagination } from "@/lib/prisma";
 
-import { UsersObjectType, UsersOrderByInput, UsersWhereInput } from "../types";
+import {
+  StaffsObjectType,
+  StaffsOrderByInput,
+  StaffsWhereInput,
+} from "../types";
 
-export const Users = queryField("users", {
-  type: UsersObjectType,
+export const Staffs = queryField("staffs", {
+  type: StaffsObjectType,
   args: {
-    where: arg({ type: UsersWhereInput }),
-    orderBy: nullable(arg({ type: UsersOrderByInput })),
+    where: arg({ type: StaffsWhereInput }),
+    orderBy: nullable(arg({ type: StaffsOrderByInput })),
     take: nonNull(intArg()),
     skip: nonNull(intArg()),
   },
   resolve: async (_parent, _args, ctx) => {
     const { where, orderBy, take, skip } = _args;
 
-    const criteria = accessibleBy(ctx.caslAbility, "read", "User");
+    const criteria = accessibleBy(ctx.caslAbility, "read", "Staff");
 
     if (where?.roleKey) criteria.roles = { some: { key: where.roleKey } };
     if (where?.search) {
@@ -29,19 +33,19 @@ export const Users = queryField("users", {
       ];
     }
 
-    const userOrderBy = buildOrderBy<Prisma.UserOrderByWithRelationInput>({
+    const staffOrderBy = buildOrderBy<Prisma.StaffOrderByWithRelationInput>({
       orderBy,
     });
 
-    const users = await ctx.prisma.user.findMany({
+    const staffs = await ctx.prisma.staff.findMany({
       where: criteria,
       include: { hospital: true, roles: true },
       ...pagination(take, skip),
-      ...userOrderBy,
+      ...staffOrderBy,
     });
     return {
-      data: users,
-      count: users.length,
+      data: staffs,
+      count: staffs.length,
     };
   },
 });

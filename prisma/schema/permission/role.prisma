@@ -1,7 +1,7 @@
 model Role {
-  id   String       @id @default(uuid())
-  key  EnumUserRole @unique
+  id   String        @id @default(uuid())
+  key  EnumStaffRole @unique
   name String
 
-  users User[]
+  staffs Staff[]
 }

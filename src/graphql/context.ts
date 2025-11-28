@@ -1,4 +1,4 @@
-import { Hospital, PrismaClient, Role, User } from "@prisma/client";
+import { Hospital, PrismaClient, Role, Staff } from "@prisma/client";
 import { Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
@@ -8,8 +8,8 @@ import { verifyAccessToken } from "@/lib/auth";
 import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
 
-export type TUser = {
-  user: (User & { roles: Role[] }) | null;
+export type TStaff = {
+  staff: (Staff & { roles: Role[] }) | null;
   hospital: Hospital | null;
 };
 
@@ -22,7 +22,7 @@ export type Context = {
   req: Request;
   res: Response;
   prisma: PrismaClient;
-  reqUser: TUser | null;
+  reqStaff: TStaff | null;
   caslAbility: AppAbility;
 };
 
@@ -33,8 +33,8 @@ const verifyToken = (req: Request) => {
 
   if (token) {
     try {
-      const { userId } = verifyAccessToken(token);
-      return userId;
+      const { staffId } = verifyAccessToken(token);
+      return staffId;
     } catch (error) {
       const tokenExpires = error instanceof TokenExpiredError;
       if (tokenExpires) throw Errors.Auth.ACCESS_TOKEN_EXPIRED();
@@ -44,35 +44,35 @@ const verifyToken = (req: Request) => {
   return undefined;
 };
 
-export const findRequestUser = async (
-  userId?: string
-): Promise<TUser | null> => {
-  if (!userId) return null;
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+export const findRequestStaff = async (
+  staffId?: string
+): Promise<TStaff | null> => {
+  if (!staffId) return null;
+  const staff = await prisma.staff.findUnique({
+    where: { id: staffId },
     include: {
       hospital: true,
       roles: true,
     },
   });
-  if (!user) return null;
+  if (!staff) return null;
 
   return {
-    user,
-    hospital: user.hospital!,
+    staff,
+    hospital: staff.hospital!,
   };
 };
 
 const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
-  const userId = verifyToken(req);
-  const reqUser = await findRequestUser(userId);
-  const caslAbility = createAbilities({ reqUser });
+  const staffId = verifyToken(req);
+  const reqStaff = await findRequestStaff(staffId);
+  const caslAbility = createAbilities({ reqStaff });
 
   return {
     req,
     res,
     prisma,
-    reqUser,
+    reqStaff,
     caslAbility,
   };
 };

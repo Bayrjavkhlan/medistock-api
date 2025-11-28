@@ -1,45 +1,51 @@
-import { EnumUserRole } from "@prisma/client";
-import { mutationField, nonNull } from "nexus";
+import { EnumStaffRole } from "@prisma/client";
+import { arg, mutationField, nonNull } from "nexus";
 
 import { Errors } from "@/errors";
-import { checkDuplicateUser } from "@/utils/checkDuplicateUser";
+import { checkDuplicateStaff } from "@/utils/checkDuplicateStaff";
 import { generatePassword } from "@/utils/generatePassword";
 
-export const userCreate = mutationField("userCreate", {
+import { StaffCreateInput } from "../types";
+
+export const staffCreate = mutationField("staffCreate", {
   type: "Boolean",
   args: {
-    input: nonNull("UserCreateInput"),
+    input: nonNull(arg({ type: StaffCreateInput })),
   },
   resolve: async (_, { input }, ctx) => {
     const { name, email, phone, roleKeys, hospitalId } = input;
 
-    const existingUser = await checkDuplicateUser(ctx.prisma, email, phone);
-    if (existingUser) {
-      throw Errors.User.DUPLICATED_USER_EMAIL();
+    const existingstaff = await checkDuplicateStaff(ctx.prisma, email, phone);
+    if (existingstaff) {
+      throw Errors.Staff.DUPLICATED_STAFF_EMAIL();
     }
 
     const { password, passwordHashed } = generatePassword(email);
 
     console.log("password:\t", password);
 
-    if (!ctx.reqUser || !ctx.reqUser.user || !ctx.reqUser.user.roles[0]?.key) {
+    if (
+      !ctx.reqStaff ||
+      !ctx.reqStaff.staff ||
+      !ctx.reqStaff.staff.roles[0]?.key
+    ) {
       throw Errors.Auth.NOT_AUTHORIZED();
     }
 
     if (roleKeys.includes("ADMIN") || roleKeys.includes("HOSPITAL_ADMIN")) {
-      if (ctx.reqUser.user.roles[0].key !== EnumUserRole.ADMIN) {
+      if (ctx.reqStaff.staff.roles[0].key !== EnumStaffRole.ADMIN) {
         throw Errors.System.ACCESS_DENIED();
       }
     }
 
-    await ctx.prisma.user.create({
+    await ctx.prisma.staff.create({
       data: {
         name,
         email,
         phone,
         password: passwordHashed,
         roles: {
-          connect: roleKeys.map((key) => ({ key })),
+          connect: roleKeys.map((key: EnumStaffRole) => ({ key })),
         },
         ...(hospitalId && {
           hospital: { connect: { id: hospitalId } },

@@ -1,11 +1,11 @@
-import { EnumUserRole, PrismaClient } from "@prisma/client";
+import { EnumStaffRole, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const roleData: { key: EnumUserRole; name: string }[] = [
-  { key: EnumUserRole.ADMIN, name: "System Administrator" },
-  { key: EnumUserRole.HOSPITAL_ADMIN, name: "Hospital Administrator" },
-  { key: EnumUserRole.STAFF, name: "Staff Member" },
+const roleData: { key: EnumStaffRole; name: string }[] = [
+  { key: EnumStaffRole.ADMIN, name: "System Administrator" },
+  { key: EnumStaffRole.HOSPITAL_ADMIN, name: "Hospital Administrator" },
+  { key: EnumStaffRole.STAFF, name: "Staff Member" },
 ];
 
 export const seedRoles = async (prisma: PrismaClient) => {

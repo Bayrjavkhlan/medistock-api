@@ -8,7 +8,7 @@ export async function seedEquipmentLogs(prisma: PrismaClient) {
     {
       id: "log-1",
       equipment: { connect: { id: "eq-1" } },
-      performedBy: { connect: { id: "user-1" } },
+      performedBy: { connect: { id: "staff-3" } },
       description: "Initial log entry for equipment eq-1",
       createdBy: "system",
       updatedBy: "system",
@@ -16,7 +16,7 @@ export async function seedEquipmentLogs(prisma: PrismaClient) {
     {
       id: "log-2",
       equipment: { connect: { id: "eq-2" } },
-      performedBy: { connect: { id: "user-2" } },
+      performedBy: { connect: { id: "staff-3" } },
       description: "Initial log entry for equipment eq-2",
       createdBy: "system",
       updatedBy: "system",
@@ -24,15 +24,15 @@ export async function seedEquipmentLogs(prisma: PrismaClient) {
     {
       id: "log-3",
       equipment: { connect: { id: "eq-3" } },
-      performedBy: { connect: { id: "user-3" } },
+      performedBy: { connect: { id: "staff-3" } },
       description: "Initial log entry for equipment eq-3",
       createdBy: "system",
       updatedBy: "system",
     },
     {
-      id: "log-3",
+      id: "log-4",
       equipment: { connect: { id: "eq-2" } },
-      performedBy: { connect: { id: "user-1" } },
+      performedBy: { connect: { id: "staff-3" } },
       description: "Second log entry for equipment eq-2",
       createdBy: "system",
       updatedBy: "system",

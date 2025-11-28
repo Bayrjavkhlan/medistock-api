@@ -10,18 +10,18 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
     input: nonNull(EquipmentCreateInput),
   },
   resolve: async (_parent, { input }, ctx) => {
-    const { name, serialNo, hospitalId, userId, category, state } = input;
+    const { name, serialNo, hospitalId, staffId, category, state } = input;
 
     const hospital = await ctx.prisma.hospital.findUnique({
       where: { id: hospitalId },
     });
     if (!hospital) throw Errors.Hospital.HOSPITAL_NOT_FOUND();
 
-    if (userId) {
-      const user = await ctx.prisma.user.findUnique({
-        where: { id: userId },
+    if (staffId) {
+      const staff = await ctx.prisma.staff.findUnique({
+        where: { id: staffId },
       });
-      if (!user) throw Errors.User.USER_NOT_FOUND();
+      if (!staff) throw Errors.Staff.STAFF_NOT_FOUND();
     }
 
     const existing = await ctx.prisma.equipment.findUnique({
@@ -36,8 +36,8 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
         category,
         state,
         hospital: { connect: { id: hospitalId } },
-        assignedTo: userId ? { connect: { id: userId } } : undefined,
-        createdBy: ctx.reqUser?.user?.id,
+        assignedTo: staffId ? { connect: { id: staffId } } : undefined,
+        createdBy: ctx.reqStaff?.staff?.id,
       },
     });
 
