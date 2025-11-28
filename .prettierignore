@@ -1,0 +1,6 @@
+src/graphql/generated/
+node_modules/
+dist/
+prisma/
+*.log
+.env
