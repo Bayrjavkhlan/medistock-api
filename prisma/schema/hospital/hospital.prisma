@@ -5,7 +5,7 @@ model Hospital {
   email       String?
 
   address Address?
-  users   User[]
+  users   Staff[]
 
   equipments Equipment[]
 

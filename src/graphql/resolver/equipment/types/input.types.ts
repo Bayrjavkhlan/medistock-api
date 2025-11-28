@@ -15,7 +15,7 @@ export const EquipmentCreateInput = inputObjectType({
     t.nonNull.string("name");
     t.nonNull.string("serialNo");
     t.nonNull.string("hospitalId");
-    t.nonNull.string("userId");
+    t.nonNull.string("staffId");
     t.nonNull.field("category", { type: EquipmentCategoryEnum });
     t.nonNull.field("state", { type: EquipmentStateEnum });
   },

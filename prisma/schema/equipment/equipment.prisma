@@ -6,8 +6,8 @@ model Equipment {
   hospital   Hospital @relation(fields: [hospitalId], references: [id])
   hospitalId String
 
-  assignedTo User?   @relation("AssignedEquipment", fields: [userId], references: [id])
-  userId     String?
+  assignedTo Staff?  @relation("AssignedEquipment", fields: [staffId], references: [id])
+  staffId    String?
 
   category EquipmentCategory
   logs     EquipmentLog[]

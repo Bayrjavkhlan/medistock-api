@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { env } from "@/config";
 
 export type TokenPayload = {
-  userId: string;
+  staffId: string;
   refreshToken?: string | undefined;
 };
 export type LoginPayload = {
@@ -29,23 +29,23 @@ const signToken = (payload: TokenPayload, options: JwtOptions): string => {
 };
 
 const signAccessToken = (
-  { userId, refreshToken }: TokenPayload,
+  { staffId, refreshToken }: TokenPayload,
   jwtid: string
 ): string =>
   signToken(
-    { userId, refreshToken },
+    { staffId, refreshToken },
     { expiresIn: ACCESS_TOKEN_EXPIRE, jwtid }
   );
 
-const signRefreshToken = ({ userId }: TokenPayload, jwtid: string): string =>
-  signToken({ userId }, { expiresIn: REFRESH_TOKEN_EXPIRE, jwtid });
+const signRefreshToken = ({ staffId }: TokenPayload, jwtid: string): string =>
+  signToken({ staffId }, { expiresIn: REFRESH_TOKEN_EXPIRE, jwtid });
 
 export const generateAccessToken = async (
-  userId: string
+  staffId: string
 ): Promise<LoginPayload> => {
   const jwtid = uuidv4();
-  const accessToken = signAccessToken({ userId }, jwtid);
-  const refreshToken = signRefreshToken({ userId }, jwtid);
+  const accessToken = signAccessToken({ staffId }, jwtid);
+  const refreshToken = signRefreshToken({ staffId }, jwtid);
   return { accessToken, refreshToken, jwtid };
 };
 

@@ -2,7 +2,7 @@ import { objectType } from "nexus";
 import { Equipment } from "nexus-prisma";
 
 import { HospitalObjectType } from "../../hospital";
-import { UserObjectType } from "../../user";
+import { StaffObjectType } from "../../staff";
 
 export const EquipmentObjectType = objectType({
   name: Equipment.$name,
@@ -12,7 +12,7 @@ export const EquipmentObjectType = objectType({
     t.string(Equipment.serialNo.name);
     // t.string(Equipment.description.name);
     t.nullable.field(Equipment.hospital.name, { type: HospitalObjectType });
-    t.nullable.field(Equipment.assignedTo.name, { type: UserObjectType }); // ← FIXED
+    t.nullable.field(Equipment.assignedTo.name, { type: StaffObjectType }); // ← FIXED
     t.string(Equipment.category.name);
     // t.nullable.field(Equipment.logs.name, { type: EquipmentLogObjectType });
     t.string(Equipment.state.name);

@@ -1,4 +1,4 @@
-enum EnumUserRole {
+enum EnumStaffRole {
   ADMIN
   HOSPITAL_ADMIN
   STAFF

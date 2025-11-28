@@ -35,7 +35,7 @@ export const hospitalCreate = mutationField("hospitalCreate", {
             province: address.province,
           },
         },
-        createdBy: ctx.reqUser?.user?.id,
+        createdBy: ctx.reqStaff?.staff?.id,
       },
     });
     return true;
