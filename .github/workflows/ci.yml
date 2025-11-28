@@ -24,7 +24,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Generate Prisma client
-        run: yarn prisma generate
+        run: yarn prisma:generate
 
       - name: Generate Nexus types
         run: yarn generate:nexus

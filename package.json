@@ -14,7 +14,8 @@
     "type:check": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,json}'",
-    "format:check": "prettier --check 'src/**/*.{ts,tsx,json}'"
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,json}'",
+    "generate:nexus": "ts-node --transpile-only -r tsconfig-paths/register src/graphql/schema.ts"
   },
   "dependencies": {
     "@apollo/server": "^5.0.0",
