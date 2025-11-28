@@ -14,7 +14,10 @@
     "type:check": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,json}'",
-    "format:check": "prettier --check 'src/**/*.{ts,tsx,json}'"
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,json}'",
+    "generate:nexus": "ts-node --transpile-only -r tsconfig-paths/register src/graphql/schema.ts",
+    "prepare": "husky",
+    "commit": "git-cz"
   },
   "dependencies": {
     "@apollo/server": "^5.0.0",
@@ -56,10 +59,12 @@
     "@types/faker": "^6.6.11",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.9.1",
+    "commitlint": "^20.1.0",
     "eslint": "^9.38.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "git-cz": "^4.9.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.6.2",
     "prisma": "5.18.0",
     "ts-node": "^10.9.2",
@@ -79,5 +84,17 @@
     ],
     "exec": "ts-node --transpile-only -r tsconfig-paths/register src/app.ts",
     "ext": "ts"
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css,scss,html}": "prettier --write"
   }
 }

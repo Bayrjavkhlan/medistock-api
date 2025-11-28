@@ -31,6 +31,6 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["src/**/*", "commitlint.config.ts", "src/types/express.d.ts"],
-  "exclude": ["node_modules", "dist", "commitlint.config.ts"]
+  "include": ["src/**/*", "src/types/express.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
