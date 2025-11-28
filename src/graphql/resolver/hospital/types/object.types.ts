@@ -7,7 +7,7 @@ export const HospitalObjectType = objectType({
     t.string(Hospital.id.name);
     t.string(Hospital.name.name);
     t.string(Hospital.email.name);
-    t.string(Hospital.phoneNumber.name);
+    t.string(Hospital.phone.name);
     t.nullable.field(Hospital.address.name, { type: AddressObjectType });
     t.dateTime(Hospital.createdAt.name);
     t.dateTime(Hospital.updatedAt.name);

@@ -1,8 +1,8 @@
 model Hospital {
-  id          String  @id @default(uuid())
-  name        String
-  phoneNumber String?
-  email       String?
+  id    String  @id @default(uuid())
+  name  String
+  phone String?
+  email String?
 
   address Address?
   users   Staff[]

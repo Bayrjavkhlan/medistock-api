@@ -22,7 +22,7 @@ export const Hospitals = queryField("hospitals", {
       criteria.OR = [
         { name: { contains: search, mode: "insensitive" } },
         { email: { contains: search, mode: "insensitive" } },
-        { phoneNumber: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search, mode: "insensitive" } },
       ];
     }
     if (where?.address) {

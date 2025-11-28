@@ -21,7 +21,7 @@ export const HospitalCreateInput = inputObjectType({
   name: "HospitalCreateInput",
   definition: (t) => {
     t.nonNull.string("name");
-    t.nonNull.string("phoneNumber");
+    t.nonNull.string("phone");
     t.nonNull.email("email");
     t.nonNull.field("address", {
       type: AddressCreateInput,

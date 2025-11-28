@@ -7,7 +7,7 @@ export async function seedHospitals(prisma: PrismaClient) {
     {
       id: "hosp-1",
       name: "Central Hospital",
-      phoneNumber: "70123456",
+      phone: "70123456",
       email: "contact@centralhospital.com",
       address: {
         create: {
@@ -20,7 +20,7 @@ export async function seedHospitals(prisma: PrismaClient) {
     {
       id: "hosp-2",
       name: "Northside Medical Center",
-      phoneNumber: "70123457",
+      phone: "70123457",
       email: "contact@northside.com",
       address: {
         create: {
@@ -39,7 +39,7 @@ export async function seedHospitals(prisma: PrismaClient) {
         create: hospital,
         update: {
           name: hospital.name,
-          phoneNumber: hospital.phoneNumber,
+          phone: hospital.phone,
           email: hospital.email,
           address: {
             upsert: {

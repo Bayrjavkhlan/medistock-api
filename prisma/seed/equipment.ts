@@ -24,7 +24,6 @@ export async function seedEquipment(prisma: PrismaClient) {
       category: EquipmentCategory.VENTILATOR,
       state: EquipmentState.ASSIGNED,
       hospital: { connect: { id: "hosp-1" } },
-      assignedTo: { connect: { email: "staff1@test.com" } },
     },
     {
       id: "eq-3",
