@@ -1,0 +1,25 @@
+model Booking {
+  id String @id @default(uuid())
+
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  hospitalId String
+
+  patientName  String
+  patientPhone String
+
+  department  String
+  doctorName  String?
+  bookingTime DateTime
+
+  status BookingStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}

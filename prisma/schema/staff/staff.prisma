@@ -1,21 +1,57 @@
-model Staff {
+model User {
   id       String  @id @default(uuid())
-  email    String  @unique
-  password String
+  email    String? @unique
+  phone    String? @unique
+  password String?
   name     String?
-  phone    String?
 
-  roles Role[]
+  memberships Membership[]
 
-  hospital   Hospital? @relation(fields: [hospitalId], references: [id])
-  hospitalId String?
+  assignedEquipments Equipment[]    @relation("AssignedEquipment")
+  performedLogs      EquipmentLog[] @relation("PerformedLogs")
 
-  equipmentsAssigned Equipment[] @relation("AssignedEquipment")
-
-  equipmentLogs EquipmentLog[] @relation("PerformedLogs")
-
-  createdBy String?
-  updatedBy String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Organization {
+  id   String           @id @default(uuid())
+  name String
+  type OrganizationType
+
+  hospital Hospital?
+  pharmacy Pharmacy?
+
+  memberships Membership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  address   Address?
+}
+
+model Membership {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  role OrganizationRole
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, organizationId])
+}
+
+enum OrganizationType {
+  HOSPITAL
+  PHARMACY
+}
+
+enum OrganizationRole {
+  OWNER
+  MANAGER
+  STAFF
 }

@@ -1,9 +1,3 @@
-enum EnumStaffRole {
-  ADMIN
-  HOSPITAL_ADMIN
-  STAFF
-}
-
 enum EquipmentCategory {
   IMAGING_MRI
   IMAGING_CT

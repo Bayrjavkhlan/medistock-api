@@ -1,7 +1,0 @@
-model Role {
-  id   String        @id @default(uuid())
-  key  EnumStaffRole @unique
-  name String
-
-  staffs Staff[]
-}
