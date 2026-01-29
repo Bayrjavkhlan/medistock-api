@@ -2,11 +2,14 @@ import { AbilityBuilder, PureAbility } from "@casl/ability";
 import { createPrismaAbility, PrismaQuery, Subjects } from "@casl/prisma";
 import {
   Booking,
+  Drug,
   Equipment,
   EquipmentLog,
   Hospital,
+  Membership,
   Pharmacy,
   PharmacyDrug,
+  User,
 } from "@prisma/client";
 
 import { Errors } from "@/errors";
@@ -21,6 +24,9 @@ type PrismaSubjects = Subjects<{
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
   Booking: Booking;
+  Drug: Drug;
+  User: User;
+  Membership: Membership;
 }>;
 
 type SubjectMap = {
@@ -30,6 +36,9 @@ type SubjectMap = {
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
   Booking: Booking;
+  Drug: Drug;
+  User: User;
+  Membership: Membership;
 };
 
 export type ModelName = keyof SubjectMap;
@@ -67,12 +76,15 @@ export const createAbilities = (
   const org = ctx.activeOrg;
 
   if (user?.isPlatformAdmin) {
-    can(["create", "read", "update", "delete"], "Equipment");
-    can(["create", "read", "update", "delete"], "EquipmentLog");
-    can(["create", "read", "update", "delete"], "Hospital");
-    can(["create", "read", "update", "delete"], "Pharmacy");
-    can(["create", "read", "update", "delete"], "PharmacyDrug");
-    can(["create", "read", "update", "delete"], "Booking");
+    can("all", "Equipment");
+    can("all", "EquipmentLog");
+    can("all", "Hospital");
+    can("all", "Pharmacy");
+    can("all", "PharmacyDrug");
+    can("all", "Booking");
+    can("all", "Drug");
+    can("all", "User");
+    can("all", "Membership");
     return build();
   }
 
@@ -83,6 +95,9 @@ export const createAbilities = (
     cannot(["create", "read", "update", "delete"], "Pharmacy");
     cannot(["create", "read", "update", "delete"], "PharmacyDrug");
     cannot(["create", "read", "update", "delete"], "Booking");
+    cannot(["create", "read", "update", "delete"], "Drug");
+    cannot(["create", "read", "update", "delete"], "User");
+    cannot(["create", "read", "update", "delete"], "Membership");
     return build();
   }
 
@@ -91,53 +106,85 @@ export const createAbilities = (
 
   switch (role) {
     case "OWNER":
-      can(["create", "read", "update", "delete"], "Hospital", {
-        organizationId,
-      });
-      can(["create", "read", "update", "delete"], "Equipment", {
-        hospital: { organizationId },
-      });
-      can(["create", "read", "update", "delete"], "EquipmentLog", {
+      can("all", "Hospital", { organizationId });
+      can("all", "Equipment", { hospital: { organizationId } });
+      can("all", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
-      can(["create", "read", "update", "delete"], "Booking", {
-        hospital: { organizationId },
-      });
-
-      can(["create", "read", "update", "delete"], "Pharmacy", {
-        organizationId,
-      });
-      can(["create", "read", "update", "delete"], "PharmacyDrug", {
-        pharmacy: { organizationId },
+      can("all", "Booking", { hospital: { organizationId } });
+      can("all", "Pharmacy", { organizationId });
+      can("all", "PharmacyDrug", { pharmacy: { organizationId } });
+      can("all", "Membership", { organizationId });
+      can(["read", "create", "update", "delete"], "Drug");
+      can(["create", "read", "update", "delete"], "User", {
+        memberships: { some: { organizationId } },
       });
       break;
 
     case "MANAGER":
-      can(["read", "update"], "Hospital", { organizationId });
-      can(["read", "update", "create"], "Equipment", {
+      can(["create", "read", "update"], "Hospital", { organizationId });
+      can(["create", "read", "update"], "Equipment", {
         hospital: { organizationId },
       });
-      can(["read", "create"], "EquipmentLog", {
+      can(["create", "read", "update"], "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
-      can(["read", "update"], "Booking", {
+      can(["create", "read", "update"], "Booking", {
         hospital: { organizationId },
       });
-      can(["read", "update"], "PharmacyDrug", {
+      can(["create", "read", "update"], "Pharmacy", { organizationId });
+      can(["create", "read", "update"], "PharmacyDrug", {
         pharmacy: { organizationId },
       });
+      can(["read", "create", "update"], "Drug");
+      can(["create", "read", "update"], "User", {
+        memberships: { some: { organizationId } },
+      });
+      cannot(["create", "read", "update", "delete"], "Membership");
+      cannot("delete", "Hospital");
+      cannot("delete", "Equipment");
+      cannot("delete", "EquipmentLog");
+      cannot("delete", "Booking");
+      cannot("delete", "Pharmacy");
+      cannot("delete", "PharmacyDrug");
+      cannot("delete", "Drug");
+      cannot("delete", "User");
       break;
 
     case "STAFF":
+      can("read", "Hospital", { organizationId });
       can("read", "Equipment", { hospital: { organizationId } });
+      can("read", "Booking", { hospital: { organizationId } });
+      can("read", "Pharmacy", { organizationId });
+      can("read", "PharmacyDrug", { pharmacy: { organizationId } });
+      can("read", "Drug");
+      can("read", "User", {
+        memberships: { some: { organizationId } },
+      });
       can("create", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
-      can("read", "PharmacyDrug", {
-        pharmacy: { organizationId },
-      });
-      cannot("delete", "Equipment");
+      cannot(["create", "read", "update", "delete"], "Membership");
+      cannot("update", "EquipmentLog");
       cannot("delete", "EquipmentLog");
+      cannot("create", "Equipment");
+      cannot("update", "Equipment");
+      cannot("delete", "Equipment");
+      cannot("create", "Booking");
+      cannot("update", "Booking");
+      cannot("delete", "Booking");
+      cannot("create", "Pharmacy");
+      cannot("update", "Pharmacy");
+      cannot("delete", "Pharmacy");
+      cannot("create", "PharmacyDrug");
+      cannot("update", "PharmacyDrug");
+      cannot("delete", "PharmacyDrug");
+      cannot("create", "Drug");
+      cannot("update", "Drug");
+      cannot("delete", "Drug");
+      cannot("create", "User");
+      cannot("update", "User");
+      cannot("delete", "User");
       break;
 
     default:
@@ -147,6 +194,9 @@ export const createAbilities = (
       cannot(["create", "read", "update", "delete"], "Pharmacy");
       cannot(["create", "read", "update", "delete"], "PharmacyDrug");
       cannot(["create", "read", "update", "delete"], "Booking");
+      cannot(["create", "read", "update", "delete"], "Drug");
+      cannot(["create", "read", "update", "delete"], "User");
+      cannot(["create", "read", "update", "delete"], "Membership");
       break;
   }
 

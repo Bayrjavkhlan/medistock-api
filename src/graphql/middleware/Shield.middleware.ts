@@ -46,6 +46,7 @@ const rl = {
 const permissions: Permissions = {
   Query: {
     currentUser: and(isAuthenticated, rl.generous),
+    me: and(isAuthenticated, rl.generous),
     hospitalDetail: and(
       isAuthenticated,
       accessRequired("read", "Hospital"),
@@ -81,10 +82,45 @@ const permissions: Permissions = {
       accessRequired("read", "EquipmentLog"),
       rl.normal
     ),
+    pharmacyDetail: and(
+      isAuthenticated,
+      accessRequired("read", "Pharmacy"),
+      rl.normal
+    ),
+    pharmacies: and(
+      isAuthenticated,
+      accessRequired("read", "Pharmacy"),
+      rl.normal
+    ),
+    pharmacyOption: and(
+      isAuthenticated,
+      accessRequired("read", "Pharmacy"),
+      rl.generous
+    ),
+    drugDetail: and(isAuthenticated, accessRequired("read", "Drug"), rl.normal),
+    drugs: and(isAuthenticated, accessRequired("read", "Drug"), rl.normal),
+    userDetail: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
+    users: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
+    bookingDetail: and(
+      isAuthenticated,
+      accessRequired("read", "Booking"),
+      rl.normal
+    ),
+    bookings: and(
+      isAuthenticated,
+      accessRequired("read", "Booking"),
+      rl.normal
+    ),
+    memberships: and(
+      isAuthenticated,
+      accessRequired("read", "Membership"),
+      rl.normal
+    ),
   },
   Mutation: {
     login: and(allow, rl.login),
     refreshAccessToken: and(allow, rl.login),
+    selectOrganization: and(isAuthenticated, rl.normal),
     hospitalCreate: and(
       isAuthenticated,
       accessRequired("create", "Hospital"),
@@ -93,6 +129,11 @@ const permissions: Permissions = {
     hospitalUpdate: and(
       isAuthenticated,
       accessRequired("update", "Hospital"),
+      rl.strict
+    ),
+    hospitalDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Hospital"),
       rl.strict
     ),
     equipmentCreate: and(
@@ -105,6 +146,11 @@ const permissions: Permissions = {
       accessRequired("update", "Equipment"),
       rl.normal
     ),
+    equipmentDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Equipment"),
+      rl.normal
+    ),
     equipmentLogCreate: and(
       isAuthenticated,
       accessRequired("create", "EquipmentLog"),
@@ -114,6 +160,86 @@ const permissions: Permissions = {
       isAuthenticated,
       accessRequired("update", "EquipmentLog"),
       rl.normal
+    ),
+    equipmentLogDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "EquipmentLog"),
+      rl.normal
+    ),
+    pharmacyCreate: and(
+      isAuthenticated,
+      accessRequired("create", "Pharmacy"),
+      rl.strict
+    ),
+    pharmacyUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "Pharmacy"),
+      rl.strict
+    ),
+    pharmacyDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Pharmacy"),
+      rl.strict
+    ),
+    drugCreate: and(
+      isAuthenticated,
+      accessRequired("create", "Drug"),
+      rl.strict
+    ),
+    drugUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "Drug"),
+      rl.strict
+    ),
+    drugDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Drug"),
+      rl.strict
+    ),
+    userCreate: and(
+      isAuthenticated,
+      accessRequired("create", "User"),
+      rl.strict
+    ),
+    userUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "User"),
+      rl.strict
+    ),
+    userDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "User"),
+      rl.strict
+    ),
+    bookingCreate: and(
+      isAuthenticated,
+      accessRequired("create", "Booking"),
+      rl.strict
+    ),
+    bookingUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "Booking"),
+      rl.strict
+    ),
+    bookingDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Booking"),
+      rl.strict
+    ),
+    membershipCreate: and(
+      isAuthenticated,
+      accessRequired("create", "Membership"),
+      rl.strict
+    ),
+    membershipUpdate: and(
+      isAuthenticated,
+      accessRequired("update", "Membership"),
+      rl.strict
+    ),
+    membershipDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "Membership"),
+      rl.strict
     ),
   },
 };

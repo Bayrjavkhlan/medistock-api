@@ -9,6 +9,7 @@ import { TokenExpiredError } from "jsonwebtoken";
 
 import { env } from "@/config";
 import { Errors } from "@/errors";
+import { resolveActiveOrg } from "@/graphql/middleware/withOrg";
 import { verifyAccessToken } from "@/lib/auth";
 import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
@@ -92,18 +93,7 @@ const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
   const userId = verifyToken(req);
   const reqUser = await findRequestUser(userId);
 
-  let activeOrg: Context["activeOrg"] = null;
-
-  if (reqUser && reqUser.user && reqUser.user.memberships.length > 0) {
-    const first = reqUser.user.memberships[0];
-
-    if (first) {
-      activeOrg = {
-        role: first.role,
-        organization: first.organization,
-      };
-    }
-  }
+  const activeOrg = resolveActiveOrg(req, reqUser);
 
   const caslAbility = createAbilities({ reqUser, activeOrg });
 

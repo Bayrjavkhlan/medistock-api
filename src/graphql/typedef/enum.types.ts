@@ -1,4 +1,5 @@
 import {
+  BookingStatus,
   EquipmentCategory,
   EquipmentState,
   OrganizationRole,
@@ -30,4 +31,9 @@ export const EquipmentCategoryEnum = enumType({
 export const EquipmentStateEnum = enumType({
   name: "EquipmentState",
   members: Object.values(EquipmentState),
+});
+
+export const BookingStatusEnum = enumType({
+  name: "BookingStatus",
+  members: Object.values(BookingStatus),
 });

@@ -32,6 +32,14 @@ export const AuthUserObject = objectType({
   },
 });
 
+export const MePayload = objectType({
+  name: "MePayload",
+  definition(t) {
+    t.nonNull.field("user", { type: AuthUserObject });
+    t.nullable.field("activeOrganization", { type: UserMembershipObject });
+  },
+});
+
 export const LoginPayload = objectType({
   name: "LoginPayload",
   definition(t) {
