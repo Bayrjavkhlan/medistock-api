@@ -1,22 +1,22 @@
-import { Prisma, PrismaClient, Staff } from "@prisma/client";
+import { Prisma, PrismaClient, User } from "@prisma/client";
 
-export async function checkDuplicateStaff(
+export async function checkDuplicateUser(
   prisma: PrismaClient,
   email?: string,
   phone?: string
-): Promise<Staff | null> {
+): Promise<User | null> {
   if (!email && !phone) return null;
 
-  const orConditions: Prisma.StaffWhereInput[] = [
+  const orConditions: Prisma.UserWhereInput[] = [
     email ? { email } : undefined,
     phone ? { phone } : undefined,
-  ].filter(Boolean) as Prisma.StaffWhereInput[];
+  ].filter(Boolean) as Prisma.UserWhereInput[];
 
-  const existingStaff = await prisma.staff.findFirst({
+  const existingUser = await prisma.user.findFirst({
     where: {
       OR: orConditions,
     },
   });
 
-  return existingStaff;
+  return existingUser;
 }

@@ -19,8 +19,16 @@ export const EquipmentLogs = queryField("equipmentLogs", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { equipment: { name: { contains: search, mode: "insensitive" } } },
-        { performedBy: { name: { contains: search, mode: "insensitive" } } },
+        {
+          equipment: {
+            is: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
+        {
+          performedBy: {
+            is: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
       ];
     }
 
@@ -31,7 +39,9 @@ export const EquipmentLogs = queryField("equipmentLogs", {
       include: {
         equipment: {
           include: {
-            hospital: true,
+            hospital: {
+              include: { organization: { include: { address: true } } },
+            },
             assignedTo: true,
           },
         },

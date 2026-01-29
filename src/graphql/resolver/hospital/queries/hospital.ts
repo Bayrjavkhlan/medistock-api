@@ -15,7 +15,7 @@ export const HospitalDetail = queryField("hospitalDetail", {
         id,
         ...criteria,
       },
-      include: { address: true },
+      include: { organization: { include: { address: true } } },
     });
 
     if (!hospital) return null;

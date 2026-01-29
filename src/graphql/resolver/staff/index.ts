@@ -1,3 +1,2 @@
-export * from "./mutations";
-export * from "./queries";
-export * from "./types";
+// Deprecated: staff model removed in multi-tenant refactor.
+export {};

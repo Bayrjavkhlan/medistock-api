@@ -1,2 +1,2 @@
-export * from "./input.types";
-export * from "./object.types";
+// Deprecated: staff model removed in multi-tenant refactor.
+export {};

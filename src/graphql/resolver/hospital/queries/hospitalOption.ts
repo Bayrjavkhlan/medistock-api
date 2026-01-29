@@ -11,13 +11,13 @@ export const HospitalOption = queryField("hospitalOption", {
 
     const hospitals = await ctx.prisma.hospital.findMany({
       where: criteria,
-      select: {
-        id: true,
-        name: true,
-      },
-      orderBy: { name: "asc" },
+      include: { organization: true },
+      orderBy: { organization: { name: "asc" } },
     });
 
-    return hospitals;
+    return hospitals.map((hospital) => ({
+      id: hospital.id,
+      name: hospital.organization.name,
+    }));
   },
 });

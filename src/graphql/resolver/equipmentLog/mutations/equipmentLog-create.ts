@@ -10,24 +10,28 @@ export const EquipmentLogCreate = mutationField("equipmentLogCreate", {
     input: nonNull(EquipmentLogCreateInput),
   },
   resolve: async (_parent, { input }, ctx) => {
-    const { equipmentId, staffId, description } = input;
+    const { equipmentId, description } = input;
 
     const equipment = await ctx.prisma.equipment.findUnique({
       where: { id: equipmentId },
+      include: { hospital: { select: { organizationId: true } } },
     });
     if (!equipment) throw Errors.Equipment.EQUIPMENT_NOT_FOUND();
 
-    const staff = await ctx.prisma.staff.findUnique({
-      where: { id: staffId },
-    });
-    if (!staff) throw Errors.Staff.STAFF_NOT_FOUND();
+    if (!ctx.reqUser?.user) throw Errors.Auth.NOT_AUTHORIZED();
+    if (
+      !ctx.reqUser.user.isPlatformAdmin &&
+      (!ctx.activeOrg ||
+        equipment.hospital.organizationId !== ctx.activeOrg.organization.id)
+    ) {
+      throw Errors.System.PERMISSION_DENIED();
+    }
 
     await ctx.prisma.equipmentLog.create({
       data: {
         equipment: { connect: { id: equipmentId } },
-        performedBy: { connect: { id: staffId } },
+        performedBy: { connect: { id: ctx.reqUser.user.id } },
         description,
-        createdBy: ctx.reqStaff?.staff?.id,
       },
     });
 

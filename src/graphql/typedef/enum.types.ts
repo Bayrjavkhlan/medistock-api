@@ -1,14 +1,20 @@
 import {
-  EnumStaffRole,
   EquipmentCategory,
   EquipmentState,
+  OrganizationRole,
+  OrganizationType,
   Prisma,
 } from "@prisma/client";
 import { enumType } from "nexus";
 
-export const EnumStaffRoleType = enumType({
-  name: "EnumStaffRole",
-  members: Object.values(EnumStaffRole),
+export const OrganizationRoleEnum = enumType({
+  name: "OrganizationRole",
+  members: Object.values(OrganizationRole),
+});
+
+export const OrganizationTypeEnum = enumType({
+  name: "OrganizationType",
+  members: Object.values(OrganizationType),
 });
 
 export const EnumSortOrderType = enumType({

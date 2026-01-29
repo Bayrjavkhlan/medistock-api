@@ -15,7 +15,11 @@ export const EquipmentDetail = queryField("equipmentDetail", {
         id,
         ...criteria,
       },
-      include: { hospital: true, logs: true },
+      include: {
+        hospital: { include: { organization: { include: { address: true } } } },
+        logs: true,
+        assignedTo: true,
+      },
     });
 
     if (!equipment) return null;

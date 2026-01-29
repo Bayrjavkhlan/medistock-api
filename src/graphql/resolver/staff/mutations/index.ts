@@ -1,2 +1,2 @@
-export * from "./staff-create";
-export * from "./staff-update";
+// Deprecated: staff model removed in multi-tenant refactor.
+export {};

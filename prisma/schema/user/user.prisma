@@ -7,6 +7,8 @@ model User {
 
   memberships Membership[]
 
+  isPlatformAdmin Boolean @default(false)
+
   assignedEquipments Equipment[]    @relation("AssignedEquipment")
   performedLogs      EquipmentLog[] @relation("PerformedLogs")
 

@@ -1,3 +1,4 @@
+import { OrganizationType } from "@prisma/client";
 import { mutationField, nonNull, stringArg } from "nexus";
 
 import { Errors } from "@/errors";
@@ -15,35 +16,54 @@ export const HospitalUpdate = mutationField("hospitalUpdate", {
 
     const hospital = await ctx.prisma.hospital.findFirst({
       where: { id },
+      include: { organization: true },
     });
 
     if (!hospital) {
-      throw Errors.Hospital.HOSPITAL_NOT_FOUND;
+      throw Errors.Hospital.HOSPITAL_NOT_FOUND();
     }
 
-    const existing = await ctx.prisma.hospital.findFirst({
+    const existingOrg = await ctx.prisma.organization.findFirst({
       where: {
-        OR: [{ name }, email ? { email } : {}, phone ? { phone } : {}].filter(
-          Boolean
-        ),
+        id: { not: hospital.organizationId },
+        name,
+        type: OrganizationType.HOSPITAL,
       },
     });
-    if (existing) throw Errors.Hospital.DUPLICATE_HOSPITAL();
+    if (existingOrg) throw Errors.Hospital.DUPLICATE_HOSPITAL();
+
+    const existingContact = await ctx.prisma.hospital.findFirst({
+      where: {
+        id: { not: id },
+        OR: [email ? { email } : {}, phone ? { phone } : {}].filter(Boolean),
+      },
+    });
+    if (existingContact) throw Errors.Hospital.DUPLICATE_HOSPITAL();
 
     await ctx.prisma.hospital.update({
       where: { id },
       data: {
-        name,
         email,
         phone,
-        address: {
+        organization: {
           update: {
-            address1: address.address1,
-            address2: address.address2 || null,
-            province: address.province,
+            name,
+            address: {
+              upsert: {
+                create: {
+                  address1: address.address1,
+                  address2: address.address2 || null,
+                  province: address.province,
+                },
+                update: {
+                  address1: address.address1,
+                  address2: address.address2 || null,
+                  province: address.province,
+                },
+              },
+            },
           },
         },
-        updatedBy: ctx.reqStaff?.staff?.id,
       },
     });
 

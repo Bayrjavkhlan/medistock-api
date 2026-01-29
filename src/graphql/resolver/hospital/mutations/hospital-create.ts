@@ -1,3 +1,4 @@
+import { OrganizationType } from "@prisma/client";
 import { mutationField, nonNull } from "nexus";
 
 import { Errors } from "@/errors";
@@ -12,20 +13,22 @@ export const hospitalCreate = mutationField("hospitalCreate", {
   resolve: async (_parents, { input }, ctx) => {
     const { name, email, phone, address } = input;
 
-    const existing = await ctx.prisma.hospital.findFirst({
+    const existingOrg = await ctx.prisma.organization.findFirst({
+      where: { name, type: OrganizationType.HOSPITAL },
+    });
+    if (existingOrg) throw Errors.Hospital.DUPLICATE_HOSPITAL();
+
+    const existingContact = await ctx.prisma.hospital.findFirst({
       where: {
-        OR: [{ name }, email ? { email } : {}, phone ? { phone } : {}].filter(
-          Boolean
-        ),
+        OR: [email ? { email } : {}, phone ? { phone } : {}].filter(Boolean),
       },
     });
-    if (existing) throw Errors.Hospital.DUPLICATE_HOSPITAL();
+    if (existingContact) throw Errors.Hospital.DUPLICATE_HOSPITAL();
 
-    await ctx.prisma.hospital.create({
+    await ctx.prisma.organization.create({
       data: {
         name,
-        email,
-        phone,
+        type: OrganizationType.HOSPITAL,
         address: {
           create: {
             address1: address.address1,
@@ -33,7 +36,12 @@ export const hospitalCreate = mutationField("hospitalCreate", {
             province: address.province,
           },
         },
-        createdBy: ctx.reqStaff?.staff?.id,
+        hospital: {
+          create: {
+            email,
+            phone,
+          },
+        },
       },
     });
     return true;

@@ -20,7 +20,11 @@ export const Hospitals = queryField("hospitals", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { name: { contains: search, mode: "insensitive" } },
+        {
+          organization: {
+            is: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
         { email: { contains: search, mode: "insensitive" } },
         { phone: { contains: search, mode: "insensitive" } },
       ];
@@ -30,7 +34,7 @@ export const Hospitals = queryField("hospitals", {
     }
     const hospitals = await ctx.prisma.hospital.findMany({
       where: criteria,
-      include: { address: true },
+      include: { organization: { include: { address: true } } },
       ...pagination(take, skip),
     });
     return {
