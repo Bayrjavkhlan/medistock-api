@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -18,11 +19,26 @@ export const Equipments = queryField("equipments", {
       const adminWhere = where?.search
         ? {
             OR: [
-              { name: { contains: where.search, mode: "insensitive" } },
-              { serialNo: { contains: where.search, mode: "insensitive" } },
+              {
+                name: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                serialNo: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
               {
                 assignedTo: {
-                  is: { name: { contains: where.search, mode: "insensitive" } },
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
                 },
               },
               {
@@ -30,7 +46,10 @@ export const Equipments = queryField("equipments", {
                   is: {
                     organization: {
                       is: {
-                        name: { contains: where.search, mode: "insensitive" },
+                        name: {
+                          contains: where.search,
+                          mode: Prisma.QueryMode.insensitive,
+                        },
                       },
                     },
                   },

@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -20,12 +21,22 @@ export const EquipmentLogs = queryField("equipmentLogs", {
             OR: [
               {
                 equipment: {
-                  is: { name: { contains: where.search, mode: "insensitive" } },
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
                 },
               },
               {
                 performedBy: {
-                  is: { name: { contains: where.search, mode: "insensitive" } },
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
                 },
               },
             ],

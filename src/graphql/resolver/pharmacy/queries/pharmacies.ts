@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -21,11 +22,26 @@ export const Pharmacies = queryField("pharmacies", {
             OR: [
               {
                 organization: {
-                  is: { name: { contains: where.search, mode: "insensitive" } },
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
                 },
               },
-              { email: { contains: where.search, mode: "insensitive" } },
-              { phone: { contains: where.search, mode: "insensitive" } },
+              {
+                email: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                phone: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
             ],
           }
         : undefined;
