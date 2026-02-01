@@ -15,6 +15,33 @@ export const Hospitals = queryField("hospitals", {
   resolve: async (_parents, _args, ctx) => {
     const { where, take, skip } = _args;
 
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      const adminWhere = where?.search
+        ? {
+            OR: [
+              {
+                organization: {
+                  is: { name: { contains: where.search, mode: "insensitive" } },
+                },
+              },
+              { email: { contains: where.search, mode: "insensitive" } },
+              { phone: { contains: where.search, mode: "insensitive" } },
+            ],
+          }
+        : undefined;
+
+      const hospitals = await ctx.prisma.hospital.findMany({
+        where: adminWhere,
+        include: { organization: { include: { address: true } } },
+        ...pagination(take, skip),
+      });
+
+      return {
+        data: hospitals,
+        count: hospitals.length,
+      };
+    }
+
     const criteria = accessibleBy(ctx.caslAbility, "read", "Hospital");
 
     if (where?.search) {

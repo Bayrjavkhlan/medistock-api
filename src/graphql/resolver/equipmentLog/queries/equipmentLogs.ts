@@ -14,6 +14,51 @@ export const EquipmentLogs = queryField("equipmentLogs", {
   resolve: async (_parent, _args, ctx) => {
     const { where, take, skip } = _args;
 
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      const adminWhere = where?.search
+        ? {
+            OR: [
+              {
+                equipment: {
+                  is: { name: { contains: where.search, mode: "insensitive" } },
+                },
+              },
+              {
+                performedBy: {
+                  is: { name: { contains: where.search, mode: "insensitive" } },
+                },
+              },
+            ],
+          }
+        : undefined;
+
+      const equipmentLogs = await ctx.prisma.equipmentLog.findMany({
+        where: adminWhere,
+        skip,
+        take,
+        include: {
+          equipment: {
+            include: {
+              hospital: {
+                include: { organization: { include: { address: true } } },
+              },
+              assignedTo: true,
+            },
+          },
+          performedBy: true,
+        },
+      });
+
+      const count = await ctx.prisma.equipmentLog.count({
+        where: adminWhere,
+      });
+
+      return {
+        data: equipmentLogs,
+        count,
+      };
+    }
+
     const criteria = accessibleBy(ctx.caslAbility, "read", "EquipmentLog");
 
     if (where?.search) {

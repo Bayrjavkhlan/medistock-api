@@ -22,13 +22,32 @@ export const resolveActiveOrg = (
       ? headerOrgId.trim()
       : null;
 
-  if (!orgId) return null;
+  if (!orgId) {
+    const fallbackMembership = reqUser.user.memberships[0];
+    if (fallbackMembership) {
+      return {
+        role: fallbackMembership.role,
+        organization: fallbackMembership.organization,
+      };
+    }
+    return null;
+  }
 
   const membership = reqUser.user.memberships.find(
     (item) => item.organization.id === orgId
   );
 
-  if (!membership) throw Errors.System.PERMISSION_DENIED();
+  if (!membership) {
+    if (reqUser.user.isPlatformAdmin) return null;
+    const fallbackMembership = reqUser.user.memberships[0];
+    if (fallbackMembership) {
+      return {
+        role: fallbackMembership.role,
+        organization: fallbackMembership.organization,
+      };
+    }
+    throw Errors.System.PERMISSION_DENIED();
+  }
 
   return {
     role: membership.role,

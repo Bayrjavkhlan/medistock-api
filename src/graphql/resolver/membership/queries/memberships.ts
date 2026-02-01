@@ -13,6 +13,18 @@ export const Memberships = queryField("memberships", {
     skip: nonNull(intArg()),
   },
   resolve: async (_parents, { take, skip }, ctx) => {
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      const memberships = await ctx.prisma.membership.findMany({
+        include: { user: true, organization: true },
+        ...pagination(take, skip),
+      });
+
+      return {
+        data: memberships,
+        count: memberships.length,
+      };
+    }
+
     const criteria = accessibleBy(ctx.caslAbility, "read", "Membership");
 
     const organizationId = ctx.activeOrg?.organization.id;

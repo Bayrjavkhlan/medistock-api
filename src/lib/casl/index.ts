@@ -15,7 +15,7 @@ import {
 import { Errors } from "@/errors";
 import { Context } from "@/graphql/context";
 
-export type Action = "all" | "create" | "read" | "update" | "delete";
+export type Action = "manage" | "create" | "read" | "update" | "delete";
 
 type PrismaSubjects = Subjects<{
   Equipment: Equipment;
@@ -76,15 +76,15 @@ export const createAbilities = (
   const org = ctx.activeOrg;
 
   if (user?.isPlatformAdmin) {
-    can("all", "Equipment");
-    can("all", "EquipmentLog");
-    can("all", "Hospital");
-    can("all", "Pharmacy");
-    can("all", "PharmacyDrug");
-    can("all", "Booking");
-    can("all", "Drug");
-    can("all", "User");
-    can("all", "Membership");
+    can("manage", "Equipment");
+    can("manage", "EquipmentLog");
+    can("manage", "Hospital");
+    can("manage", "Pharmacy");
+    can("manage", "PharmacyDrug");
+    can("manage", "Booking");
+    can("manage", "Drug");
+    can("manage", "User");
+    can("manage", "Membership");
     return build();
   }
 
@@ -106,15 +106,15 @@ export const createAbilities = (
 
   switch (role) {
     case "OWNER":
-      can("all", "Hospital", { organizationId });
-      can("all", "Equipment", { hospital: { organizationId } });
-      can("all", "EquipmentLog", {
+      can("manage", "Hospital", { organizationId });
+      can("manage", "Equipment", { hospital: { organizationId } });
+      can("manage", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
-      can("all", "Booking", { hospital: { organizationId } });
-      can("all", "Pharmacy", { organizationId });
-      can("all", "PharmacyDrug", { pharmacy: { organizationId } });
-      can("all", "Membership", { organizationId });
+      can("manage", "Booking", { hospital: { organizationId } });
+      can("manage", "Pharmacy", { organizationId });
+      can("manage", "PharmacyDrug", { pharmacy: { organizationId } });
+      can("manage", "Membership", { organizationId });
       can(["read", "create", "update", "delete"], "Drug");
       can(["create", "read", "update", "delete"], "User", {
         memberships: { some: { organizationId } },
@@ -158,6 +158,9 @@ export const createAbilities = (
       can("read", "Pharmacy", { organizationId });
       can("read", "PharmacyDrug", { pharmacy: { organizationId } });
       can("read", "Drug");
+      can("read", "EquipmentLog", {
+        equipment: { hospital: { organizationId } },
+      });
       can("read", "User", {
         memberships: { some: { organizationId } },
       });

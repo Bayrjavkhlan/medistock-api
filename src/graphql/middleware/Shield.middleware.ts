@@ -26,10 +26,20 @@ const isAuthenticated = rule({ cache: "contextual" })(async (
 
 const accessRequired = (action: Action, modelName: ModelName) =>
   rule({ cache: "contextual" })(async (_parent, _args, ctx: Context) => {
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      return true;
+    }
     try {
       accessibleBy(ctx.caslAbility, action, modelName);
       return true;
-    } catch {
+    } catch (error) {
+      const userId = ctx.reqUser?.user?.id ?? "anonymous";
+      const orgId = ctx.activeOrg?.organization?.id ?? "none";
+      console.warn(
+        "[RBAC] Denied",
+        JSON.stringify({ action, modelName, userId, orgId })
+      );
+      void error;
       return false;
     }
   });
