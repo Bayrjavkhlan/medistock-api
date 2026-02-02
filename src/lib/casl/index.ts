@@ -140,7 +140,8 @@ export const createAbilities = (
       can(["create", "read", "update"], "User", {
         memberships: { some: { organizationId } },
       });
-      cannot(["create", "read", "update", "delete"], "Membership");
+      can("read", "Membership", { organizationId });
+      cannot(["create", "update", "delete"], "Membership");
       cannot("delete", "Hospital");
       cannot("delete", "Equipment");
       cannot("delete", "EquipmentLog");

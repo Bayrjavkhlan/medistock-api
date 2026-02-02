@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -20,11 +21,22 @@ export const Drugs = queryField("drugs", {
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { genericName: { contains: search, mode: "insensitive" } },
-        { manufacturer: { contains: search, mode: "insensitive" } },
-        { strength: { contains: search, mode: "insensitive" } },
-        { dosageForm: { contains: search, mode: "insensitive" } },
+        { name: { contains: search, mode: Prisma.QueryMode.insensitive } },
+        {
+          genericName: { contains: search, mode: Prisma.QueryMode.insensitive },
+        },
+        {
+          manufacturer: {
+            contains: search,
+            mode: Prisma.QueryMode.insensitive,
+          },
+        },
+        {
+          strength: { contains: search, mode: Prisma.QueryMode.insensitive },
+        },
+        {
+          dosageForm: { contains: search, mode: Prisma.QueryMode.insensitive },
+        },
       ];
     }
 

@@ -7,6 +7,13 @@ export const DrugsWhereInput = inputObjectType({
   },
 });
 
+export const PharmacyDrugsWhereInput = inputObjectType({
+  name: "PharmacyDrugsWhereInput",
+  definition: (t) => {
+    t.nullable.string("search");
+  },
+});
+
 export const DrugCreateInput = inputObjectType({
   name: "DrugCreateInput",
   definition: (t) => {

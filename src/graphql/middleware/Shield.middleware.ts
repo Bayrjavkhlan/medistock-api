@@ -109,6 +109,11 @@ const permissions: Permissions = {
     ),
     drugDetail: and(isAuthenticated, accessRequired("read", "Drug"), rl.normal),
     drugs: and(isAuthenticated, accessRequired("read", "Drug"), rl.normal),
+    pharmacyDrugs: and(
+      isAuthenticated,
+      accessRequired("read", "PharmacyDrug"),
+      rl.normal
+    ),
     userDetail: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
     users: and(isAuthenticated, accessRequired("read", "User"), rl.normal),
     bookingDetail: and(

@@ -1,5 +1,5 @@
 import { objectType } from "nexus";
-import { Drug } from "nexus-prisma";
+import { Drug, PharmacyDrug } from "nexus-prisma";
 
 export const DrugObjectType = objectType({
   name: Drug.$name,
@@ -20,6 +20,26 @@ export const DrugsObjectType = objectType({
   name: DrugObjectType.name + "s",
   definition(t) {
     t.list.nonNull.field("data", { type: DrugObjectType });
+    t.nonNull.int("count");
+  },
+});
+
+export const PharmacyDrugObjectType = objectType({
+  name: PharmacyDrug.$name,
+  definition(t) {
+    t.string(PharmacyDrug.id.name);
+    t.nonNull.field(PharmacyDrug.drug.name, { type: DrugObjectType });
+    t.int(PharmacyDrug.quantity.name);
+    t.float(PharmacyDrug.price.name);
+    t.string(PharmacyDrug.status.name);
+    t.dateTime(PharmacyDrug.updatedAt.name);
+  },
+});
+
+export const PharmacyDrugsObjectType = objectType({
+  name: PharmacyDrugObjectType.name + "s",
+  definition(t) {
+    t.list.nonNull.field("data", { type: PharmacyDrugObjectType });
     t.nonNull.int("count");
   },
 });
