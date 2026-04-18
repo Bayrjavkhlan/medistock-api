@@ -25,3 +25,13 @@ export const DrugCreateInput = inputObjectType({
     t.string("description");
   },
 });
+
+export const PharmacyDrugUpsertInput = inputObjectType({
+  name: "PharmacyDrugUpsertInput",
+  definition: (t) => {
+    t.nonNull.string("drugId");
+    t.nonNull.int("quantity");
+    t.float("price");
+    t.nonNull.string("status");
+  },
+});

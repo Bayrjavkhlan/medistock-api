@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { objectType } from "nexus";
 import { Pharmacy } from "nexus-prisma";
 
+import { PharmacyDrugObjectType } from "../../drug";
 import { AddressObjectType } from "../../hospital";
 
 type PharmacyWithOrganization = Prisma.PharmacyGetPayload<{
@@ -22,6 +23,13 @@ export const PharmacyObjectType = objectType({
       type: AddressObjectType,
       resolve: (pharmacy: any) =>
         (pharmacy as PharmacyWithOrganization).organization.address,
+    });
+    t.nonNull.int("inventoryCount", {
+      resolve: (pharmacy: any) => pharmacy.inventory?.length ?? 0,
+    });
+    t.nonNull.list.nonNull.field("inventory", {
+      type: PharmacyDrugObjectType,
+      resolve: (pharmacy: any) => pharmacy.inventory ?? [],
     });
     t.dateTime(Pharmacy.createdAt.name);
     t.dateTime(Pharmacy.updatedAt.name);

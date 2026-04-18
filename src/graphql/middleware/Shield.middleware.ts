@@ -212,6 +212,16 @@ const permissions: Permissions = {
       accessRequired("delete", "Drug"),
       rl.strict
     ),
+    pharmacyDrugUpsert: and(
+      isAuthenticated,
+      accessRequired("create", "PharmacyDrug"),
+      rl.strict
+    ),
+    pharmacyDrugDelete: and(
+      isAuthenticated,
+      accessRequired("delete", "PharmacyDrug"),
+      rl.strict
+    ),
     userCreate: and(
       isAuthenticated,
       accessRequired("create", "User"),

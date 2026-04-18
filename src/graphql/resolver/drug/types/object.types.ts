@@ -17,6 +17,15 @@ export const DrugAvailabilityObjectType = objectType({
     t.nonNull.string("pharmacyName", {
       resolve: (listing: any) => listing.pharmacy.organization.name,
     });
+    t.nonNull.string("organizationId", {
+      resolve: (listing: any) => listing.pharmacy.organizationId,
+    });
+    t.nullable.string("pharmacyEmail", {
+      resolve: (listing: any) => listing.pharmacy.email ?? null,
+    });
+    t.nullable.string("pharmacyPhone", {
+      resolve: (listing: any) => listing.pharmacy.phone ?? null,
+    });
     t.nullable.field("address", {
       type: AddressObjectType,
       resolve: (listing: any) => listing.pharmacy.organization.address ?? null,

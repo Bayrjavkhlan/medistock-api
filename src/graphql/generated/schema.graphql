@@ -111,8 +111,11 @@ type Drug {
 type DrugAvailability {
   address: Address
   id: String!
+  organizationId: String!
+  pharmacyEmail: String
   pharmacyId: String!
   pharmacyName: String!
+  pharmacyPhone: String
   price: Float
   quantity: Int!
   status: String
@@ -329,6 +332,8 @@ type Mutation {
   membershipUpdate(id: String!, input: MembershipUpdateInput!): Boolean
   pharmacyCreate(input: PharmacyCreateInput!): Boolean
   pharmacyDelete(id: String!): Boolean
+  pharmacyDrugDelete(drugId: String!): Boolean
+  pharmacyDrugUpsert(input: PharmacyDrugUpsertInput!): Boolean
   pharmacyUpdate(id: String!, input: PharmacyCreateInput!): Boolean
   refreshAccessToken(refreshToken: String!): LoginPayload
   resendOtp(input: ResendOtpInput!): ResendOtpPayload
@@ -366,6 +371,8 @@ type Pharmacy {
   createdAt: DateTime
   email: String
   id: String
+  inventory: [PharmacyDrug!]!
+  inventoryCount: Int!
   name: String
   phone: String
   updatedAt: DateTime
@@ -385,6 +392,13 @@ type PharmacyDrug {
   quantity: Int
   status: String
   updatedAt: DateTime
+}
+
+input PharmacyDrugUpsertInput {
+  drugId: String!
+  price: Float
+  quantity: Int!
+  status: String!
 }
 
 type PharmacyDrugs {

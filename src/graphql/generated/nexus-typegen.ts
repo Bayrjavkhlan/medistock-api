@@ -126,6 +126,12 @@ export interface NexusGenInputs {
     name: string; // String!
     phone: string; // String!
   }
+  PharmacyDrugUpsertInput: { // input type
+    drugId: string; // String!
+    price?: number | null; // Float
+    quantity: number; // Int!
+    status: string; // String!
+  }
   PharmacyDrugsWhereInput: { // input type
     search?: string | null; // String
   }
@@ -464,8 +470,11 @@ export interface NexusGenFieldTypes {
   DrugAvailability: { // field return type
     address: NexusGenRootTypes['Address'] | null; // Address
     id: string; // String!
+    organizationId: string; // String!
+    pharmacyEmail: string | null; // String
     pharmacyId: string; // String!
     pharmacyName: string; // String!
+    pharmacyPhone: string | null; // String
     price: number | null; // Float
     quantity: number; // Int!
     status: string | null; // String
@@ -565,6 +574,8 @@ export interface NexusGenFieldTypes {
     membershipUpdate: boolean | null; // Boolean
     pharmacyCreate: boolean | null; // Boolean
     pharmacyDelete: boolean | null; // Boolean
+    pharmacyDrugDelete: boolean | null; // Boolean
+    pharmacyDrugUpsert: boolean | null; // Boolean
     pharmacyUpdate: boolean | null; // Boolean
     refreshAccessToken: NexusGenRootTypes['LoginPayload'] | null; // LoginPayload
     resendOtp: NexusGenRootTypes['ResendOtpPayload'] | null; // ResendOtpPayload
@@ -585,6 +596,8 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string | null; // String
     id: string | null; // String
+    inventory: NexusGenRootTypes['PharmacyDrug'][]; // [PharmacyDrug!]!
+    inventoryCount: number; // Int!
     name: string | null; // String
     phone: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -729,8 +742,11 @@ export interface NexusGenFieldTypeNames {
   DrugAvailability: { // field return type name
     address: 'Address'
     id: 'String'
+    organizationId: 'String'
+    pharmacyEmail: 'String'
     pharmacyId: 'String'
     pharmacyName: 'String'
+    pharmacyPhone: 'String'
     price: 'Float'
     quantity: 'Int'
     status: 'String'
@@ -830,6 +846,8 @@ export interface NexusGenFieldTypeNames {
     membershipUpdate: 'Boolean'
     pharmacyCreate: 'Boolean'
     pharmacyDelete: 'Boolean'
+    pharmacyDrugDelete: 'Boolean'
+    pharmacyDrugUpsert: 'Boolean'
     pharmacyUpdate: 'Boolean'
     refreshAccessToken: 'LoginPayload'
     resendOtp: 'ResendOtpPayload'
@@ -850,6 +868,8 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     email: 'String'
     id: 'String'
+    inventory: 'PharmacyDrug'
+    inventoryCount: 'Int'
     name: 'String'
     phone: 'String'
     updatedAt: 'DateTime'
@@ -995,6 +1015,12 @@ export interface NexusGenArgTypes {
     }
     pharmacyDelete: { // args
       id: string; // String!
+    }
+    pharmacyDrugDelete: { // args
+      drugId: string; // String!
+    }
+    pharmacyDrugUpsert: { // args
+      input: NexusGenInputs['PharmacyDrugUpsertInput']; // PharmacyDrugUpsertInput!
     }
     pharmacyUpdate: { // args
       id: string; // String!

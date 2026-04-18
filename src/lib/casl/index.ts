@@ -89,13 +89,16 @@ export const createAbilities = (
   }
 
   if (!org) {
+    can("read", "Hospital");
+    can("read", "Pharmacy");
+    can("read", "Drug");
     cannot(["create", "read", "update", "delete"], "Equipment");
     cannot(["create", "read", "update", "delete"], "EquipmentLog");
-    cannot(["create", "read", "update", "delete"], "Hospital");
-    cannot(["create", "read", "update", "delete"], "Pharmacy");
+    cannot(["create", "update", "delete"], "Hospital");
+    cannot(["create", "update", "delete"], "Pharmacy");
     cannot(["create", "read", "update", "delete"], "PharmacyDrug");
     cannot(["create", "read", "update", "delete"], "Booking");
-    cannot(["create", "read", "update", "delete"], "Drug");
+    cannot(["create", "update", "delete"], "Drug");
     cannot(["create", "read", "update", "delete"], "User");
     cannot(["create", "read", "update", "delete"], "Membership");
     return build();
@@ -155,14 +158,17 @@ export const createAbilities = (
     case "STAFF":
       if (org.organization.type === "PHARMACY") {
         can(["create", "read", "update", "delete"], "Drug");
+        can(["create", "read", "update", "delete"], "PharmacyDrug", {
+          pharmacy: { organizationId },
+        });
       } else {
         can("read", "Drug");
+        can("read", "PharmacyDrug", { pharmacy: { organizationId } });
       }
       can("read", "Hospital", { organizationId });
       can("read", "Equipment", { hospital: { organizationId } });
       can("read", "Booking", { hospital: { organizationId } });
       can("read", "Pharmacy", { organizationId });
-      can("read", "PharmacyDrug", { pharmacy: { organizationId } });
       can("read", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
@@ -184,9 +190,11 @@ export const createAbilities = (
       cannot("create", "Pharmacy");
       cannot("update", "Pharmacy");
       cannot("delete", "Pharmacy");
-      cannot("create", "PharmacyDrug");
-      cannot("update", "PharmacyDrug");
-      cannot("delete", "PharmacyDrug");
+      if (org.organization.type !== "PHARMACY") {
+        cannot("create", "PharmacyDrug");
+        cannot("update", "PharmacyDrug");
+        cannot("delete", "PharmacyDrug");
+      }
       cannot("create", "User");
       cannot("update", "User");
       cannot("delete", "User");
