@@ -42,12 +42,24 @@ export const Drugs = queryField("drugs", {
 
     const drugs = await ctx.prisma.drug.findMany({
       where: criteria,
+      include: {
+        listings: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+          },
+        },
+      },
       ...pagination(take, skip),
+    });
+    const count = await ctx.prisma.drug.count({
+      where: criteria,
     });
 
     return {
       data: drugs,
-      count: drugs.length,
+      count,
     };
   },
 });

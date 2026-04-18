@@ -153,12 +153,16 @@ export const createAbilities = (
       break;
 
     case "STAFF":
+      if (org.organization.type === "PHARMACY") {
+        can(["create", "read", "update", "delete"], "Drug");
+      } else {
+        can("read", "Drug");
+      }
       can("read", "Hospital", { organizationId });
       can("read", "Equipment", { hospital: { organizationId } });
       can("read", "Booking", { hospital: { organizationId } });
       can("read", "Pharmacy", { organizationId });
       can("read", "PharmacyDrug", { pharmacy: { organizationId } });
-      can("read", "Drug");
       can("read", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
       });
@@ -183,9 +187,6 @@ export const createAbilities = (
       cannot("create", "PharmacyDrug");
       cannot("update", "PharmacyDrug");
       cannot("delete", "PharmacyDrug");
-      cannot("create", "Drug");
-      cannot("update", "Drug");
-      cannot("delete", "Drug");
       cannot("create", "User");
       cannot("update", "User");
       cannot("delete", "User");

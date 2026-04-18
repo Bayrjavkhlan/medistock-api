@@ -17,7 +17,7 @@ export const PharmacyDrugs = queryField("pharmacyDrugs", {
   resolve: async (_parents, _args, ctx) => {
     const { where, take, skip } = _args;
 
-    const organizationId = ctx.activeOrg?.organization?.id;
+    const organizationId = ctx.activeOrg?.organization.id;
     if (!organizationId) throw Errors.System.PERMISSION_DENIED();
 
     const criteria = accessibleBy(ctx.caslAbility, "read", "PharmacyDrug");
@@ -83,10 +83,16 @@ export const PharmacyDrugs = queryField("pharmacyDrugs", {
       include: { drug: true },
       ...pagination(take, skip),
     });
+    const count = await ctx.prisma.pharmacyDrug.count({
+      where: {
+        ...criteria,
+        pharmacy: { organizationId },
+      },
+    });
 
     return {
       data: pharmacyDrugs,
-      count: pharmacyDrugs.length,
+      count,
     };
   },
 });
