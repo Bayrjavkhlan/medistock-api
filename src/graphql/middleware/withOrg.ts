@@ -17,10 +17,13 @@ export const resolveActiveOrg = (
   if (!reqUser?.user) return null;
 
   const headerOrgId = req.headers["x-org-id"];
+  const cookieOrgId = req.cookies?.["x-org-id"];
   const orgId =
     typeof headerOrgId === "string" && headerOrgId.trim().length > 0
       ? headerOrgId.trim()
-      : null;
+      : typeof cookieOrgId === "string" && cookieOrgId.trim().length > 0
+        ? cookieOrgId.trim()
+        : null;
 
   if (!orgId) {
     const fallbackMembership = reqUser.user.memberships[0];

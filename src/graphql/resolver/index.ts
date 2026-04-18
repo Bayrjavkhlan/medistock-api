@@ -4,6 +4,7 @@ export * from "./drug";
 export * from "./equipment";
 export * from "./equipmentLog";
 export * from "./hospital";
+export * from "./location";
 export * from "./membership";
 export * from "./pharmacy";
 export * from "./user";

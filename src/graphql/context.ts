@@ -84,6 +84,26 @@ export const findRequestUser = async (
 
   if (!user) return null;
 
+  if (user.isPlatformAdmin && user.memberships.length === 0) {
+    const organizations = await prisma.organization.findMany({
+      include: {
+        hospital: true,
+        pharmacy: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return {
+      user: {
+        ...user,
+        memberships: organizations.map((organization) => ({
+          role: OrganizationRole.OWNER,
+          organization,
+        })),
+      },
+    };
+  }
+
   return {
     user,
   };

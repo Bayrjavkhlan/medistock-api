@@ -18,10 +18,11 @@ export const Memberships = queryField("memberships", {
         include: { user: true, organization: true },
         ...pagination(take, skip),
       });
+      const count = await ctx.prisma.membership.count();
 
       return {
         data: memberships,
-        count: memberships.length,
+        count,
       };
     }
 
@@ -37,10 +38,13 @@ export const Memberships = queryField("memberships", {
       include: { user: true, organization: true },
       ...pagination(take, skip),
     });
+    const count = await ctx.prisma.membership.count({
+      where: { ...criteria, organizationId },
+    });
 
     return {
       data: memberships,
-      count: memberships.length,
+      count,
     };
   },
 });

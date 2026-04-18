@@ -1,0 +1,4 @@
+2026-04-18 14:59:07 [info]: [Server start] PORT: 4000 GRAPHQL_PATH: /api/graphql
+2026-04-18 15:07:46 [emerg]: [Server stop]
+2026-04-18 15:07:52 [info]: [Server start] PORT: 4000 GRAPHQL_PATH: /api/graphql
+2026-04-18 15:10:24 [emerg]: [Server stop]

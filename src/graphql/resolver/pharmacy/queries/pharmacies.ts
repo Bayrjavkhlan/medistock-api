@@ -51,10 +51,13 @@ export const Pharmacies = queryField("pharmacies", {
         include: { organization: { include: { address: true } } },
         ...pagination(take, skip),
       });
+      const count = await ctx.prisma.pharmacy.count({
+        where: adminWhere,
+      });
 
       return {
         data: pharmacies,
-        count: pharmacies.length,
+        count,
       };
     }
 
@@ -78,10 +81,13 @@ export const Pharmacies = queryField("pharmacies", {
       include: { organization: { include: { address: true } } },
       ...pagination(take, skip),
     });
+    const count = await ctx.prisma.pharmacy.count({
+      where: criteria,
+    });
 
     return {
       data: pharmacies,
-      count: pharmacies.length,
+      count,
     };
   },
 });

@@ -59,7 +59,8 @@ const authCookieOptions = (secure = false) => ({
   expires: new Date(Date.now() + ONE_DAY_MS),
   maxAge: ONE_DAY_MS,
   secure,
-  domain: env.COOKIE_DOMAIN,
+  sameSite: "lax" as const,
+  ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 });
 
 export const setAuthCookies = (

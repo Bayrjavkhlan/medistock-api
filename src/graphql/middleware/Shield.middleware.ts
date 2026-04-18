@@ -72,6 +72,7 @@ const permissions: Permissions = {
       accessRequired("read", "Hospital"),
       rl.generous
     ),
+    adminMapLocations: and(isAuthenticated, rl.normal),
     equipmentDetail: and(
       isAuthenticated,
       accessRequired("read", "Equipment"),

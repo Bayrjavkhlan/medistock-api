@@ -17,5 +17,5 @@ export const env = {
   CORS_DOMAIN: process.env.CORS_DOMAIN?.trim().split(",") || [
     "http://localhost:3000",
   ],
-  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || "localhost",
+  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN?.trim() || undefined,
 };

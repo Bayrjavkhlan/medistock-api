@@ -34,6 +34,8 @@ export const AddressObjectType = objectType({
     t.string(Address.address1.name);
     t.string(Address.address2.name);
     t.string(Address.province.name);
+    t.float(Address.latitude.name);
+    t.float(Address.longitude.name);
     t.dateTime(Address.createdAt.name);
     t.dateTime(Address.updatedAt.name);
   },

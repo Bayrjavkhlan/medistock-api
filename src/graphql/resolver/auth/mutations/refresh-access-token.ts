@@ -26,7 +26,7 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
       const { accessToken, refreshToken: newRefreshToken } =
         await generateAccessToken(ctxUser.user.id);
 
-      setAuthCookies(ctx.res, true, accessToken);
+      setAuthCookies(ctx.res, env.NODE_ENV === "production", accessToken);
 
       return {
         user: ctxUser.user,

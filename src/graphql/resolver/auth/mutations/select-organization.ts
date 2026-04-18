@@ -1,5 +1,6 @@
 import { mutationField, nonNull, stringArg } from "nexus";
 
+import { env } from "@/config";
 import { Errors } from "@/errors";
 
 import { UserMembershipObject } from "../types";
@@ -18,7 +19,12 @@ export const SelectOrganization = mutationField("selectOrganization", {
     if (!membership) throw Errors.System.PERMISSION_DENIED();
 
     ctx.res.setHeader("x-org-id", orgId);
-    ctx.res.cookie("x-org-id", orgId, { sameSite: "lax" });
+    ctx.res.cookie("x-org-id", orgId, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: env.NODE_ENV === "production",
+      ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
+    });
 
     return membership;
   },

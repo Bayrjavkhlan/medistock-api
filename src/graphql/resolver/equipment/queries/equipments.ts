@@ -71,10 +71,13 @@ export const Equipments = queryField("equipments", {
         skip,
         take,
       });
+      const count = await ctx.prisma.equipment.count({
+        where: adminWhere,
+      });
 
       return {
         data: equipments,
-        count: equipments.length,
+        count,
       };
     }
 
@@ -118,10 +121,13 @@ export const Equipments = queryField("equipments", {
       skip,
       take,
     });
+    const count = await ctx.prisma.equipment.count({
+      where: criteria,
+    });
 
     return {
       data: equipments,
-      count: equipments.length,
+      count,
     };
   },
 });

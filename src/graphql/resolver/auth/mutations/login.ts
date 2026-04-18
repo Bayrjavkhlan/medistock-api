@@ -33,7 +33,7 @@ export const Login = mutationField("login", {
 
     const { accessToken, refreshToken } = await generateAccessToken(user.id);
 
-    setAuthCookies(ctx.res, true, accessToken);
+    setAuthCookies(ctx.res, env.NODE_ENV === "production", accessToken);
 
     return {
       user,
