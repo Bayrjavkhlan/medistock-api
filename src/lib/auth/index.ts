@@ -60,6 +60,7 @@ const authCookieOptions = (secure = false) => ({
   maxAge: ONE_DAY_MS,
   secure,
   sameSite: "lax" as const,
+  path: "/",
   ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 });
 
@@ -69,4 +70,18 @@ export const setAuthCookies = (
   accessToken: string
 ): void => {
   res.cookie(env.AUTH_TOKEN_KEY, accessToken, authCookieOptions(secure));
+};
+
+export const clearAuthCookies = (res: Response): void => {
+  const cookieOptions = {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: env.NODE_ENV === "production",
+    path: "/",
+    ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
+  };
+
+  res.clearCookie(env.AUTH_TOKEN_KEY, cookieOptions);
+  res.clearCookie(env.REFRESH_TOKEN_KEY, cookieOptions);
+  res.clearCookie("x-org-id", cookieOptions);
 };

@@ -7,15 +7,15 @@ export const SystemErrorMap = {
   },
   DATA_NOT_FOUND: {
     code: "DATA_NOT_FOUND",
-    message: "Мэдээлэл олдсонгүй",
+    message: "Мэдээлэл олдсонгүй.",
   },
   PERMISSION_DENIED: {
     code: "PERMISSION_DENIED",
-    message: "Хандах эрхгүй permission",
+    message: "Энэ үйлдлийг хийх эрхгүй байна.",
   },
   ACCESS_DENIED: {
     code: "ACCESS_DENIED",
-    message: "Хандах эрхгүй access",
+    message: "Хандах эрхгүй байна.",
   },
   TOO_MANY_REQUESTS: {
     code: "TOO_MANY_REQUESTS",

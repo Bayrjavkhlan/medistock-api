@@ -1,9 +1,10 @@
-import { compareSync } from "bcrypt";
+import { compare } from "bcrypt";
 import { arg, mutationField, nonNull } from "nexus";
 
 import { env } from "@/config";
 import { Errors } from "@/errors";
 import { generateAccessToken, setAuthCookies } from "@/lib/auth";
+import { normalizeEmail } from "@/lib/auth/credentials";
 
 import { LoginInput, LoginPayload } from "../types";
 
@@ -12,10 +13,10 @@ export const Login = mutationField("login", {
   args: {
     input: nonNull(arg({ type: LoginInput })),
   },
-  resolve: async (_, { input }, ctx) => {
-    const { email, password } = input;
+  resolve: async (_parent, { input }, ctx) => {
+    const email = normalizeEmail(input.email);
 
-    const user = await ctx.prisma.user.findFirst({
+    const user = await ctx.prisma.user.findUnique({
       where: { email },
       include: {
         memberships: {
@@ -26,10 +27,18 @@ export const Login = mutationField("login", {
       },
     });
 
-    if (!user || !user.password) throw Errors.Auth.WRONG_USERNAME_PASSWORD();
+    if (!user || !user.password) {
+      throw Errors.Auth.WRONG_USERNAME_PASSWORD();
+    }
 
-    const isPasswordValid = compareSync(password, user.password);
-    if (!isPasswordValid) throw Errors.Auth.WRONG_USERNAME_PASSWORD();
+    if (!user.emailVerified) {
+      throw Errors.Auth.EMAIL_NOT_VERIFIED();
+    }
+
+    const isPasswordValid = await compare(input.password, user.password);
+    if (!isPasswordValid) {
+      throw Errors.Auth.WRONG_USERNAME_PASSWORD();
+    }
 
     const { accessToken, refreshToken } = await generateAccessToken(user.id);
 

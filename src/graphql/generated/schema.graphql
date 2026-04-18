@@ -93,6 +93,8 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Drug {
+  availability: [DrugAvailability!]!
+  availabilityCount: Int!
   createdAt: DateTime
   description: String
   dosageForm: String
@@ -100,7 +102,20 @@ type Drug {
   id: String
   manufacturer: String
   name: String
+  startingPrice: Float
   strength: String
+  totalStock: Int!
+  updatedAt: DateTime
+}
+
+type DrugAvailability {
+  address: Address
+  id: String!
+  pharmacyId: String!
+  pharmacyName: String!
+  price: Float
+  quantity: Int!
+  status: String
   updatedAt: DateTime
 }
 
@@ -260,6 +275,10 @@ type LoginPayload {
   user: AuthUser!
 }
 
+type LogoutPayload {
+  message: String!
+}
+
 type MePayload {
   activeOrganization: UserMembership
   user: AuthUser!
@@ -304,6 +323,7 @@ type Mutation {
   hospitalDelete(id: String!): Boolean
   hospitalUpdate(id: String!, input: HospitalCreateInput!): Boolean
   login(input: LoginInput!): LoginPayload
+  logout: LogoutPayload
   membershipCreate(input: MembershipCreateInput!): Boolean
   membershipDelete(id: String!): Boolean
   membershipUpdate(id: String!, input: MembershipUpdateInput!): Boolean
@@ -311,10 +331,13 @@ type Mutation {
   pharmacyDelete(id: String!): Boolean
   pharmacyUpdate(id: String!, input: PharmacyCreateInput!): Boolean
   refreshAccessToken(refreshToken: String!): LoginPayload
+  resendOtp(input: ResendOtpInput!): ResendOtpPayload
   selectOrganization(orgId: String!): UserMembership
+  signUp(input: SignUpInput!): SignUpPayload
   userCreate(input: UserCreateInput!): Boolean
   userDelete(id: String!): Boolean
   userUpdate(id: String!, input: UserUpdateInput!): Boolean
+  verifyOtp(input: VerifyOtpInput!): VerifyOtpPayload
 }
 
 enum OrganizationRole {
@@ -407,6 +430,24 @@ type Query {
   users(skip: Int!, take: Int!, where: UsersWhereInput): Users
 }
 
+input ResendOtpInput {
+  email: String!
+}
+
+type ResendOtpPayload {
+  message: String!
+}
+
+input SignUpInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+type SignUpPayload {
+  message: String!
+}
+
 type User {
   createdAt: DateTime
   email: String
@@ -450,4 +491,13 @@ type Users {
 input UsersWhereInput {
   organizationId: String
   search: String
+}
+
+input VerifyOtpInput {
+  email: String!
+  otp: String!
+}
+
+type VerifyOtpPayload {
+  message: String!
 }

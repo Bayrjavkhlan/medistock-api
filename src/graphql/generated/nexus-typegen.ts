@@ -129,6 +129,14 @@ export interface NexusGenInputs {
   PharmacyDrugsWhereInput: { // input type
     search?: string | null; // String
   }
+  ResendOtpInput: { // input type
+    email: string; // String!
+  }
+  SignUpInput: { // input type
+    email: string; // String!
+    name: string; // String!
+    password: string; // String!
+  }
   UserCreateInput: { // input type
     email: string; // String!
     isPlatformAdmin?: boolean | null; // Boolean
@@ -150,6 +158,10 @@ export interface NexusGenInputs {
   UsersWhereInput: { // input type
     organizationId?: string | null; // String
     search?: string | null; // String
+  }
+  VerifyOtpInput: { // input type
+    email: string; // String!
+    otp: string; // String!
   }
 }
 
@@ -235,6 +247,13 @@ export interface NexusGenObjects {
     strength?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  DrugAvailability: { // root type
+    id: string; // String!
+    price?: number | null; // Float
+    quantity: number; // Int!
+    status?: string | null; // String
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   Drugs: { // root type
     count: number; // Int!
     data?: NexusGenRootTypes['Drug'][] | null; // [Drug!]
@@ -286,6 +305,9 @@ export interface NexusGenObjects {
     refreshToken: string; // String!
     user: NexusGenRootTypes['AuthUser']; // AuthUser!
   }
+  LogoutPayload: { // root type
+    message: string; // String!
+  }
   MePayload: { // root type
     activeOrganization?: NexusGenRootTypes['UserMembership'] | null; // UserMembership
     user: NexusGenRootTypes['AuthUser']; // AuthUser!
@@ -335,6 +357,12 @@ export interface NexusGenObjects {
     data?: NexusGenRootTypes['Pharmacy'][] | null; // [Pharmacy!]
   }
   Query: {};
+  ResendOtpPayload: { // root type
+    message: string; // String!
+  }
+  SignUpPayload: { // root type
+    message: string; // String!
+  }
   User: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: string | null; // String
@@ -351,6 +379,9 @@ export interface NexusGenObjects {
   Users: { // root type
     count: number; // Int!
     data?: NexusGenRootTypes['User'][] | null; // [User!]
+  }
+  VerifyOtpPayload: { // root type
+    message: string; // String!
   }
 }
 
@@ -416,6 +447,8 @@ export interface NexusGenFieldTypes {
     type: string; // String!
   }
   Drug: { // field return type
+    availability: NexusGenRootTypes['DrugAvailability'][]; // [DrugAvailability!]!
+    availabilityCount: number; // Int!
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
     dosageForm: string | null; // String
@@ -423,7 +456,19 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     manufacturer: string | null; // String
     name: string | null; // String
+    startingPrice: number | null; // Float
     strength: string | null; // String
+    totalStock: number; // Int!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  DrugAvailability: { // field return type
+    address: NexusGenRootTypes['Address'] | null; // Address
+    id: string; // String!
+    pharmacyId: string; // String!
+    pharmacyName: string; // String!
+    price: number | null; // Float
+    quantity: number; // Int!
+    status: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Drugs: { // field return type
@@ -479,6 +524,9 @@ export interface NexusGenFieldTypes {
     refreshToken: string; // String!
     user: NexusGenRootTypes['AuthUser']; // AuthUser!
   }
+  LogoutPayload: { // field return type
+    message: string; // String!
+  }
   MePayload: { // field return type
     activeOrganization: NexusGenRootTypes['UserMembership'] | null; // UserMembership
     user: NexusGenRootTypes['AuthUser']; // AuthUser!
@@ -511,6 +559,7 @@ export interface NexusGenFieldTypes {
     hospitalDelete: boolean | null; // Boolean
     hospitalUpdate: boolean | null; // Boolean
     login: NexusGenRootTypes['LoginPayload'] | null; // LoginPayload
+    logout: NexusGenRootTypes['LogoutPayload'] | null; // LogoutPayload
     membershipCreate: boolean | null; // Boolean
     membershipDelete: boolean | null; // Boolean
     membershipUpdate: boolean | null; // Boolean
@@ -518,10 +567,13 @@ export interface NexusGenFieldTypes {
     pharmacyDelete: boolean | null; // Boolean
     pharmacyUpdate: boolean | null; // Boolean
     refreshAccessToken: NexusGenRootTypes['LoginPayload'] | null; // LoginPayload
+    resendOtp: NexusGenRootTypes['ResendOtpPayload'] | null; // ResendOtpPayload
     selectOrganization: NexusGenRootTypes['UserMembership'] | null; // UserMembership
+    signUp: NexusGenRootTypes['SignUpPayload'] | null; // SignUpPayload
     userCreate: boolean | null; // Boolean
     userDelete: boolean | null; // Boolean
     userUpdate: boolean | null; // Boolean
+    verifyOtp: NexusGenRootTypes['VerifyOtpPayload'] | null; // VerifyOtpPayload
   }
   OrganizationSummary: { // field return type
     id: string; // String!
@@ -580,6 +632,12 @@ export interface NexusGenFieldTypes {
     userDetail: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['Users'] | null; // Users
   }
+  ResendOtpPayload: { // field return type
+    message: string; // String!
+  }
+  SignUpPayload: { // field return type
+    message: string; // String!
+  }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string | null; // String
@@ -596,6 +654,9 @@ export interface NexusGenFieldTypes {
   Users: { // field return type
     count: number; // Int!
     data: NexusGenRootTypes['User'][] | null; // [User!]
+  }
+  VerifyOtpPayload: { // field return type
+    message: string; // String!
   }
 }
 
@@ -651,6 +712,8 @@ export interface NexusGenFieldTypeNames {
     type: 'String'
   }
   Drug: { // field return type name
+    availability: 'DrugAvailability'
+    availabilityCount: 'Int'
     createdAt: 'DateTime'
     description: 'String'
     dosageForm: 'String'
@@ -658,7 +721,19 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     manufacturer: 'String'
     name: 'String'
+    startingPrice: 'Float'
     strength: 'String'
+    totalStock: 'Int'
+    updatedAt: 'DateTime'
+  }
+  DrugAvailability: { // field return type name
+    address: 'Address'
+    id: 'String'
+    pharmacyId: 'String'
+    pharmacyName: 'String'
+    price: 'Float'
+    quantity: 'Int'
+    status: 'String'
     updatedAt: 'DateTime'
   }
   Drugs: { // field return type name
@@ -714,6 +789,9 @@ export interface NexusGenFieldTypeNames {
     refreshToken: 'String'
     user: 'AuthUser'
   }
+  LogoutPayload: { // field return type name
+    message: 'String'
+  }
   MePayload: { // field return type name
     activeOrganization: 'UserMembership'
     user: 'AuthUser'
@@ -746,6 +824,7 @@ export interface NexusGenFieldTypeNames {
     hospitalDelete: 'Boolean'
     hospitalUpdate: 'Boolean'
     login: 'LoginPayload'
+    logout: 'LogoutPayload'
     membershipCreate: 'Boolean'
     membershipDelete: 'Boolean'
     membershipUpdate: 'Boolean'
@@ -753,10 +832,13 @@ export interface NexusGenFieldTypeNames {
     pharmacyDelete: 'Boolean'
     pharmacyUpdate: 'Boolean'
     refreshAccessToken: 'LoginPayload'
+    resendOtp: 'ResendOtpPayload'
     selectOrganization: 'UserMembership'
+    signUp: 'SignUpPayload'
     userCreate: 'Boolean'
     userDelete: 'Boolean'
     userUpdate: 'Boolean'
+    verifyOtp: 'VerifyOtpPayload'
   }
   OrganizationSummary: { // field return type name
     id: 'String'
@@ -815,6 +897,12 @@ export interface NexusGenFieldTypeNames {
     userDetail: 'User'
     users: 'Users'
   }
+  ResendOtpPayload: { // field return type name
+    message: 'String'
+  }
+  SignUpPayload: { // field return type name
+    message: 'String'
+  }
   User: { // field return type name
     createdAt: 'DateTime'
     email: 'String'
@@ -831,6 +919,9 @@ export interface NexusGenFieldTypeNames {
   Users: { // field return type name
     count: 'Int'
     data: 'User'
+  }
+  VerifyOtpPayload: { // field return type name
+    message: 'String'
   }
 }
 
@@ -912,8 +1003,14 @@ export interface NexusGenArgTypes {
     refreshAccessToken: { // args
       refreshToken: string; // String!
     }
+    resendOtp: { // args
+      input: NexusGenInputs['ResendOtpInput']; // ResendOtpInput!
+    }
     selectOrganization: { // args
       orgId: string; // String!
+    }
+    signUp: { // args
+      input: NexusGenInputs['SignUpInput']; // SignUpInput!
     }
     userCreate: { // args
       input: NexusGenInputs['UserCreateInput']; // UserCreateInput!
@@ -924,6 +1021,9 @@ export interface NexusGenArgTypes {
     userUpdate: { // args
       id: string; // String!
       input: NexusGenInputs['UserUpdateInput']; // UserUpdateInput!
+    }
+    verifyOtp: { // args
+      input: NexusGenInputs['VerifyOtpInput']; // VerifyOtpInput!
     }
   }
   Query: {

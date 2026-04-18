@@ -5,6 +5,12 @@ model User {
   password String?
   name     String?
 
+  emailVerified Boolean   @default(false)
+  otp           String?
+  otpExpiry     DateTime?
+  otpAttempts   Int       @default(0)
+  otpLastSentAt DateTime?
+
   memberships Membership[]
 
   isPlatformAdmin Boolean @default(false)

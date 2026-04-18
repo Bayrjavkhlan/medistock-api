@@ -12,6 +12,7 @@ export async function seedUser(prisma: PrismaClient) {
       name: "System Owner",
       phone: "00000000",
       isPlatformAdmin: true,
+      emailVerified: true,
     },
     {
       id: "user-1",
@@ -20,6 +21,7 @@ export async function seedUser(prisma: PrismaClient) {
       name: "System Admin",
       phone: "00000001",
       isPlatformAdmin: true,
+      emailVerified: true,
     },
     {
       id: "user-1a",
@@ -27,6 +29,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("H123", 10),
       name: "Даланзадгад эмнэлэг А эзэн",
       phone: "00000011",
+      emailVerified: true,
     },
     {
       id: "user-2",
@@ -34,6 +37,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("H123", 10),
       name: "Даланзадгад эмнэлэг А менежер",
       phone: "00000002",
+      emailVerified: true,
     },
     {
       id: "user-3",
@@ -41,6 +45,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("S123", 10),
       name: "Даланзадгад эмнэлэг А ажилтан",
       phone: "00000003",
+      emailVerified: true,
     },
     {
       id: "user-4a",
@@ -48,6 +53,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("H123", 10),
       name: "Даланзадгад эмнэлэг Б эзэн",
       phone: "00000021",
+      emailVerified: true,
     },
     {
       id: "user-4b",
@@ -55,6 +61,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("H123", 10),
       name: "Даланзадгад эмнэлэг Б менежер",
       phone: "00000022",
+      emailVerified: true,
     },
     {
       id: "user-4",
@@ -62,6 +69,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("S123", 10),
       name: "Даланзадгад эмнэлэг Б ажилтан",
       phone: "00000004",
+      emailVerified: true,
     },
     {
       id: "user-5",
@@ -69,6 +77,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан А эзэн",
       phone: "00000031",
+      emailVerified: true,
     },
     {
       id: "user-6",
@@ -76,6 +85,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан А менежер",
       phone: "00000032",
+      emailVerified: true,
     },
     {
       id: "user-7",
@@ -83,6 +93,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан А ажилтан",
       phone: "00000033",
+      emailVerified: true,
     },
     {
       id: "user-8",
@@ -90,6 +101,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан Б эзэн",
       phone: "00000041",
+      emailVerified: true,
     },
     {
       id: "user-9",
@@ -97,6 +109,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан Б менежер",
       phone: "00000042",
+      emailVerified: true,
     },
     {
       id: "user-10",
@@ -104,6 +117,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан Б ажилтан",
       phone: "00000043",
+      emailVerified: true,
     },
     {
       id: "user-11",
@@ -111,6 +125,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан В эзэн",
       phone: "00000051",
+      emailVerified: true,
     },
     {
       id: "user-12",
@@ -118,6 +133,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан В менежер",
       phone: "00000052",
+      emailVerified: true,
     },
     {
       id: "user-13",
@@ -125,6 +141,7 @@ export async function seedUser(prisma: PrismaClient) {
       password: hashSync("P123", 10),
       name: "Даланзадгад эмийн сан В ажилтан",
       phone: "00000053",
+      emailVerified: true,
     },
   ];
 
@@ -137,6 +154,11 @@ export async function seedUser(prisma: PrismaClient) {
         phone: user.phone,
         password: user.password,
         isPlatformAdmin: user.isPlatformAdmin,
+        emailVerified: true,
+        otp: null,
+        otpExpiry: null,
+        otpAttempts: 0,
+        otpLastSentAt: null,
       },
     })
   );

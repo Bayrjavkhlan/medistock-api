@@ -15,6 +15,22 @@ export const DrugDetail = queryField("drugDetail", {
         id,
         ...criteria,
       },
+      include: {
+        listings: {
+          include: {
+            pharmacy: {
+              include: {
+                organization: {
+                  include: {
+                    address: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: [{ quantity: "desc" }, { updatedAt: "desc" }],
+        },
+      },
     });
 
     if (!drug) return null;

@@ -49,3 +49,31 @@ export const LoginPayload = objectType({
     t.nonNull.string("accessTokenExpiresAt");
   },
 });
+
+export const SignUpPayload = objectType({
+  name: "SignUpPayload",
+  definition(t) {
+    t.nonNull.string("message");
+  },
+});
+
+export const VerifyOtpPayload = objectType({
+  name: "VerifyOtpPayload",
+  definition(t) {
+    t.nonNull.string("message");
+  },
+});
+
+export const ResendOtpPayload = objectType({
+  name: "ResendOtpPayload",
+  definition(t) {
+    t.nonNull.string("message");
+  },
+});
+
+export const LogoutPayload = objectType({
+  name: "LogoutPayload",
+  definition(t) {
+    t.nonNull.string("message");
+  },
+});
