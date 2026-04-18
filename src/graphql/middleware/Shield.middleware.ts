@@ -57,6 +57,7 @@ const permissions: Permissions = {
   Query: {
     currentUser: and(isAuthenticated, rl.generous),
     me: and(isAuthenticated, rl.generous),
+    dashboardOverview: and(isAuthenticated, rl.normal),
     hospitalDetail: and(
       isAuthenticated,
       accessRequired("read", "Hospital"),

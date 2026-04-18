@@ -19,6 +19,17 @@ input AddressCreateInput {
   province: String!
 }
 
+type AdminDashboardOverview {
+  alerts: [DashboardAlertItem!]!
+  growthSeries: [DashboardSeries!]!
+  inventoryStatus: [DashboardStat!]!
+  map: AdminMapLocationsPayload!
+  recentItems: [DashboardActivityItem!]!
+  stats: [DashboardStat!]!
+  topHospitals: [DashboardStat!]!
+  topPharmacies: [DashboardStat!]!
+}
+
 type AdminMapLocationsPayload {
   drugstores: [DashboardMapLocation!]!
   hospitals: [DashboardMapLocation!]!
@@ -74,6 +85,22 @@ input BookingsWhereInput {
   status: BookingStatus
 }
 
+type DashboardActivityItem {
+  createdAt: String
+  href: String
+  id: String!
+  meta: String
+  subtitle: String
+  title: String!
+}
+
+type DashboardAlertItem {
+  description: String!
+  id: String!
+  severity: String!
+  title: String!
+}
+
 type DashboardMapLocation {
   address: String!
   address2: String
@@ -85,6 +112,43 @@ type DashboardMapLocation {
   opensAt: String!
   province: String!
   type: String!
+}
+
+type DashboardOverview {
+  admin: AdminDashboardOverview
+  hospital: HospitalDashboardOverview
+  pharmacy: PharmacyDashboardOverview
+  role: String
+}
+
+type DashboardProfile {
+  address: String!
+  email: String
+  id: String!
+  latitude: Float
+  longitude: Float
+  name: String!
+  phone: String
+  province: String
+}
+
+type DashboardSeries {
+  color: String
+  key: String!
+  label: String!
+  points: [DashboardSeriesPoint!]!
+}
+
+type DashboardSeriesPoint {
+  label: String!
+  value: Int!
+}
+
+type DashboardStat {
+  helper: String
+  label: String!
+  tone: String
+  value: Int!
 }
 
 """
@@ -246,6 +310,17 @@ input HospitalCreateInput {
   phone: String!
 }
 
+type HospitalDashboardOverview {
+  activitySeries: [DashboardSeries!]!
+  alerts: [DashboardAlertItem!]!
+  equipmentStates: [DashboardStat!]!
+  nearbyPharmacies: [DashboardActivityItem!]!
+  profile: DashboardProfile!
+  recentLogs: [DashboardActivityItem!]!
+  stats: [DashboardStat!]!
+  upcomingBookings: [DashboardActivityItem!]!
+}
+
 type HospitalOption {
   id: String
   name: String
@@ -385,6 +460,17 @@ input PharmacyCreateInput {
   phone: String!
 }
 
+type PharmacyDashboardOverview {
+  activitySeries: [DashboardSeries!]!
+  alerts: [DashboardAlertItem!]!
+  inventoryStatus: [DashboardStat!]!
+  lowStockItems: [DashboardActivityItem!]!
+  profile: DashboardProfile!
+  recentUpdates: [DashboardActivityItem!]!
+  stats: [DashboardStat!]!
+  topDrugs: [DashboardActivityItem!]!
+}
+
 type PharmacyDrug {
   drug: Drug!
   id: String
@@ -425,6 +511,7 @@ type Query {
   bookingDetail(id: String!): Booking
   bookings(skip: Int!, take: Int!, where: BookingsWhereInput): Bookings
   currentUser: AuthUser
+  dashboardOverview: DashboardOverview
   drugDetail(id: String!): Drug
   drugs(skip: Int!, take: Int!, where: DrugsWhereInput): Drugs
   equipmentDetail(id: String!): Equipment

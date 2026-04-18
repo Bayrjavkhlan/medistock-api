@@ -202,6 +202,16 @@ export interface NexusGenObjects {
     province?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  AdminDashboardOverview: { // root type
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    growthSeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    inventoryStatus: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    map: NexusGenRootTypes['AdminMapLocationsPayload']; // AdminMapLocationsPayload!
+    recentItems: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topHospitals: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topPharmacies: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+  }
   AdminMapLocationsPayload: { // root type
     drugstores: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
     hospitals: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
@@ -230,6 +240,20 @@ export interface NexusGenObjects {
     count: number; // Int!
     data?: NexusGenRootTypes['Booking'][] | null; // [Booking!]
   }
+  DashboardActivityItem: { // root type
+    createdAt?: string | null; // String
+    href?: string | null; // String
+    id: string; // String!
+    meta?: string | null; // String
+    subtitle?: string | null; // String
+    title: string; // String!
+  }
+  DashboardAlertItem: { // root type
+    description: string; // String!
+    id: string; // String!
+    severity: string; // String!
+    title: string; // String!
+  }
   DashboardMapLocation: { // root type
     address: string; // String!
     address2?: string | null; // String
@@ -241,6 +265,38 @@ export interface NexusGenObjects {
     opensAt: string; // String!
     province: string; // String!
     type: string; // String!
+  }
+  DashboardOverview: { // root type
+    admin?: NexusGenRootTypes['AdminDashboardOverview'] | null; // AdminDashboardOverview
+    hospital?: NexusGenRootTypes['HospitalDashboardOverview'] | null; // HospitalDashboardOverview
+    pharmacy?: NexusGenRootTypes['PharmacyDashboardOverview'] | null; // PharmacyDashboardOverview
+    role?: string | null; // String
+  }
+  DashboardProfile: { // root type
+    address: string; // String!
+    email?: string | null; // String
+    id: string; // String!
+    latitude?: number | null; // Float
+    longitude?: number | null; // Float
+    name: string; // String!
+    phone?: string | null; // String
+    province?: string | null; // String
+  }
+  DashboardSeries: { // root type
+    color?: string | null; // String
+    key: string; // String!
+    label: string; // String!
+    points: NexusGenRootTypes['DashboardSeriesPoint'][]; // [DashboardSeriesPoint!]!
+  }
+  DashboardSeriesPoint: { // root type
+    label: string; // String!
+    value: number; // Int!
+  }
+  DashboardStat: { // root type
+    helper?: string | null; // String
+    label: string; // String!
+    tone?: string | null; // String
+    value: number; // Int!
   }
   Drug: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -297,6 +353,16 @@ export interface NexusGenObjects {
     phone?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  HospitalDashboardOverview: { // root type
+    activitySeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    equipmentStates: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    nearbyPharmacies: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    profile: NexusGenRootTypes['DashboardProfile']; // DashboardProfile!
+    recentLogs: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    upcomingBookings: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+  }
   HospitalOption: { // root type
     id?: string | null; // String
     name?: string | null; // String
@@ -341,6 +407,16 @@ export interface NexusGenObjects {
     id?: string | null; // String
     phone?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  PharmacyDashboardOverview: { // root type
+    activitySeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    inventoryStatus: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    lowStockItems: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    profile: NexusGenRootTypes['DashboardProfile']; // DashboardProfile!
+    recentUpdates: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topDrugs: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
   }
   PharmacyDrug: { // root type
     drug: NexusGenRootTypes['Drug']; // Drug!
@@ -412,6 +488,16 @@ export interface NexusGenFieldTypes {
     province: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  AdminDashboardOverview: { // field return type
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    growthSeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    inventoryStatus: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    map: NexusGenRootTypes['AdminMapLocationsPayload']; // AdminMapLocationsPayload!
+    recentItems: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topHospitals: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topPharmacies: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+  }
   AdminMapLocationsPayload: { // field return type
     drugstores: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
     hospitals: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
@@ -440,6 +526,20 @@ export interface NexusGenFieldTypes {
     count: number; // Int!
     data: NexusGenRootTypes['Booking'][] | null; // [Booking!]
   }
+  DashboardActivityItem: { // field return type
+    createdAt: string | null; // String
+    href: string | null; // String
+    id: string; // String!
+    meta: string | null; // String
+    subtitle: string | null; // String
+    title: string; // String!
+  }
+  DashboardAlertItem: { // field return type
+    description: string; // String!
+    id: string; // String!
+    severity: string; // String!
+    title: string; // String!
+  }
   DashboardMapLocation: { // field return type
     address: string; // String!
     address2: string | null; // String
@@ -451,6 +551,38 @@ export interface NexusGenFieldTypes {
     opensAt: string; // String!
     province: string; // String!
     type: string; // String!
+  }
+  DashboardOverview: { // field return type
+    admin: NexusGenRootTypes['AdminDashboardOverview'] | null; // AdminDashboardOverview
+    hospital: NexusGenRootTypes['HospitalDashboardOverview'] | null; // HospitalDashboardOverview
+    pharmacy: NexusGenRootTypes['PharmacyDashboardOverview'] | null; // PharmacyDashboardOverview
+    role: string | null; // String
+  }
+  DashboardProfile: { // field return type
+    address: string; // String!
+    email: string | null; // String
+    id: string; // String!
+    latitude: number | null; // Float
+    longitude: number | null; // Float
+    name: string; // String!
+    phone: string | null; // String
+    province: string | null; // String
+  }
+  DashboardSeries: { // field return type
+    color: string | null; // String
+    key: string; // String!
+    label: string; // String!
+    points: NexusGenRootTypes['DashboardSeriesPoint'][]; // [DashboardSeriesPoint!]!
+  }
+  DashboardSeriesPoint: { // field return type
+    label: string; // String!
+    value: number; // Int!
+  }
+  DashboardStat: { // field return type
+    helper: string | null; // String
+    label: string; // String!
+    tone: string | null; // String
+    value: number; // Int!
   }
   Drug: { // field return type
     availability: NexusGenRootTypes['DrugAvailability'][]; // [DrugAvailability!]!
@@ -518,6 +650,16 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     phone: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  HospitalDashboardOverview: { // field return type
+    activitySeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    equipmentStates: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    nearbyPharmacies: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    profile: NexusGenRootTypes['DashboardProfile']; // DashboardProfile!
+    recentLogs: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    upcomingBookings: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
   }
   HospitalOption: { // field return type
     id: string | null; // String
@@ -602,6 +744,16 @@ export interface NexusGenFieldTypes {
     phone: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  PharmacyDashboardOverview: { // field return type
+    activitySeries: NexusGenRootTypes['DashboardSeries'][]; // [DashboardSeries!]!
+    alerts: NexusGenRootTypes['DashboardAlertItem'][]; // [DashboardAlertItem!]!
+    inventoryStatus: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    lowStockItems: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    profile: NexusGenRootTypes['DashboardProfile']; // DashboardProfile!
+    recentUpdates: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+    stats: NexusGenRootTypes['DashboardStat'][]; // [DashboardStat!]!
+    topDrugs: NexusGenRootTypes['DashboardActivityItem'][]; // [DashboardActivityItem!]!
+  }
   PharmacyDrug: { // field return type
     drug: NexusGenRootTypes['Drug']; // Drug!
     id: string | null; // String
@@ -627,6 +779,7 @@ export interface NexusGenFieldTypes {
     bookingDetail: NexusGenRootTypes['Booking'] | null; // Booking
     bookings: NexusGenRootTypes['Bookings'] | null; // Bookings
     currentUser: NexusGenRootTypes['AuthUser'] | null; // AuthUser
+    dashboardOverview: NexusGenRootTypes['DashboardOverview'] | null; // DashboardOverview
     drugDetail: NexusGenRootTypes['Drug'] | null; // Drug
     drugs: NexusGenRootTypes['Drugs'] | null; // Drugs
     equipmentDetail: NexusGenRootTypes['Equipment'] | null; // Equipment
@@ -684,6 +837,16 @@ export interface NexusGenFieldTypeNames {
     province: 'String'
     updatedAt: 'DateTime'
   }
+  AdminDashboardOverview: { // field return type name
+    alerts: 'DashboardAlertItem'
+    growthSeries: 'DashboardSeries'
+    inventoryStatus: 'DashboardStat'
+    map: 'AdminMapLocationsPayload'
+    recentItems: 'DashboardActivityItem'
+    stats: 'DashboardStat'
+    topHospitals: 'DashboardStat'
+    topPharmacies: 'DashboardStat'
+  }
   AdminMapLocationsPayload: { // field return type name
     drugstores: 'DashboardMapLocation'
     hospitals: 'DashboardMapLocation'
@@ -712,6 +875,20 @@ export interface NexusGenFieldTypeNames {
     count: 'Int'
     data: 'Booking'
   }
+  DashboardActivityItem: { // field return type name
+    createdAt: 'String'
+    href: 'String'
+    id: 'String'
+    meta: 'String'
+    subtitle: 'String'
+    title: 'String'
+  }
+  DashboardAlertItem: { // field return type name
+    description: 'String'
+    id: 'String'
+    severity: 'String'
+    title: 'String'
+  }
   DashboardMapLocation: { // field return type name
     address: 'String'
     address2: 'String'
@@ -723,6 +900,38 @@ export interface NexusGenFieldTypeNames {
     opensAt: 'String'
     province: 'String'
     type: 'String'
+  }
+  DashboardOverview: { // field return type name
+    admin: 'AdminDashboardOverview'
+    hospital: 'HospitalDashboardOverview'
+    pharmacy: 'PharmacyDashboardOverview'
+    role: 'String'
+  }
+  DashboardProfile: { // field return type name
+    address: 'String'
+    email: 'String'
+    id: 'String'
+    latitude: 'Float'
+    longitude: 'Float'
+    name: 'String'
+    phone: 'String'
+    province: 'String'
+  }
+  DashboardSeries: { // field return type name
+    color: 'String'
+    key: 'String'
+    label: 'String'
+    points: 'DashboardSeriesPoint'
+  }
+  DashboardSeriesPoint: { // field return type name
+    label: 'String'
+    value: 'Int'
+  }
+  DashboardStat: { // field return type name
+    helper: 'String'
+    label: 'String'
+    tone: 'String'
+    value: 'Int'
   }
   Drug: { // field return type name
     availability: 'DrugAvailability'
@@ -790,6 +999,16 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     phone: 'String'
     updatedAt: 'DateTime'
+  }
+  HospitalDashboardOverview: { // field return type name
+    activitySeries: 'DashboardSeries'
+    alerts: 'DashboardAlertItem'
+    equipmentStates: 'DashboardStat'
+    nearbyPharmacies: 'DashboardActivityItem'
+    profile: 'DashboardProfile'
+    recentLogs: 'DashboardActivityItem'
+    stats: 'DashboardStat'
+    upcomingBookings: 'DashboardActivityItem'
   }
   HospitalOption: { // field return type name
     id: 'String'
@@ -874,6 +1093,16 @@ export interface NexusGenFieldTypeNames {
     phone: 'String'
     updatedAt: 'DateTime'
   }
+  PharmacyDashboardOverview: { // field return type name
+    activitySeries: 'DashboardSeries'
+    alerts: 'DashboardAlertItem'
+    inventoryStatus: 'DashboardStat'
+    lowStockItems: 'DashboardActivityItem'
+    profile: 'DashboardProfile'
+    recentUpdates: 'DashboardActivityItem'
+    stats: 'DashboardStat'
+    topDrugs: 'DashboardActivityItem'
+  }
   PharmacyDrug: { // field return type name
     drug: 'Drug'
     id: 'String'
@@ -899,6 +1128,7 @@ export interface NexusGenFieldTypeNames {
     bookingDetail: 'Booking'
     bookings: 'Bookings'
     currentUser: 'AuthUser'
+    dashboardOverview: 'DashboardOverview'
     drugDetail: 'Drug'
     drugs: 'Drugs'
     equipmentDetail: 'Equipment'
