@@ -1,0 +1,45 @@
+import { PureAbility } from "@casl/ability";
+import { PrismaQuery, Subjects } from "@casl/prisma";
+import { Booking, Drug, Equipment, EquipmentLog, Hospital, Membership, Pharmacy, PharmacyDrug, User } from "@prisma/client";
+import { Context } from "../../graphql/context";
+export type Action = "manage" | "create" | "read" | "update" | "delete";
+type Symptom = Record<string, unknown>;
+type SymptomMedication = Record<string, unknown>;
+type DiagnosticTest = Record<string, unknown>;
+type DiagnosticTimeSlot = Record<string, unknown>;
+type PrismaSubjects = Subjects<{
+    Equipment: Equipment;
+    EquipmentLog: EquipmentLog;
+    Hospital: Hospital;
+    Pharmacy: Pharmacy;
+    PharmacyDrug: PharmacyDrug;
+    Booking: Booking;
+    Symptom: Symptom;
+    SymptomMedication: SymptomMedication;
+    DiagnosticTest: DiagnosticTest;
+    DiagnosticTimeSlot: DiagnosticTimeSlot;
+    Drug: Drug;
+    User: User;
+    Membership: Membership;
+}>;
+type SubjectMap = {
+    Equipment: Equipment;
+    EquipmentLog: EquipmentLog;
+    Hospital: Hospital;
+    Pharmacy: Pharmacy;
+    PharmacyDrug: PharmacyDrug;
+    Booking: Booking;
+    Symptom: Symptom;
+    SymptomMedication: SymptomMedication;
+    DiagnosticTest: DiagnosticTest;
+    DiagnosticTimeSlot: DiagnosticTimeSlot;
+    Drug: Drug;
+    User: User;
+    Membership: Membership;
+};
+export type ModelName = keyof SubjectMap;
+export type AppAbility = PureAbility<[Action, PrismaSubjects], PrismaQuery>;
+export declare const accessibleBy: (ability: AppAbility, action: Action, modelName: ModelName) => any;
+export declare const createAbilities: (ctx: Pick<Context, "reqUser" | "activeOrg">) => AppAbility;
+export {};
+//# sourceMappingURL=index.d.ts.map

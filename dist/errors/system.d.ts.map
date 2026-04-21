@@ -1,0 +1,1 @@
+{"version":3,"file":"system.d.ts","sourceRoot":"","sources":["../../src/errors/system.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAEvC,eAAO,MAAM,cAAc;;;;;;;;;;;;;;;;;;;;;;CAsB1B,CAAC;AAEF,eAAO,MAAM,YAAY;iCACI,YAAY;0BAInB,YAAY;6BAIT,YAAY;yBAIhB,YAAY;6BAIR,YAAY;CAOpC,CAAC"}
