@@ -1,6 +1,6 @@
 import { inputObjectType } from "nexus";
 
-import { AddressCreateInput } from "../../hospital";
+import { AddressCreateInput, AddressUpdateInput } from "../../hospital";
 
 export const PharmaciesWhereInput = inputObjectType({
   name: "PharmaciesWhereInput",
@@ -16,5 +16,15 @@ export const PharmacyCreateInput = inputObjectType({
     t.nonNull.string("phone");
     t.nonNull.email("email");
     t.nonNull.field("address", { type: AddressCreateInput });
+  },
+});
+
+export const PharmacyUpdateInput = inputObjectType({
+  name: "PharmacyUpdateInput",
+  definition: (t) => {
+    t.nonNull.string("name");
+    t.nonNull.string("phone");
+    t.nonNull.email("email");
+    t.nonNull.field("address", { type: AddressUpdateInput });
   },
 });

@@ -2,17 +2,19 @@ import { OrganizationType } from "@prisma/client";
 import { mutationField, nonNull, stringArg } from "nexus";
 
 import { Errors } from "@/errors";
+import { validateAddressCoordinates } from "@/graphql/utils/addressCoordinates";
 
-import { PharmacyCreateInput } from "../types";
+import { PharmacyUpdateInput } from "../types";
 
 export const PharmacyUpdate = mutationField("pharmacyUpdate", {
   type: "Boolean",
   args: {
     id: nonNull(stringArg()),
-    input: nonNull(PharmacyCreateInput),
+    input: nonNull(PharmacyUpdateInput),
   },
   resolve: async (_parents, { id, input }, ctx) => {
     const { name, email, phone, address } = input;
+    validateAddressCoordinates(address);
 
     const pharmacy = await ctx.prisma.pharmacy.findFirst({
       where: { id },
@@ -54,11 +56,15 @@ export const PharmacyUpdate = mutationField("pharmacyUpdate", {
                   address1: address.address1,
                   address2: address.address2 || null,
                   province: address.province,
+                  latitude: address.latitude ?? null,
+                  longitude: address.longitude ?? null,
                 },
                 update: {
                   address1: address.address1,
                   address2: address.address2 || null,
                   province: address.province,
+                  latitude: address.latitude ?? null,
+                  longitude: address.longitude ?? null,
                 },
               },
             },

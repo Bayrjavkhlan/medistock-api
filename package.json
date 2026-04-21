@@ -11,6 +11,7 @@
     "prisma:migration": "yarn prisma:generate && yarn prisma migrate dev --create-only",
     "prisma:migrate": "yarn prisma:generate && yarn prisma migrate dev",
     "prisma:seed": "ts-node --transpile-only -r tsconfig-paths/register prisma/seed/index.ts",
+    "backfill:coordinates": "ts-node --transpile-only scripts/backfill-address-coordinates.ts",
     "type:check": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,json}'",

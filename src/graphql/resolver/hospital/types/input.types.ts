@@ -29,11 +29,36 @@ export const HospitalCreateInput = inputObjectType({
   },
 });
 
+export const HospitalUpdateInput = inputObjectType({
+  name: "HospitalUpdateInput",
+  definition: (t) => {
+    t.nonNull.string("name");
+    t.nonNull.string("phone");
+    t.nonNull.email("email");
+    t.nonNull.field("address", {
+      type: AddressUpdateInput,
+    });
+  },
+});
+
 export const AddressCreateInput = inputObjectType({
   name: "AddressCreateInput",
   definition(t) {
     t.nonNull.string("address1");
     t.string("address2");
     t.nonNull.string("province");
+    t.float("latitude");
+    t.float("longitude");
+  },
+});
+
+export const AddressUpdateInput = inputObjectType({
+  name: "AddressUpdateInput",
+  definition(t) {
+    t.nonNull.string("address1");
+    t.string("address2");
+    t.nonNull.string("province");
+    t.float("latitude");
+    t.float("longitude");
   },
 });

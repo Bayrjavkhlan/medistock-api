@@ -3,6 +3,7 @@ export * from "./booking";
 export * from "./drug";
 export * from "./equipment";
 export * from "./equipmentLog";
+export * from "./explore";
 export * from "./hospital";
 export * from "./membership";
 export * from "./pharmacy";

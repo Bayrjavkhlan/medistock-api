@@ -131,9 +131,11 @@ const permissions: Permissions = {
       accessRequired("read", "Membership"),
       rl.normal
     ),
+    publicExploreMap: and(allow, rl.generous),
   },
   Mutation: {
     login: and(allow, rl.login),
+    register: and(allow, rl.normal),
     refreshAccessToken: and(allow, rl.login),
     selectOrganization: and(isAuthenticated, rl.normal),
     hospitalCreate: and(

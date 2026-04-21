@@ -2,6 +2,7 @@ import { OrganizationType } from "@prisma/client";
 import { mutationField, nonNull } from "nexus";
 
 import { Errors } from "@/errors";
+import { validateAddressCoordinates } from "@/graphql/utils/addressCoordinates";
 
 import { HospitalCreateInput } from "../types";
 
@@ -12,6 +13,7 @@ export const hospitalCreate = mutationField("hospitalCreate", {
   },
   resolve: async (_parents, { input }, ctx) => {
     const { name, email, phone, address } = input;
+    validateAddressCoordinates(address);
 
     const existingOrg = await ctx.prisma.organization.findFirst({
       where: { name, type: OrganizationType.HOSPITAL },
@@ -34,6 +36,8 @@ export const hospitalCreate = mutationField("hospitalCreate", {
             address1: address.address1,
             address2: address.address2 || null,
             province: address.province,
+            latitude: address.latitude ?? null,
+            longitude: address.longitude ?? null,
           },
         },
         hospital: {
