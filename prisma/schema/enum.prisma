@@ -20,3 +20,8 @@ enum EquipmentState {
   OUT_OF_ORDER
   RETIRED
 }
+
+enum BookingType {
+  GENERAL
+  DIAGNOSTIC_TEST
+}

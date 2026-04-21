@@ -17,6 +17,11 @@ import { Context } from "@/graphql/context";
 
 export type Action = "manage" | "create" | "read" | "update" | "delete";
 
+type Symptom = Record<string, unknown>;
+type SymptomMedication = Record<string, unknown>;
+type DiagnosticTest = Record<string, unknown>;
+type DiagnosticTimeSlot = Record<string, unknown>;
+
 type PrismaSubjects = Subjects<{
   Equipment: Equipment;
   EquipmentLog: EquipmentLog;
@@ -24,6 +29,10 @@ type PrismaSubjects = Subjects<{
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
   Booking: Booking;
+  Symptom: Symptom;
+  SymptomMedication: SymptomMedication;
+  DiagnosticTest: DiagnosticTest;
+  DiagnosticTimeSlot: DiagnosticTimeSlot;
   Drug: Drug;
   User: User;
   Membership: Membership;
@@ -36,6 +45,10 @@ type SubjectMap = {
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
   Booking: Booking;
+  Symptom: Symptom;
+  SymptomMedication: SymptomMedication;
+  DiagnosticTest: DiagnosticTest;
+  DiagnosticTimeSlot: DiagnosticTimeSlot;
   Drug: Drug;
   User: User;
   Membership: Membership;
@@ -82,6 +95,10 @@ export const createAbilities = (
     can("manage", "Pharmacy");
     can("manage", "PharmacyDrug");
     can("manage", "Booking");
+    can("manage", "Symptom");
+    can("manage", "SymptomMedication");
+    can("manage", "DiagnosticTest");
+    can("manage", "DiagnosticTimeSlot");
     can("manage", "Drug");
     can("manage", "User");
     can("manage", "Membership");
@@ -89,6 +106,13 @@ export const createAbilities = (
   }
 
   if (!org) {
+    if (user) {
+      can("read", "Symptom");
+      can("read", "SymptomMedication");
+      can("read", "DiagnosticTest");
+      can("read", "DiagnosticTimeSlot");
+      can(["create", "read"], "Booking", { patientUserId: user.id } as any);
+    }
     can("read", "Hospital");
     can("read", "Pharmacy");
     can("read", "Drug");
@@ -97,7 +121,11 @@ export const createAbilities = (
     cannot(["create", "update", "delete"], "Hospital");
     cannot(["create", "update", "delete"], "Pharmacy");
     cannot(["create", "read", "update", "delete"], "PharmacyDrug");
-    cannot(["create", "read", "update", "delete"], "Booking");
+    cannot(["update", "delete"], "Booking");
+    cannot(["create", "update", "delete"], "Symptom");
+    cannot(["create", "update", "delete"], "SymptomMedication");
+    cannot(["create", "update", "delete"], "DiagnosticTest");
+    cannot(["create", "update", "delete"], "DiagnosticTimeSlot");
     cannot(["create", "update", "delete"], "Drug");
     cannot(["create", "read", "update", "delete"], "User");
     cannot(["create", "read", "update", "delete"], "Membership");
@@ -106,6 +134,9 @@ export const createAbilities = (
 
   const role = org.role;
   const organizationId = org.organization.id;
+  const doctorAssignmentCondition = user?.id
+    ? { assignedDoctorId: user.id }
+    : undefined;
 
   switch (role) {
     case "OWNER":
@@ -115,6 +146,12 @@ export const createAbilities = (
         equipment: { hospital: { organizationId } },
       });
       can("manage", "Booking", { hospital: { organizationId } });
+      can("manage", "Symptom");
+      can("manage", "SymptomMedication");
+      can("manage", "DiagnosticTest", { hospital: { organizationId } });
+      can("manage", "DiagnosticTimeSlot", {
+        diagnosticTest: { hospital: { organizationId } },
+      } as any);
       can("manage", "Pharmacy", { organizationId });
       can("manage", "PharmacyDrug", { pharmacy: { organizationId } });
       can("manage", "Membership", { organizationId });
@@ -135,6 +172,14 @@ export const createAbilities = (
       can(["create", "read", "update"], "Booking", {
         hospital: { organizationId },
       });
+      can("read", "Symptom");
+      can("read", "SymptomMedication");
+      can(["create", "read", "update"], "DiagnosticTest", {
+        hospital: { organizationId },
+      });
+      can(["create", "read", "update"], "DiagnosticTimeSlot", {
+        diagnosticTest: { hospital: { organizationId } },
+      } as any);
       can(["create", "read", "update"], "Pharmacy", { organizationId });
       can(["create", "read", "update"], "PharmacyDrug", {
         pharmacy: { organizationId },
@@ -164,10 +209,31 @@ export const createAbilities = (
       } else {
         can("read", "Drug");
         can("read", "PharmacyDrug", { pharmacy: { organizationId } });
+        can("read", "Symptom");
+        can("read", "SymptomMedication");
+        can("read", "DiagnosticTest", {
+          OR: doctorAssignmentCondition
+            ? [{ hospital: { organizationId } }, doctorAssignmentCondition]
+            : [{ hospital: { organizationId } }],
+        } as any);
+        can("read", "DiagnosticTimeSlot", {
+          diagnosticTest: {
+            OR: doctorAssignmentCondition
+              ? [{ hospital: { organizationId } }, doctorAssignmentCondition]
+              : [{ hospital: { organizationId } }],
+          },
+        } as any);
       }
       can("read", "Hospital", { organizationId });
       can("read", "Equipment", { hospital: { organizationId } });
-      can("read", "Booking", { hospital: { organizationId } });
+      can("read", "Booking", {
+        OR: doctorAssignmentCondition
+          ? [
+              { hospital: { organizationId } },
+              { diagnosticTest: doctorAssignmentCondition },
+            ]
+          : [{ hospital: { organizationId } }],
+      } as any);
       can("read", "Pharmacy", { organizationId });
       can("read", "EquipmentLog", {
         equipment: { hospital: { organizationId } },
@@ -187,6 +253,18 @@ export const createAbilities = (
       cannot("create", "Booking");
       cannot("update", "Booking");
       cannot("delete", "Booking");
+      cannot("create", "Symptom");
+      cannot("update", "Symptom");
+      cannot("delete", "Symptom");
+      cannot("create", "SymptomMedication");
+      cannot("update", "SymptomMedication");
+      cannot("delete", "SymptomMedication");
+      cannot("create", "DiagnosticTest");
+      cannot("update", "DiagnosticTest");
+      cannot("delete", "DiagnosticTest");
+      cannot("create", "DiagnosticTimeSlot");
+      cannot("update", "DiagnosticTimeSlot");
+      cannot("delete", "DiagnosticTimeSlot");
       cannot("create", "Pharmacy");
       cannot("update", "Pharmacy");
       cannot("delete", "Pharmacy");
@@ -207,6 +285,10 @@ export const createAbilities = (
       cannot(["create", "read", "update", "delete"], "Pharmacy");
       cannot(["create", "read", "update", "delete"], "PharmacyDrug");
       cannot(["create", "read", "update", "delete"], "Booking");
+      cannot(["create", "read", "update", "delete"], "Symptom");
+      cannot(["create", "read", "update", "delete"], "SymptomMedication");
+      cannot(["create", "read", "update", "delete"], "DiagnosticTest");
+      cannot(["create", "read", "update", "delete"], "DiagnosticTimeSlot");
       cannot(["create", "read", "update", "delete"], "Drug");
       cannot(["create", "read", "update", "delete"], "User");
       cannot(["create", "read", "update", "delete"], "Membership");

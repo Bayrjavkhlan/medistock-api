@@ -7,8 +7,9 @@ model Hospital {
   phone String?
   email String?
 
-  equipments Equipment[]
-  bookings   Booking[]
+  equipments      Equipment[]
+  bookings        Booking[]
+  diagnosticTests DiagnosticTest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

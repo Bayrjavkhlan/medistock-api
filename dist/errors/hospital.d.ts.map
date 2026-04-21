@@ -1,0 +1,1 @@
+{"version":3,"file":"hospital.d.ts","sourceRoot":"","sources":["../../src/errors/hospital.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAEvC,eAAO,MAAM,gBAAgB;;;;;;;;;;;;;;;;;CAiB5B,CAAC;AAEF,eAAO,MAAM,cAAc;8BACD,YAAY;iDAIO,YAAY;8BAO/B,YAAY;sCAIJ,YAAY;CAI7C,CAAC"}

@@ -48,12 +48,16 @@ type Booking {
   bookingTime: DateTime
   createdAt: DateTime
   department: String
+  diagnosticTest: DiagnosticTest
+  diagnosticTimeSlot: DiagnosticTimeSlot
   doctorName: String
   hospital: Hospital
   id: String
   patientName: String
   patientPhone: String
+  patientUserId: String
   status: String
+  type: String
   updatedAt: DateTime
 }
 
@@ -72,6 +76,11 @@ enum BookingStatus {
   COMPLETED
   CONFIRMED
   PENDING
+}
+
+enum BookingType {
+  DIAGNOSTIC_TEST
+  GENERAL
 }
 
 type Bookings {
@@ -155,6 +164,80 @@ type DashboardStat {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+type DiagnosticBooking {
+  bookingTime: DateTime!
+  createdAt: DateTime!
+  department: String!
+  diagnosticTest: DiagnosticTest
+  diagnosticTimeSlot: DiagnosticTimeSlot
+  doctorName: String
+  hospital: Hospital
+  id: String!
+  patientName: String!
+  patientPhone: String!
+  patientUserId: String
+  status: String!
+  type: String!
+  updatedAt: DateTime!
+}
+
+input DiagnosticBookingCreateInput {
+  bookingDate: String!
+  diagnosticTestId: String!
+  diagnosticTimeSlotId: String!
+  note: String
+  patientName: String!
+  patientPhone: String!
+}
+
+type DiagnosticDoctor {
+  email: String
+  id: String!
+  name: String
+  phone: String
+}
+
+type DiagnosticDoctorBookingListPayload {
+  count: Int!
+  data: [DiagnosticBooking!]!
+}
+
+type DiagnosticMedicationSuggestion {
+  drug: Drug!
+  id: String!
+  linkUrl: String
+  note: String
+  sortOrder: Int!
+}
+
+type DiagnosticPatientBookingListPayload {
+  count: Int!
+  data: [DiagnosticBooking!]!
+}
+
+type DiagnosticTest {
+  assignedDoctor: DiagnosticDoctor
+  contact: String
+  description: String
+  hospital: Hospital
+  id: String!
+  instructions: String
+  isActive: Boolean!
+  name: String!
+  price: Float
+  room: String
+  timeSlots: [DiagnosticTimeSlot!]!
+}
+
+type DiagnosticTimeSlot {
+  capacity: Int!
+  endTime: String!
+  id: String!
+  isActive: Boolean!
+  label: String!
+  startTime: String!
+}
 
 type Drug {
   availability: [DrugAvailability!]!
@@ -388,6 +471,7 @@ type Mutation {
   bookingCreate(input: BookingCreateInput!): Boolean
   bookingDelete(id: String!): Boolean
   bookingUpdate(id: String!, input: BookingCreateInput!): Boolean
+  diagnosticBookingCreate(input: DiagnosticBookingCreateInput!): DiagnosticBooking
   drugCreate(input: DrugCreateInput!): Boolean
   drugDelete(id: String!): Boolean
   drugUpdate(id: String!, input: DrugCreateInput!): Boolean
@@ -512,6 +596,8 @@ type Query {
   bookings(skip: Int!, take: Int!, where: BookingsWhereInput): Bookings
   currentUser: AuthUser
   dashboardOverview: DashboardOverview
+  diagnosticDoctorBookings: DiagnosticDoctorBookingListPayload
+  diagnosticPatientBookings: DiagnosticPatientBookingListPayload
   drugDetail(id: String!): Drug
   drugs(skip: Int!, take: Int!, where: DrugsWhereInput): Drugs
   equipmentDetail(id: String!): Equipment
@@ -527,6 +613,8 @@ type Query {
   pharmacyDetail(id: String!): Pharmacy
   pharmacyDrugs(skip: Int!, take: Int!, where: PharmacyDrugsWhereInput): PharmacyDrugs
   pharmacyOption: [PharmacyOption!]!
+  symptom(code: String!): Symptom
+  symptoms: SymptomOptionsPayload
   userDetail(id: String!): User
   users(skip: Int!, take: Int!, where: UsersWhereInput): Users
 }
@@ -547,6 +635,27 @@ input SignUpInput {
 
 type SignUpPayload {
   message: String!
+}
+
+type Symptom {
+  cause: String!
+  code: String!
+  id: String!
+  medications: [DiagnosticMedicationSuggestion!]!
+  name: String!
+  relief: String!
+  tests: [DiagnosticTest!]!
+}
+
+type SymptomOption {
+  code: String!
+  id: String!
+  name: String!
+}
+
+type SymptomOptionsPayload {
+  count: Int!
+  data: [SymptomOption!]!
 }
 
 type User {

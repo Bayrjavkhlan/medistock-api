@@ -15,8 +15,10 @@ model User {
 
   isPlatformAdmin Boolean @default(false)
 
-  assignedEquipments Equipment[]    @relation("AssignedEquipment")
-  performedLogs      EquipmentLog[] @relation("PerformedLogs")
+  assignedEquipments      Equipment[]      @relation("AssignedEquipment")
+  performedLogs           EquipmentLog[]   @relation("PerformedLogs")
+  assignedDiagnosticTests DiagnosticTest[] @relation("AssignedDiagnosticTests")
+  patientBookings         Booking[]        @relation("PatientBookings")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

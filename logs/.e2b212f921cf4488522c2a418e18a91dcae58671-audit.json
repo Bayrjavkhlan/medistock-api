@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 10
+  },
+  "auditLog": "/home/zero/Documents/medistock/medistock-api/logs/.e2b212f921cf4488522c2a418e18a91dcae58671-audit.json",
+  "files": [
+    {
+      "date": 1776779267301,
+      "name": "/home/zero/Documents/medistock/medistock-api/logs/application-2026-04-21.log",
+      "hash": "cf630970f896418eab3fc2c566da99ffc83e4d2e5ac59436a4cda82a9c65aa7b"
+    }
+  ],
+  "hashType": "sha256"
+}

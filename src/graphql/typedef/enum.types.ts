@@ -37,3 +37,8 @@ export const BookingStatusEnum = enumType({
   name: "BookingStatus",
   members: Object.values(BookingStatus),
 });
+
+export const BookingTypeEnum = enumType({
+  name: "BookingType",
+  members: ["GENERAL", "DIAGNOSTIC_TEST"],
+});

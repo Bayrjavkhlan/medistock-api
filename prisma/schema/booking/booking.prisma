@@ -4,6 +4,9 @@ model Booking {
   hospital   Hospital @relation(fields: [hospitalId], references: [id])
   hospitalId String
 
+  patientUser   User?   @relation("PatientBookings", fields: [patientUserId], references: [id])
+  patientUserId String?
+
   patientName  String
   patientPhone String
 
@@ -12,6 +15,13 @@ model Booking {
   bookingTime DateTime
 
   status BookingStatus
+  type   BookingType   @default(GENERAL)
+
+  diagnosticTest   DiagnosticTest? @relation(fields: [diagnosticTestId], references: [id])
+  diagnosticTestId String?
+
+  diagnosticTimeSlot   DiagnosticTimeSlot? @relation(fields: [diagnosticTimeSlotId], references: [id])
+  diagnosticTimeSlotId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
