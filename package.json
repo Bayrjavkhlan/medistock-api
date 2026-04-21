@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
-    "build": "yarn prisma generate && tsc && tsc-alias",
+    "build": "tsc && tsc-alias",
     "start": "node dist/app.js",
     "prisma:generate": "yarn prisma generate && yarn prisma format && yarn prisma validate",
     "prisma:migration": "yarn prisma:generate && yarn prisma migrate dev --create-only",
@@ -20,7 +20,6 @@
     "commit": "git-cz"
   },
   "prisma": {
-    "schema": "prisma/schema/schema.prisma",
     "seed": "ts-node --transpile-only -r tsconfig-paths/register prisma/seed/index.ts"
   },
   "dependencies": {
