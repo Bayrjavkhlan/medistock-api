@@ -24,12 +24,15 @@ import routes from "./routes";
 const app: Express = express();
 
 const corsOptions: cors.CorsOptions = {
-  origin: "*",
+  origin: true,
   credentials: true,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-org-id"],
 };
 
 if (env.NODE_ENV !== "local") app.use(helmet());
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "20mb" }));
 app.use(cookieParser());
 
