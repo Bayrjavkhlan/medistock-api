@@ -18,6 +18,7 @@ type JwtOptions = jwt.SignOptions;
 
 const JWT_SECRET = String(env.JWT_SECRET);
 const ONE_DAY_MS = 24 * 3600 * 1000;
+const isProduction = env.NODE_ENV === "production";
 
 const ACCESS_TOKEN_EXPIRE =
   (env.AUTH_TOKEN_EXPIRE as JwtOptions["expiresIn"]) || ONE_DAY_MS;
@@ -59,7 +60,7 @@ const authCookieOptions = (secure = false) => ({
   expires: new Date(Date.now() + ONE_DAY_MS),
   maxAge: ONE_DAY_MS,
   secure,
-  sameSite: "lax" as const,
+  sameSite: isProduction ? ("none" as const) : ("lax" as const),
   path: "/",
   ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 });
@@ -75,8 +76,8 @@ export const setAuthCookies = (
 export const clearAuthCookies = (res: Response): void => {
   const cookieOptions = {
     httpOnly: true,
-    sameSite: "lax" as const,
-    secure: env.NODE_ENV === "production",
+    sameSite: isProduction ? ("none" as const) : ("lax" as const),
+    secure: isProduction,
     path: "/",
     ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
   };
