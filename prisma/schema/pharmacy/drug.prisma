@@ -1,0 +1,42 @@
+model Drug {
+  id String @id @default(uuid())
+
+  name         String
+  genericName  String?
+  dosageForm   String?
+  strength     String?
+  manufacturer String?
+  description  String?
+
+  listings PharmacyDrug[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, strength, dosageForm])
+}
+
+model PharmacyDrug {
+  id String @id @default(uuid())
+
+  pharmacy   Pharmacy @relation(fields: [pharmacyId], references: [id])
+  pharmacyId String
+
+  drug   Drug   @relation(fields: [drugId], references: [id])
+  drugId String
+
+  quantity Int             @default(0)
+  price    Float?
+  status   InventoryStatus
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([pharmacyId, drugId])
+}
+
+enum InventoryStatus {
+  AVAILABLE
+  LOW
+  OUT_OF_STOCK
+  UNKNOWN
+}

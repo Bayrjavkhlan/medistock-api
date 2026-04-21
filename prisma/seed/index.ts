@@ -1,17 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import { seedRoles } from "./roles";
 import { seedHospitals } from "./hospitals";
+import { seedPharmacies } from "./pharmacies";
+import { seedDrugs } from "./drugs";
 import { seedEquipment } from "./equipment";
 import { seedEquipmentLogs } from "./equipmentsLog";
-import { seedStaffs } from "./staff";
+import { seedUser } from "./user";
 
 const prisma = new PrismaClient();
 
 async function main() {
   try {
-    await seedRoles(prisma);
     await seedHospitals(prisma);
-    await seedStaffs(prisma);
+    await seedPharmacies(prisma);
+    await seedUser(prisma);
+    await seedDrugs(prisma);
     await seedEquipment(prisma);
     await seedEquipmentLogs(prisma);
 

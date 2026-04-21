@@ -17,5 +17,11 @@ export const env = {
   CORS_DOMAIN: process.env.CORS_DOMAIN?.trim().split(",") || [
     "http://localhost:3000",
   ],
-  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || "localhost",
+  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN?.trim() || undefined,
+  SMTP_HOST: process.env.SMTP_HOST || "smtp.gmail.com",
+  SMTP_PORT: parseInt(process.env.SMTP_PORT || "587"),
+  SMTP_SECURE: process.env.SMTP_SECURE === "true",
+  SMTP_USER: process.env.SMTP_USER || "",
+  SMTP_PASS: process.env.SMTP_PASS || "",
+  SMTP_FROM: process.env.SMTP_FROM || "noreply@medistock.com",
 };

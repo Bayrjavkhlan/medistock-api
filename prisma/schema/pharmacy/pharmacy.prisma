@@ -1,0 +1,14 @@
+model Pharmacy {
+  id String @id @default(uuid())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @unique
+
+  phone String?
+  email String?
+
+  inventory PharmacyDrug[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

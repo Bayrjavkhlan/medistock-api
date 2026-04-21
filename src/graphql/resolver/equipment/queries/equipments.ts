@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -13,6 +14,72 @@ export const Equipments = queryField("equipments", {
   },
   resolve: async (_parents, _args, ctx) => {
     const { where, take, skip } = _args;
+
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      const adminWhere = where?.search
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                serialNo: {
+                  contains: where.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                assignedTo: {
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                },
+              },
+              {
+                hospital: {
+                  is: {
+                    organization: {
+                      is: {
+                        name: {
+                          contains: where.search,
+                          mode: Prisma.QueryMode.insensitive,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : undefined;
+
+      const equipments = await ctx.prisma.equipment.findMany({
+        where: adminWhere,
+        include: {
+          hospital: {
+            include: { organization: { include: { address: true } } },
+          },
+          logs: true,
+          assignedTo: true,
+        },
+        skip,
+        take,
+      });
+      const count = await ctx.prisma.equipment.count({
+        where: adminWhere,
+      });
+
+      return {
+        data: equipments,
+        count,
+      };
+    }
 
     const criteria = accessibleBy(ctx.caslAbility, "read", "Equipment");
 
@@ -31,7 +98,11 @@ export const Equipments = queryField("equipments", {
         {
           hospital: {
             is: {
-              name: { contains: search, mode: "insensitive" },
+              organization: {
+                is: {
+                  name: { contains: search, mode: "insensitive" },
+                },
+              },
             },
           },
         },
@@ -40,14 +111,23 @@ export const Equipments = queryField("equipments", {
 
     const equipments = await ctx.prisma.equipment.findMany({
       where: criteria,
-      include: { hospital: true, logs: true, assignedTo: true },
+      include: {
+        hospital: {
+          include: { organization: { include: { address: true } } },
+        },
+        logs: true,
+        assignedTo: true,
+      },
       skip,
       take,
+    });
+    const count = await ctx.prisma.equipment.count({
+      where: criteria,
     });
 
     return {
       data: equipments,
-      count: equipments.length,
+      count,
     };
   },
 });

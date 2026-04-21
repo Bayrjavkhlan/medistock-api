@@ -9,6 +9,7 @@ export default defineConfig({
   schema: path.join("prisma/schema", "schema.prisma"),
   migrations: {
     path: path.join("prisma", "migrations"),
+    seed: "ts-node --transpile-only -r tsconfig-paths/register prisma/seed/index.ts",
   },
   views: {
     path: path.join("prisma", "views"),

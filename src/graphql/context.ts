@@ -1,16 +1,29 @@
-import { Hospital, PrismaClient, Role, Staff } from "@prisma/client";
+import {
+  Organization,
+  OrganizationRole,
+  PrismaClient,
+  User,
+} from "@prisma/client";
 import { Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
 import { env } from "@/config";
 import { Errors } from "@/errors";
+import { resolveActiveOrg } from "@/graphql/middleware/withOrg";
 import { verifyAccessToken } from "@/lib/auth";
 import { AppAbility, createAbilities } from "@/lib/casl";
 import { prisma } from "@/lib/prisma";
 
-export type TStaff = {
-  staff: (Staff & { roles: Role[] }) | null;
-  hospital: Hospital | null;
+export type TUser = {
+  user:
+    | (User & {
+        isPlatformAdmin: boolean;
+        memberships: {
+          role: OrganizationRole;
+          organization: Organization;
+        }[];
+      })
+    | null;
 };
 
 type CreateContext = {
@@ -22,7 +35,11 @@ export type Context = {
   req: Request;
   res: Response;
   prisma: PrismaClient;
-  reqStaff: TStaff | null;
+  reqUser: TUser | null;
+  activeOrg: {
+    role: OrganizationRole;
+    organization: Organization;
+  } | null;
   caslAbility: AppAbility;
 };
 
@@ -33,8 +50,8 @@ const verifyToken = (req: Request) => {
 
   if (token) {
     try {
-      const { staffId } = verifyAccessToken(token);
-      return staffId;
+      const { userId } = verifyAccessToken(token);
+      return userId;
     } catch (error) {
       const tokenExpires = error instanceof TokenExpiredError;
       if (tokenExpires) throw Errors.Auth.ACCESS_TOKEN_EXPIRED();
@@ -44,35 +61,68 @@ const verifyToken = (req: Request) => {
   return undefined;
 };
 
-export const findRequestStaff = async (
-  staffId?: string
-): Promise<TStaff | null> => {
-  if (!staffId) return null;
-  const staff = await prisma.staff.findUnique({
-    where: { id: staffId },
+export const findRequestUser = async (
+  userId?: string
+): Promise<TUser | null> => {
+  if (!userId) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
     include: {
-      hospital: true,
-      roles: true,
+      memberships: {
+        include: {
+          organization: {
+            include: {
+              hospital: true,
+              pharmacy: true,
+            },
+          },
+        },
+      },
     },
   });
-  if (!staff) return null;
+
+  if (!user) return null;
+
+  if (user.isPlatformAdmin && user.memberships.length === 0) {
+    const organizations = await prisma.organization.findMany({
+      include: {
+        hospital: true,
+        pharmacy: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return {
+      user: {
+        ...user,
+        memberships: organizations.map((organization) => ({
+          role: OrganizationRole.OWNER,
+          organization,
+        })),
+      },
+    };
+  }
 
   return {
-    staff,
-    hospital: staff.hospital!,
+    user,
   };
 };
 
 const createContext = async ({ req, res }: CreateContext): Promise<Context> => {
-  const staffId = verifyToken(req);
-  const reqStaff = await findRequestStaff(staffId);
-  const caslAbility = createAbilities({ reqStaff });
+  const userId = verifyToken(req);
+  const reqUser = await findRequestUser(userId);
+
+  const activeOrg = resolveActiveOrg(req, reqUser);
+
+  const caslAbility = createAbilities({ reqUser, activeOrg });
 
   return {
     req,
     res,
     prisma,
-    reqStaff,
+    reqUser,
+    activeOrg,
     caslAbility,
   };
 };

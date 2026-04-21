@@ -20,7 +20,10 @@ export const EquipmentLogDetail = queryField("equipmentLogDetail", {
       include: {
         equipment: {
           include: {
-            hospital: true,
+            hospital: {
+              include: { organization: { include: { address: true } } },
+            },
+            assignedTo: true,
           },
         },
         performedBy: true,

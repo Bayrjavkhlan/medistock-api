@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { env } from "@/config";
 
 export type TokenPayload = {
-  staffId: string;
+  userId: string;
   refreshToken?: string | undefined;
 };
 export type LoginPayload = {
@@ -29,23 +29,23 @@ const signToken = (payload: TokenPayload, options: JwtOptions): string => {
 };
 
 const signAccessToken = (
-  { staffId, refreshToken }: TokenPayload,
+  { userId, refreshToken }: TokenPayload,
   jwtid: string
 ): string =>
   signToken(
-    { staffId, refreshToken },
+    { userId, refreshToken },
     { expiresIn: ACCESS_TOKEN_EXPIRE, jwtid }
   );
 
-const signRefreshToken = ({ staffId }: TokenPayload, jwtid: string): string =>
-  signToken({ staffId }, { expiresIn: REFRESH_TOKEN_EXPIRE, jwtid });
+const signRefreshToken = ({ userId }: TokenPayload, jwtid: string): string =>
+  signToken({ userId }, { expiresIn: REFRESH_TOKEN_EXPIRE, jwtid });
 
 export const generateAccessToken = async (
-  staffId: string
+  userId: string
 ): Promise<LoginPayload> => {
   const jwtid = uuidv4();
-  const accessToken = signAccessToken({ staffId }, jwtid);
-  const refreshToken = signRefreshToken({ staffId }, jwtid);
+  const accessToken = signAccessToken({ userId }, jwtid);
+  const refreshToken = signRefreshToken({ userId }, jwtid);
   return { accessToken, refreshToken, jwtid };
 };
 
@@ -59,7 +59,9 @@ const authCookieOptions = (secure = false) => ({
   expires: new Date(Date.now() + ONE_DAY_MS),
   maxAge: ONE_DAY_MS,
   secure,
-  domain: env.COOKIE_DOMAIN,
+  sameSite: "lax" as const,
+  path: "/",
+  ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 });
 
 export const setAuthCookies = (
@@ -68,4 +70,18 @@ export const setAuthCookies = (
   accessToken: string
 ): void => {
   res.cookie(env.AUTH_TOKEN_KEY, accessToken, authCookieOptions(secure));
+};
+
+export const clearAuthCookies = (res: Response): void => {
+  const cookieOptions = {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: env.NODE_ENV === "production",
+    path: "/",
+    ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
+  };
+
+  res.clearCookie(env.AUTH_TOKEN_KEY, cookieOptions);
+  res.clearCookie(env.REFRESH_TOKEN_KEY, cookieOptions);
+  res.clearCookie("x-org-id", cookieOptions);
 };
