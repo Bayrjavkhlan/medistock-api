@@ -1,5 +1,17 @@
 import "dotenv/config";
 
+const parseCsvEnv = (
+  value: string | undefined,
+  fallback: string[]
+): string[] => {
+  if (!value?.trim()) return fallback;
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
 const constants = {
   DEFAULT_PASSWORD: "A1234",
   AUTH_TOKEN_EXPIRE: 24 * 3600 * 1000,
@@ -14,9 +26,7 @@ export const env = {
   PORT: process.env.PORT || 4000,
   JWT_SECRET: process.env.JWT_SECRET || "medistock-secret-key",
   GRAPHQL_PATH: process.env.GRAPHQL_PATH || "/api/graphql",
-  CORS_DOMAIN: process.env.CORS_DOMAIN?.trim().split(",") || [
-    "http://localhost:3000",
-  ],
+  CORS_DOMAIN: parseCsvEnv(process.env.CORS_DOMAIN, ["http://localhost:3000"]),
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN?.trim() || undefined,
   SMTP_HOST: process.env.SMTP_HOST || "smtp.gmail.com",
   SMTP_PORT: parseInt(process.env.SMTP_PORT || "587"),

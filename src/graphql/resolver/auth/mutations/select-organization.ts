@@ -21,7 +21,7 @@ export const SelectOrganization = mutationField("selectOrganization", {
     ctx.res.setHeader("x-org-id", orgId);
     ctx.res.cookie("x-org-id", orgId, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       secure: env.NODE_ENV === "production",
       ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
     });
