@@ -48,6 +48,7 @@ const httpServer = createServer(app);
 
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
+  csrfPrevention: false,
   plugins: [
     {
       async serverWillStart() {
