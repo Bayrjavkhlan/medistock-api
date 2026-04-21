@@ -24,7 +24,7 @@ import routes from "./routes";
 const app: Express = express();
 
 const corsOptions: cors.CorsOptions = {
-  origin: env.CORS_DOMAIN,
+  origin: "*",
   credentials: true,
 };
 
