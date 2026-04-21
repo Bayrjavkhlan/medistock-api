@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 10
+  },
+  "auditLog": "/home/zero/Documents/tempFolderToMergeMediConAndMediStock/medistock/medistock-api/logs/.f43d3324eeb72df56a135a0bbffe375e2d53d49d-audit.json",
+  "files": [
+    {
+      "date": 1776781831175,
+      "name": "/home/zero/Documents/tempFolderToMergeMediConAndMediStock/medistock/medistock-api/logs/application-2026-04-21.log",
+      "hash": "f26c6e8bacc95be24ab5ff07887c0cc1a10c3eed171bc249ed18f0a60595fb1f"
+    }
+  ],
+  "hashType": "sha256"
+}

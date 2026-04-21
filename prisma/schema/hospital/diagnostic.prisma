@@ -1,0 +1,89 @@
+model Symptom {
+  id     String @id @default(uuid())
+  code   String @unique
+  name   String
+  cause  String
+  relief String
+
+  medications SymptomMedication[]
+  tests       SymptomDiagnosticTest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SymptomMedication {
+  id String @id @default(uuid())
+
+  symptom   Symptom @relation(fields: [symptomId], references: [id])
+  symptomId String
+
+  drug   Drug   @relation(fields: [drugId], references: [id])
+  drugId String
+
+  note      String?
+  linkUrl   String?
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([symptomId, drugId])
+}
+
+model DiagnosticTest {
+  id String @id @default(uuid())
+
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  hospitalId String
+
+  assignedDoctor   User?   @relation("AssignedDiagnosticTests", fields: [assignedDoctorId], references: [id])
+  assignedDoctorId String?
+
+  name         String
+  description  String?
+  price        Float?
+  room         String?
+  contact      String?
+  instructions String?
+  isActive     Boolean @default(true)
+
+  symptoms  SymptomDiagnosticTest[]
+  timeSlots DiagnosticTimeSlot[]
+  bookings  Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SymptomDiagnosticTest {
+  id String @id @default(uuid())
+
+  symptom   Symptom @relation(fields: [symptomId], references: [id])
+  symptomId String
+
+  diagnosticTest   DiagnosticTest @relation(fields: [diagnosticTestId], references: [id])
+  diagnosticTestId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([symptomId, diagnosticTestId])
+}
+
+model DiagnosticTimeSlot {
+  id String @id @default(uuid())
+
+  diagnosticTest   DiagnosticTest @relation(fields: [diagnosticTestId], references: [id])
+  diagnosticTestId String
+
+  label     String
+  startTime String
+  endTime   String
+  capacity  Int     @default(1)
+  isActive  Boolean @default(true)
+
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

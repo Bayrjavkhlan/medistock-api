@@ -64,6 +64,14 @@ export interface NexusGenInputs {
     search?: string | null; // String
     status?: NexusGenEnums['BookingStatus'] | null; // BookingStatus
   }
+  DiagnosticBookingCreateInput: { // input type
+    bookingDate: string; // String!
+    diagnosticTestId: string; // String!
+    diagnosticTimeSlotId: string; // String!
+    note?: string | null; // String
+    patientName: string; // String!
+    patientPhone: string; // String!
+  }
   DrugCreateInput: { // input type
     description?: string | null; // String
     dosageForm?: string | null; // String
@@ -173,6 +181,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   BookingStatus: "CANCELLED" | "COMPLETED" | "CONFIRMED" | "PENDING"
+  BookingType: "DIAGNOSTIC_TEST" | "GENERAL"
   EnumSortOrder: "asc" | "desc"
   EquipmentCategory: "DEFIBRILLATOR" | "DIALYSIS_MACHINE" | "IMAGING_CT" | "IMAGING_MRI" | "IMAGING_ULTRASOUND" | "IMAGING_X_RAY" | "INFUSION_PUMP" | "LAB_EQUIPMENT" | "OTHER" | "PATIENT_MONITOR" | "SURGICAL_INSTRUMENT" | "VENTILATOR"
   EquipmentState: "ASSIGNED" | "AVAILABLE" | "IN_MAINTENANCE" | "OUT_OF_ORDER" | "RETIRED"
@@ -228,12 +237,16 @@ export interface NexusGenObjects {
     bookingTime?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     department?: string | null; // String
+    diagnosticTest?: NexusGenRootTypes['DiagnosticTest'] | null; // DiagnosticTest
+    diagnosticTimeSlot?: NexusGenRootTypes['DiagnosticTimeSlot'] | null; // DiagnosticTimeSlot
     doctorName?: string | null; // String
     hospital?: NexusGenRootTypes['Hospital'] | null; // Hospital
     id?: string | null; // String
     patientName?: string | null; // String
     patientPhone?: string | null; // String
+    patientUserId?: string | null; // String
     status?: string | null; // String
+    type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Bookings: { // root type
@@ -297,6 +310,63 @@ export interface NexusGenObjects {
     label: string; // String!
     tone?: string | null; // String
     value: number; // Int!
+  }
+  DiagnosticBooking: { // root type
+    bookingTime: NexusGenScalars['DateTime']; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    department: string; // String!
+    diagnosticTest?: NexusGenRootTypes['DiagnosticTest'] | null; // DiagnosticTest
+    diagnosticTimeSlot?: NexusGenRootTypes['DiagnosticTimeSlot'] | null; // DiagnosticTimeSlot
+    doctorName?: string | null; // String
+    hospital?: NexusGenRootTypes['Hospital'] | null; // Hospital
+    id: string; // String!
+    patientName: string; // String!
+    patientPhone: string; // String!
+    patientUserId?: string | null; // String
+    status: string; // String!
+    type: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  DiagnosticDoctor: { // root type
+    email?: string | null; // String
+    id: string; // String!
+    name?: string | null; // String
+    phone?: string | null; // String
+  }
+  DiagnosticDoctorBookingListPayload: { // root type
+    count: number; // Int!
+    data: NexusGenRootTypes['DiagnosticBooking'][]; // [DiagnosticBooking!]!
+  }
+  DiagnosticMedicationSuggestion: { // root type
+    drug: NexusGenRootTypes['Drug']; // Drug!
+    id: string; // String!
+    linkUrl?: string | null; // String
+    note?: string | null; // String
+    sortOrder: number; // Int!
+  }
+  DiagnosticPatientBookingListPayload: { // root type
+    count: number; // Int!
+    data: NexusGenRootTypes['DiagnosticBooking'][]; // [DiagnosticBooking!]!
+  }
+  DiagnosticTest: { // root type
+    contact?: string | null; // String
+    description?: string | null; // String
+    hospital?: NexusGenRootTypes['Hospital'] | null; // Hospital
+    id: string; // String!
+    instructions?: string | null; // String
+    isActive: boolean; // Boolean!
+    name: string; // String!
+    price?: number | null; // Float
+    room?: string | null; // String
+    timeSlots: NexusGenRootTypes['DiagnosticTimeSlot'][]; // [DiagnosticTimeSlot!]!
+  }
+  DiagnosticTimeSlot: { // root type
+    capacity: number; // Int!
+    endTime: string; // String!
+    id: string; // String!
+    isActive: boolean; // Boolean!
+    label: string; // String!
+    startTime: string; // String!
   }
   Drug: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -445,6 +515,23 @@ export interface NexusGenObjects {
   SignUpPayload: { // root type
     message: string; // String!
   }
+  Symptom: { // root type
+    cause: string; // String!
+    code: string; // String!
+    id: string; // String!
+    medications: NexusGenRootTypes['DiagnosticMedicationSuggestion'][]; // [DiagnosticMedicationSuggestion!]!
+    name: string; // String!
+    relief: string; // String!
+  }
+  SymptomOption: { // root type
+    code: string; // String!
+    id: string; // String!
+    name: string; // String!
+  }
+  SymptomOptionsPayload: { // root type
+    count: number; // Int!
+    data: NexusGenRootTypes['SymptomOption'][]; // [SymptomOption!]!
+  }
   User: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: string | null; // String
@@ -514,12 +601,16 @@ export interface NexusGenFieldTypes {
     bookingTime: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     department: string | null; // String
+    diagnosticTest: NexusGenRootTypes['DiagnosticTest'] | null; // DiagnosticTest
+    diagnosticTimeSlot: NexusGenRootTypes['DiagnosticTimeSlot'] | null; // DiagnosticTimeSlot
     doctorName: string | null; // String
     hospital: NexusGenRootTypes['Hospital'] | null; // Hospital
     id: string | null; // String
     patientName: string | null; // String
     patientPhone: string | null; // String
+    patientUserId: string | null; // String
     status: string | null; // String
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Bookings: { // field return type
@@ -583,6 +674,64 @@ export interface NexusGenFieldTypes {
     label: string; // String!
     tone: string | null; // String
     value: number; // Int!
+  }
+  DiagnosticBooking: { // field return type
+    bookingTime: NexusGenScalars['DateTime']; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    department: string; // String!
+    diagnosticTest: NexusGenRootTypes['DiagnosticTest'] | null; // DiagnosticTest
+    diagnosticTimeSlot: NexusGenRootTypes['DiagnosticTimeSlot'] | null; // DiagnosticTimeSlot
+    doctorName: string | null; // String
+    hospital: NexusGenRootTypes['Hospital'] | null; // Hospital
+    id: string; // String!
+    patientName: string; // String!
+    patientPhone: string; // String!
+    patientUserId: string | null; // String
+    status: string; // String!
+    type: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  DiagnosticDoctor: { // field return type
+    email: string | null; // String
+    id: string; // String!
+    name: string | null; // String
+    phone: string | null; // String
+  }
+  DiagnosticDoctorBookingListPayload: { // field return type
+    count: number; // Int!
+    data: NexusGenRootTypes['DiagnosticBooking'][]; // [DiagnosticBooking!]!
+  }
+  DiagnosticMedicationSuggestion: { // field return type
+    drug: NexusGenRootTypes['Drug']; // Drug!
+    id: string; // String!
+    linkUrl: string | null; // String
+    note: string | null; // String
+    sortOrder: number; // Int!
+  }
+  DiagnosticPatientBookingListPayload: { // field return type
+    count: number; // Int!
+    data: NexusGenRootTypes['DiagnosticBooking'][]; // [DiagnosticBooking!]!
+  }
+  DiagnosticTest: { // field return type
+    assignedDoctor: NexusGenRootTypes['DiagnosticDoctor'] | null; // DiagnosticDoctor
+    contact: string | null; // String
+    description: string | null; // String
+    hospital: NexusGenRootTypes['Hospital'] | null; // Hospital
+    id: string; // String!
+    instructions: string | null; // String
+    isActive: boolean; // Boolean!
+    name: string; // String!
+    price: number | null; // Float
+    room: string | null; // String
+    timeSlots: NexusGenRootTypes['DiagnosticTimeSlot'][]; // [DiagnosticTimeSlot!]!
+  }
+  DiagnosticTimeSlot: { // field return type
+    capacity: number; // Int!
+    endTime: string; // String!
+    id: string; // String!
+    isActive: boolean; // Boolean!
+    label: string; // String!
+    startTime: string; // String!
   }
   Drug: { // field return type
     availability: NexusGenRootTypes['DrugAvailability'][]; // [DrugAvailability!]!
@@ -697,6 +846,7 @@ export interface NexusGenFieldTypes {
     bookingCreate: boolean | null; // Boolean
     bookingDelete: boolean | null; // Boolean
     bookingUpdate: boolean | null; // Boolean
+    diagnosticBookingCreate: NexusGenRootTypes['DiagnosticBooking'] | null; // DiagnosticBooking
     drugCreate: boolean | null; // Boolean
     drugDelete: boolean | null; // Boolean
     drugUpdate: boolean | null; // Boolean
@@ -780,6 +930,8 @@ export interface NexusGenFieldTypes {
     bookings: NexusGenRootTypes['Bookings'] | null; // Bookings
     currentUser: NexusGenRootTypes['AuthUser'] | null; // AuthUser
     dashboardOverview: NexusGenRootTypes['DashboardOverview'] | null; // DashboardOverview
+    diagnosticDoctorBookings: NexusGenRootTypes['DiagnosticDoctorBookingListPayload'] | null; // DiagnosticDoctorBookingListPayload
+    diagnosticPatientBookings: NexusGenRootTypes['DiagnosticPatientBookingListPayload'] | null; // DiagnosticPatientBookingListPayload
     drugDetail: NexusGenRootTypes['Drug'] | null; // Drug
     drugs: NexusGenRootTypes['Drugs'] | null; // Drugs
     equipmentDetail: NexusGenRootTypes['Equipment'] | null; // Equipment
@@ -795,6 +947,8 @@ export interface NexusGenFieldTypes {
     pharmacyDetail: NexusGenRootTypes['Pharmacy'] | null; // Pharmacy
     pharmacyDrugs: NexusGenRootTypes['PharmacyDrugs'] | null; // PharmacyDrugs
     pharmacyOption: NexusGenRootTypes['PharmacyOption'][]; // [PharmacyOption!]!
+    symptom: NexusGenRootTypes['Symptom'] | null; // Symptom
+    symptoms: NexusGenRootTypes['SymptomOptionsPayload'] | null; // SymptomOptionsPayload
     userDetail: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['Users'] | null; // Users
   }
@@ -803,6 +957,24 @@ export interface NexusGenFieldTypes {
   }
   SignUpPayload: { // field return type
     message: string; // String!
+  }
+  Symptom: { // field return type
+    cause: string; // String!
+    code: string; // String!
+    id: string; // String!
+    medications: NexusGenRootTypes['DiagnosticMedicationSuggestion'][]; // [DiagnosticMedicationSuggestion!]!
+    name: string; // String!
+    relief: string; // String!
+    tests: NexusGenRootTypes['DiagnosticTest'][]; // [DiagnosticTest!]!
+  }
+  SymptomOption: { // field return type
+    code: string; // String!
+    id: string; // String!
+    name: string; // String!
+  }
+  SymptomOptionsPayload: { // field return type
+    count: number; // Int!
+    data: NexusGenRootTypes['SymptomOption'][]; // [SymptomOption!]!
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -863,12 +1035,16 @@ export interface NexusGenFieldTypeNames {
     bookingTime: 'DateTime'
     createdAt: 'DateTime'
     department: 'String'
+    diagnosticTest: 'DiagnosticTest'
+    diagnosticTimeSlot: 'DiagnosticTimeSlot'
     doctorName: 'String'
     hospital: 'Hospital'
     id: 'String'
     patientName: 'String'
     patientPhone: 'String'
+    patientUserId: 'String'
     status: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
   }
   Bookings: { // field return type name
@@ -932,6 +1108,64 @@ export interface NexusGenFieldTypeNames {
     label: 'String'
     tone: 'String'
     value: 'Int'
+  }
+  DiagnosticBooking: { // field return type name
+    bookingTime: 'DateTime'
+    createdAt: 'DateTime'
+    department: 'String'
+    diagnosticTest: 'DiagnosticTest'
+    diagnosticTimeSlot: 'DiagnosticTimeSlot'
+    doctorName: 'String'
+    hospital: 'Hospital'
+    id: 'String'
+    patientName: 'String'
+    patientPhone: 'String'
+    patientUserId: 'String'
+    status: 'String'
+    type: 'String'
+    updatedAt: 'DateTime'
+  }
+  DiagnosticDoctor: { // field return type name
+    email: 'String'
+    id: 'String'
+    name: 'String'
+    phone: 'String'
+  }
+  DiagnosticDoctorBookingListPayload: { // field return type name
+    count: 'Int'
+    data: 'DiagnosticBooking'
+  }
+  DiagnosticMedicationSuggestion: { // field return type name
+    drug: 'Drug'
+    id: 'String'
+    linkUrl: 'String'
+    note: 'String'
+    sortOrder: 'Int'
+  }
+  DiagnosticPatientBookingListPayload: { // field return type name
+    count: 'Int'
+    data: 'DiagnosticBooking'
+  }
+  DiagnosticTest: { // field return type name
+    assignedDoctor: 'DiagnosticDoctor'
+    contact: 'String'
+    description: 'String'
+    hospital: 'Hospital'
+    id: 'String'
+    instructions: 'String'
+    isActive: 'Boolean'
+    name: 'String'
+    price: 'Float'
+    room: 'String'
+    timeSlots: 'DiagnosticTimeSlot'
+  }
+  DiagnosticTimeSlot: { // field return type name
+    capacity: 'Int'
+    endTime: 'String'
+    id: 'String'
+    isActive: 'Boolean'
+    label: 'String'
+    startTime: 'String'
   }
   Drug: { // field return type name
     availability: 'DrugAvailability'
@@ -1046,6 +1280,7 @@ export interface NexusGenFieldTypeNames {
     bookingCreate: 'Boolean'
     bookingDelete: 'Boolean'
     bookingUpdate: 'Boolean'
+    diagnosticBookingCreate: 'DiagnosticBooking'
     drugCreate: 'Boolean'
     drugDelete: 'Boolean'
     drugUpdate: 'Boolean'
@@ -1129,6 +1364,8 @@ export interface NexusGenFieldTypeNames {
     bookings: 'Bookings'
     currentUser: 'AuthUser'
     dashboardOverview: 'DashboardOverview'
+    diagnosticDoctorBookings: 'DiagnosticDoctorBookingListPayload'
+    diagnosticPatientBookings: 'DiagnosticPatientBookingListPayload'
     drugDetail: 'Drug'
     drugs: 'Drugs'
     equipmentDetail: 'Equipment'
@@ -1144,6 +1381,8 @@ export interface NexusGenFieldTypeNames {
     pharmacyDetail: 'Pharmacy'
     pharmacyDrugs: 'PharmacyDrugs'
     pharmacyOption: 'PharmacyOption'
+    symptom: 'Symptom'
+    symptoms: 'SymptomOptionsPayload'
     userDetail: 'User'
     users: 'Users'
   }
@@ -1152,6 +1391,24 @@ export interface NexusGenFieldTypeNames {
   }
   SignUpPayload: { // field return type name
     message: 'String'
+  }
+  Symptom: { // field return type name
+    cause: 'String'
+    code: 'String'
+    id: 'String'
+    medications: 'DiagnosticMedicationSuggestion'
+    name: 'String'
+    relief: 'String'
+    tests: 'DiagnosticTest'
+  }
+  SymptomOption: { // field return type name
+    code: 'String'
+    id: 'String'
+    name: 'String'
+  }
+  SymptomOptionsPayload: { // field return type name
+    count: 'Int'
+    data: 'SymptomOption'
   }
   User: { // field return type name
     createdAt: 'DateTime'
@@ -1186,6 +1443,9 @@ export interface NexusGenArgTypes {
     bookingUpdate: { // args
       id: string; // String!
       input: NexusGenInputs['BookingCreateInput']; // BookingCreateInput!
+    }
+    diagnosticBookingCreate: { // args
+      input: NexusGenInputs['DiagnosticBookingCreateInput']; // DiagnosticBookingCreateInput!
     }
     drugCreate: { // args
       input: NexusGenInputs['DrugCreateInput']; // DrugCreateInput!
@@ -1339,6 +1599,9 @@ export interface NexusGenArgTypes {
       skip: number; // Int!
       take: number; // Int!
       where?: NexusGenInputs['PharmacyDrugsWhereInput'] | null; // PharmacyDrugsWhereInput
+    }
+    symptom: { // args
+      code: string; // String!
     }
     userDetail: { // args
       id: string; // String!
