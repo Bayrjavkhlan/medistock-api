@@ -20,6 +20,7 @@
     "commit": "git-cz"
   },
   "prisma": {
+    "schema": "prisma/schema/schema.prisma",
     "seed": "ts-node --transpile-only -r tsconfig-paths/register prisma/seed/index.ts"
   },
   "dependencies": {
