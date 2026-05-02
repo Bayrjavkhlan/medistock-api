@@ -6,6 +6,8 @@ import { EquipmentLogErrorMap, EquipmentLogErrors } from "./equipmentLog";
 import { HospitalErrorMap, HospitalErrors } from "./hospital";
 import { MembershipErrorMap, MembershipErrors } from "./membership";
 import { PharmacyErrorMap, PharmacyErrors } from "./pharmacy";
+import { SupplierErrorMap, SupplierErrors } from "./supplier";
+import { SupplyErrorMap, SupplyErrors } from "./supply";
 import { SystemErrorMap, SystemErrors } from "./system";
 import { UserErrorMap, UserErrors } from "./user";
 
@@ -22,6 +24,8 @@ export const ErrorMap = {
   ...UserErrorMap,
   ...BookingErrorMap,
   ...MembershipErrorMap,
+  ...SupplierErrorMap,
+  ...SupplyErrorMap,
 };
 
 export const Errors = {
@@ -35,4 +39,6 @@ export const Errors = {
   User: UserErrors,
   Booking: BookingErrors,
   Membership: MembershipErrors,
+  Supplier: SupplierErrors,
+  Supply: SupplyErrors,
 };

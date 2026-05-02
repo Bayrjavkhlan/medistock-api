@@ -8,4 +8,6 @@ export * from "./hospital";
 export * from "./location";
 export * from "./membership";
 export * from "./pharmacy";
+export * from "./supplier";
+export * from "./supply";
 export * from "./user";

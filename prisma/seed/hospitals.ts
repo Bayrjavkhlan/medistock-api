@@ -1,5 +1,3 @@
-// src/prisma/seed/hospitals.ts  (or wherever you keep it)
-
 import { OrganizationType, PrismaClient } from "@prisma/client";
 
 export async function seedHospitals(prisma: PrismaClient) {
@@ -9,30 +7,30 @@ export async function seedHospitals(prisma: PrismaClient) {
     {
       organizationId: "org-hosp-1",
       hospitalId: "hosp-1",
-      name: "Даланзадгад эмнэлэг А",
+      name: "Улаанбаатар эмнэлэг А",
       phone: "70532001",
       email: "hospital-a@demo.mn",
       address: {
         id: "addr-1",
-        address1: "Даланзадгад хотын төв",
-        province: "Umnugovi, Dalanzadgad",
-        latitude: 43.5772,
-        longitude: 104.4254,
+        address1: "Сүхбаатар дүүрэг, 1-р хороо",
+        province: "Улаанбаатар",
+        latitude: 47.918873,
+        longitude: 106.917701,
       },
     },
     {
       organizationId: "org-hosp-2",
       hospitalId: "hosp-2",
-      name: "Даланзадгад эмнэлэг Б",
+      name: "Улаанбаатар эмнэлэг Б",
       phone: "70532002",
       email: "hospital-b@demo.mn",
       address: {
         id: "addr-2",
-        address1: "Даланзадгадын урд хэсэг",
-        address2: "Аймгийн төвийн ойролцоо",
-        province: "Umnugovi, Dalanzadgad",
-        latitude: 43.5748,
-        longitude: 104.4291,
+        address1: "Баянзүрх дүүрэг, 6-р хороо",
+        address2: "Олимпын гудамж 8",
+        province: "Улаанбаатар",
+        latitude: 47.913,
+        longitude: 106.985,
       },
     },
   ];
@@ -84,7 +82,7 @@ export async function seedHospitals(prisma: PrismaClient) {
           create: hospital.address,
         },
       },
-    })
+    }),
   );
 
   await prisma.$transaction(upserts);

@@ -29,6 +29,7 @@ model Organization {
 
   hospital Hospital?
   pharmacy Pharmacy?
+  supplier Supplier?
 
   memberships Membership[]
 
@@ -56,6 +57,7 @@ model Membership {
 enum OrganizationType {
   HOSPITAL
   PHARMACY
+  SUPPLIER
 }
 
 enum OrganizationRole {

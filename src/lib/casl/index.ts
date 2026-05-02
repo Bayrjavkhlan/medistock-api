@@ -9,6 +9,8 @@ import {
   Membership,
   Pharmacy,
   PharmacyDrug,
+  Supplier,
+  SupplyItem,
   User,
 } from "@prisma/client";
 
@@ -23,6 +25,8 @@ type PrismaSubjects = Subjects<{
   Hospital: Hospital;
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
+  Supplier: Supplier;
+  SupplyItem: SupplyItem;
   Booking: Booking;
   Drug: Drug;
   User: User;
@@ -35,6 +39,8 @@ type SubjectMap = {
   Hospital: Hospital;
   Pharmacy: Pharmacy;
   PharmacyDrug: PharmacyDrug;
+  Supplier: Supplier;
+  SupplyItem: SupplyItem;
   Booking: Booking;
   Drug: Drug;
   User: User;
@@ -81,6 +87,8 @@ export const createAbilities = (
     can("manage", "Hospital");
     can("manage", "Pharmacy");
     can("manage", "PharmacyDrug");
+    can("manage", "Supplier");
+    can("manage", "SupplyItem");
     can("manage", "Booking");
     can("manage", "Drug");
     can("manage", "User");
@@ -92,6 +100,8 @@ export const createAbilities = (
     can("read", "Hospital");
     can("read", "Pharmacy");
     can("read", "Drug");
+    cannot(["create", "read", "update", "delete"], "Supplier");
+    cannot(["create", "read", "update", "delete"], "SupplyItem");
     cannot(["create", "read", "update", "delete"], "Equipment");
     cannot(["create", "read", "update", "delete"], "EquipmentLog");
     cannot(["create", "update", "delete"], "Hospital");
@@ -117,6 +127,8 @@ export const createAbilities = (
       can("manage", "Booking", { hospital: { organizationId } });
       can("manage", "Pharmacy", { organizationId });
       can("manage", "PharmacyDrug", { pharmacy: { organizationId } });
+      can("manage", "Supplier", { organizationId });
+      can("manage", "SupplyItem", { supplier: { organizationId } });
       can("manage", "Membership", { organizationId });
       can(["read", "create", "update", "delete"], "Drug");
       can(["create", "read", "update", "delete"], "User", {
@@ -139,6 +151,10 @@ export const createAbilities = (
       can(["create", "read", "update"], "PharmacyDrug", {
         pharmacy: { organizationId },
       });
+      can(["create", "read", "update"], "Supplier", { organizationId });
+      can(["create", "read", "update", "delete"], "SupplyItem", {
+        supplier: { organizationId },
+      });
       can(["read", "create", "update"], "Drug");
       can(["create", "read", "update"], "User", {
         memberships: { some: { organizationId } },
@@ -151,6 +167,7 @@ export const createAbilities = (
       cannot("delete", "Booking");
       cannot("delete", "Pharmacy");
       cannot("delete", "PharmacyDrug");
+      cannot("delete", "Supplier");
       cannot("delete", "Drug");
       cannot("delete", "User");
       break;
@@ -165,6 +182,8 @@ export const createAbilities = (
         can("read", "Drug");
         can("read", "PharmacyDrug", { pharmacy: { organizationId } });
       }
+      can("read", "Supplier");
+      can("read", "SupplyItem");
       can("read", "Hospital", { organizationId });
       can("read", "Equipment", { hospital: { organizationId } });
       can("read", "Booking", { hospital: { organizationId } });
@@ -195,6 +214,12 @@ export const createAbilities = (
         cannot("update", "PharmacyDrug");
         cannot("delete", "PharmacyDrug");
       }
+      cannot("create", "Supplier");
+      cannot("update", "Supplier");
+      cannot("delete", "Supplier");
+      cannot("create", "SupplyItem");
+      cannot("update", "SupplyItem");
+      cannot("delete", "SupplyItem");
       cannot("create", "User");
       cannot("update", "User");
       cannot("delete", "User");
@@ -206,6 +231,8 @@ export const createAbilities = (
       cannot(["create", "read", "update", "delete"], "Hospital");
       cannot(["create", "read", "update", "delete"], "Pharmacy");
       cannot(["create", "read", "update", "delete"], "PharmacyDrug");
+      cannot(["create", "read", "update", "delete"], "Supplier");
+      cannot(["create", "read", "update", "delete"], "SupplyItem");
       cannot(["create", "read", "update", "delete"], "Booking");
       cannot(["create", "read", "update", "delete"], "Drug");
       cannot(["create", "read", "update", "delete"], "User");

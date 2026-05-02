@@ -414,6 +414,12 @@ type Mutation {
   resendOtp(input: ResendOtpInput!): ResendOtpPayload
   selectOrganization(orgId: String!): UserMembership
   signUp(input: SignUpInput!): SignUpPayload
+  supplierCreate(input: SupplierCreateInput!): Boolean
+  supplierDelete(id: String!): Boolean
+  supplierUpdate(id: String!, input: SupplierUpdateInput!): Boolean
+  supplyItemCreate(input: SupplyItemCreateInput!): Boolean
+  supplyItemDelete(id: String!): Boolean
+  supplyItemUpdate(id: String!, input: SupplyItemUpdateInput!): Boolean
   userCreate(input: UserCreateInput!): Boolean
   userDelete(id: String!): Boolean
   userUpdate(id: String!, input: UserUpdateInput!): Boolean
@@ -435,6 +441,7 @@ type OrganizationSummary {
 enum OrganizationType {
   HOSPITAL
   PHARMACY
+  SUPPLIER
 }
 
 input PharmaciesWhereInput {
@@ -527,6 +534,11 @@ type Query {
   pharmacyDetail(id: String!): Pharmacy
   pharmacyDrugs(skip: Int!, take: Int!, where: PharmacyDrugsWhereInput): PharmacyDrugs
   pharmacyOption: [PharmacyOption!]!
+  supplierDetail(id: String!): Supplier
+  supplierSupplyItems(skip: Int!, supplierId: String!, take: Int!): SupplyItems
+  suppliers(skip: Int!, take: Int!, where: SuppliersWhereInput): Suppliers
+  supplyItemDetail(id: String!): SupplyItem
+  supplyItems(skip: Int!, take: Int!, where: SupplyItemsWhereInput): SupplyItems
   userDetail(id: String!): User
   users(skip: Int!, take: Int!, where: UsersWhereInput): Users
 }
@@ -547,6 +559,175 @@ input SignUpInput {
 
 type SignUpPayload {
   message: String!
+}
+
+type Supplier {
+  address: Address
+  categoriesSupplied: [String!]!
+  createdAt: DateTime
+  description: String
+  email: String
+  id: String
+  logoUrl: String
+  name: String!
+  organizationId: String!
+  phone: String
+  status: SupplierStatus!
+  supplyItemCount: Int!
+  updatedAt: DateTime
+  website: String
+}
+
+input SupplierAddressInput {
+  address1: String!
+  address2: String
+  province: String!
+}
+
+input SupplierCreateInput {
+  address: SupplierAddressInput
+  description: String
+  email: String
+  logoUrl: String
+  name: String!
+  ownerUserId: String
+  phone: String
+  status: SupplierStatus
+  website: String
+}
+
+enum SupplierStatus {
+  ACTIVE
+  PENDING_VERIFICATION
+  SUSPENDED
+}
+
+input SupplierUpdateInput {
+  address: SupplierAddressInput
+  description: String
+  email: String
+  logoUrl: String
+  name: String!
+  ownerUserId: String
+  phone: String
+  status: SupplierStatus
+  website: String
+}
+
+type Suppliers {
+  count: Int!
+  data: [Supplier!]
+}
+
+input SuppliersWhereInput {
+  search: String
+  status: SupplierStatus
+}
+
+enum SupplyAvailabilityStatus {
+  AVAILABLE
+  DISCONTINUED
+  LIMITED
+  OUT_OF_STOCK
+  PREORDER
+}
+
+type SupplyItem {
+  availability: SupplyAvailabilityStatus!
+  brand: String
+  category: SupplyItemCategory!
+  contactInfo: String
+  createdAt: DateTime
+  currency: String
+  description: String
+  documentUrls: [String!]!
+  id: String
+  imageUrls: [String!]!
+  manufacturer: String
+  model: String
+  name: String!
+  price: Float
+  shortDescription: String
+  specifications: JSON
+  supplier: Supplier!
+  supplierId: String!
+  updatedAt: DateTime
+  warranty: String
+}
+
+enum SupplyItemCategory {
+  DIAGNOSTIC_DEVICE
+  HOSPITAL_FURNITURE
+  ICU_SUPPORT
+  IMAGING_SYSTEM
+  LAB_ANALYZER
+  LAB_CONSUMABLE
+  OTHER
+  PATIENT_MONITORING
+  PPE
+  STERILIZATION
+  SURGICAL_SUPPLY
+}
+
+input SupplyItemCreateInput {
+  availability: SupplyAvailabilityStatus
+  brand: String
+  category: SupplyItemCategory!
+  contactInfo: String
+  currency: String
+  description: String
+  documentUrls: [String!]!
+  imageUrls: [String!]!
+  manufacturer: String
+  model: String
+  name: String!
+  price: Float
+  shortDescription: String
+  specifications: JSON
+  supplierId: String!
+  warranty: String
+}
+
+enum SupplyItemSortField {
+  CREATED_AT
+  NAME
+  PRICE
+  UPDATED_AT
+}
+
+input SupplyItemUpdateInput {
+  availability: SupplyAvailabilityStatus
+  brand: String
+  category: SupplyItemCategory!
+  contactInfo: String
+  currency: String
+  description: String
+  documentUrls: [String!]!
+  imageUrls: [String!]!
+  manufacturer: String
+  model: String
+  name: String!
+  price: Float
+  shortDescription: String
+  specifications: JSON
+  supplierId: String!
+  warranty: String
+}
+
+type SupplyItems {
+  count: Int!
+  data: [SupplyItem!]
+}
+
+input SupplyItemsWhereInput {
+  availability: SupplyAvailabilityStatus
+  category: SupplyItemCategory
+  maxPrice: Float
+  minPrice: Float
+  search: String
+  sortBy: SupplyItemSortField
+  sortOrder: EnumSortOrder
+  supplierId: String
 }
 
 type User {

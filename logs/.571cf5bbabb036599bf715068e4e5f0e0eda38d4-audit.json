@@ -1,20 +1,15 @@
 {
-  "keep": {
-    "days": true,
-    "amount": 10
-  },
-  "auditLog": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\.571cf5bbabb036599bf715068e4e5f0e0eda38d4-audit.json",
-  "files": [
-    {
-      "date": 1775650133248,
-      "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-04-08.log",
-      "hash": "8d7cf9e440f89d949160b278d930a28257236513a3582764943fb6fcb9e370a9"
+    "keep": {
+        "days": true,
+        "amount": 10
     },
-    {
-      "date": 1776495547648,
-      "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-04-18.log",
-      "hash": "f71ed0f7aeea8622528100d46955a53260e9b9d00c6fbc98366bbcb03c26fef1"
-    }
-  ],
-  "hashType": "sha256"
+    "auditLog": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\.571cf5bbabb036599bf715068e4e5f0e0eda38d4-audit.json",
+    "files": [
+        {
+            "date": 1777710608334,
+            "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-05-02.log",
+            "hash": "49c9971b68ca0108dd2e86b3c76b6cbe380499eb7e8a735fb4b66e6f84de9207"
+        }
+    ],
+    "hashType": "sha256"
 }

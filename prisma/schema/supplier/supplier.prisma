@@ -1,0 +1,76 @@
+model Supplier {
+  id String @id @default(uuid())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @unique
+
+  description String?
+  logoUrl     String?
+  email       String?
+  phone       String?
+  website     String?
+  status      SupplierStatus @default(ACTIVE)
+
+  supplyItems SupplyItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SupplyItem {
+  id String @id @default(uuid())
+
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+  supplierId String
+
+  name             String
+  shortDescription String?
+  description      String?
+  category         SupplyItemCategory
+  model            String?
+  brand            String?
+  manufacturer     String?
+  price            Float?
+  currency         String?                  @default("USD")
+  availability     SupplyAvailabilityStatus @default(AVAILABLE)
+  warranty         String?
+  contactInfo      String?
+  imageUrls        String[]
+  documentUrls     String[]
+  specifications   Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([supplierId])
+  @@index([category])
+  @@index([availability])
+}
+
+enum SupplierStatus {
+  ACTIVE
+  PENDING_VERIFICATION
+  SUSPENDED
+}
+
+enum SupplyItemCategory {
+  LAB_ANALYZER
+  LAB_CONSUMABLE
+  IMAGING_SYSTEM
+  PATIENT_MONITORING
+  SURGICAL_SUPPLY
+  DIAGNOSTIC_DEVICE
+  ICU_SUPPORT
+  STERILIZATION
+  HOSPITAL_FURNITURE
+  PPE
+  OTHER
+}
+
+enum SupplyAvailabilityStatus {
+  AVAILABLE
+  LIMITED
+  OUT_OF_STOCK
+  PREORDER
+  DISCONTINUED
+}

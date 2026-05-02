@@ -5,6 +5,9 @@ import {
   OrganizationRole,
   OrganizationType,
   Prisma,
+  SupplierStatus,
+  SupplyAvailabilityStatus,
+  SupplyItemCategory,
 } from "@prisma/client";
 import { enumType } from "nexus";
 
@@ -36,4 +39,19 @@ export const EquipmentStateEnum = enumType({
 export const BookingStatusEnum = enumType({
   name: "BookingStatus",
   members: Object.values(BookingStatus),
+});
+
+export const SupplierStatusEnum = enumType({
+  name: "SupplierStatus",
+  members: Object.values(SupplierStatus),
+});
+
+export const SupplyItemCategoryEnum = enumType({
+  name: "SupplyItemCategory",
+  members: Object.values(SupplyItemCategory),
+});
+
+export const SupplyAvailabilityStatusEnum = enumType({
+  name: "SupplyAvailabilityStatus",
+  members: Object.values(SupplyAvailabilityStatus),
 });

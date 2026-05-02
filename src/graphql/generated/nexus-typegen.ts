@@ -143,6 +143,83 @@ export interface NexusGenInputs {
     name: string; // String!
     password: string; // String!
   }
+  SupplierAddressInput: { // input type
+    address1: string; // String!
+    address2?: string | null; // String
+    province: string; // String!
+  }
+  SupplierCreateInput: { // input type
+    address?: NexusGenInputs['SupplierAddressInput'] | null; // SupplierAddressInput
+    description?: string | null; // String
+    email?: string | null; // String
+    logoUrl?: string | null; // String
+    name: string; // String!
+    ownerUserId?: string | null; // String
+    phone?: string | null; // String
+    status?: NexusGenEnums['SupplierStatus'] | null; // SupplierStatus
+    website?: string | null; // String
+  }
+  SupplierUpdateInput: { // input type
+    address?: NexusGenInputs['SupplierAddressInput'] | null; // SupplierAddressInput
+    description?: string | null; // String
+    email?: string | null; // String
+    logoUrl?: string | null; // String
+    name: string; // String!
+    ownerUserId?: string | null; // String
+    phone?: string | null; // String
+    status?: NexusGenEnums['SupplierStatus'] | null; // SupplierStatus
+    website?: string | null; // String
+  }
+  SuppliersWhereInput: { // input type
+    search?: string | null; // String
+    status?: NexusGenEnums['SupplierStatus'] | null; // SupplierStatus
+  }
+  SupplyItemCreateInput: { // input type
+    availability?: NexusGenEnums['SupplyAvailabilityStatus'] | null; // SupplyAvailabilityStatus
+    brand?: string | null; // String
+    category: NexusGenEnums['SupplyItemCategory']; // SupplyItemCategory!
+    contactInfo?: string | null; // String
+    currency?: string | null; // String
+    description?: string | null; // String
+    documentUrls: string[]; // [String!]!
+    imageUrls: string[]; // [String!]!
+    manufacturer?: string | null; // String
+    model?: string | null; // String
+    name: string; // String!
+    price?: number | null; // Float
+    shortDescription?: string | null; // String
+    specifications?: NexusGenScalars['JSON'] | null; // JSON
+    supplierId: string; // String!
+    warranty?: string | null; // String
+  }
+  SupplyItemUpdateInput: { // input type
+    availability?: NexusGenEnums['SupplyAvailabilityStatus'] | null; // SupplyAvailabilityStatus
+    brand?: string | null; // String
+    category: NexusGenEnums['SupplyItemCategory']; // SupplyItemCategory!
+    contactInfo?: string | null; // String
+    currency?: string | null; // String
+    description?: string | null; // String
+    documentUrls: string[]; // [String!]!
+    imageUrls: string[]; // [String!]!
+    manufacturer?: string | null; // String
+    model?: string | null; // String
+    name: string; // String!
+    price?: number | null; // Float
+    shortDescription?: string | null; // String
+    specifications?: NexusGenScalars['JSON'] | null; // JSON
+    supplierId: string; // String!
+    warranty?: string | null; // String
+  }
+  SupplyItemsWhereInput: { // input type
+    availability?: NexusGenEnums['SupplyAvailabilityStatus'] | null; // SupplyAvailabilityStatus
+    category?: NexusGenEnums['SupplyItemCategory'] | null; // SupplyItemCategory
+    maxPrice?: number | null; // Float
+    minPrice?: number | null; // Float
+    search?: string | null; // String
+    sortBy?: NexusGenEnums['SupplyItemSortField'] | null; // SupplyItemSortField
+    sortOrder?: NexusGenEnums['EnumSortOrder'] | null; // EnumSortOrder
+    supplierId?: string | null; // String
+  }
   UserCreateInput: { // input type
     email: string; // String!
     isPlatformAdmin?: boolean | null; // Boolean
@@ -177,7 +254,11 @@ export interface NexusGenEnums {
   EquipmentCategory: "DEFIBRILLATOR" | "DIALYSIS_MACHINE" | "IMAGING_CT" | "IMAGING_MRI" | "IMAGING_ULTRASOUND" | "IMAGING_X_RAY" | "INFUSION_PUMP" | "LAB_EQUIPMENT" | "OTHER" | "PATIENT_MONITOR" | "SURGICAL_INSTRUMENT" | "VENTILATOR"
   EquipmentState: "ASSIGNED" | "AVAILABLE" | "IN_MAINTENANCE" | "OUT_OF_ORDER" | "RETIRED"
   OrganizationRole: "MANAGER" | "OWNER" | "STAFF"
-  OrganizationType: "HOSPITAL" | "PHARMACY"
+  OrganizationType: "HOSPITAL" | "PHARMACY" | "SUPPLIER"
+  SupplierStatus: "ACTIVE" | "PENDING_VERIFICATION" | "SUSPENDED"
+  SupplyAvailabilityStatus: "AVAILABLE" | "DISCONTINUED" | "LIMITED" | "OUT_OF_STOCK" | "PREORDER"
+  SupplyItemCategory: "DIAGNOSTIC_DEVICE" | "HOSPITAL_FURNITURE" | "ICU_SUPPORT" | "IMAGING_SYSTEM" | "LAB_ANALYZER" | "LAB_CONSUMABLE" | "OTHER" | "PATIENT_MONITORING" | "PPE" | "STERILIZATION" | "SURGICAL_SUPPLY"
+  SupplyItemSortField: "CREATED_AT" | "NAME" | "PRICE" | "UPDATED_AT"
 }
 
 export interface NexusGenScalars {
@@ -444,6 +525,46 @@ export interface NexusGenObjects {
   }
   SignUpPayload: { // root type
     message: string; // String!
+  }
+  Supplier: { // root type
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    description?: string | null; // String
+    email?: string | null; // String
+    id?: string | null; // String
+    logoUrl?: string | null; // String
+    phone?: string | null; // String
+    status: NexusGenEnums['SupplierStatus']; // SupplierStatus!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    website?: string | null; // String
+  }
+  Suppliers: { // root type
+    count: number; // Int!
+    data?: NexusGenRootTypes['Supplier'][] | null; // [Supplier!]
+  }
+  SupplyItem: { // root type
+    availability: NexusGenEnums['SupplyAvailabilityStatus']; // SupplyAvailabilityStatus!
+    brand?: string | null; // String
+    category: NexusGenEnums['SupplyItemCategory']; // SupplyItemCategory!
+    contactInfo?: string | null; // String
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    currency?: string | null; // String
+    description?: string | null; // String
+    documentUrls: string[]; // [String!]!
+    id?: string | null; // String
+    imageUrls: string[]; // [String!]!
+    manufacturer?: string | null; // String
+    model?: string | null; // String
+    name: string; // String!
+    price?: number | null; // Float
+    shortDescription?: string | null; // String
+    specifications?: NexusGenScalars['JSON'] | null; // JSON
+    supplier: NexusGenRootTypes['Supplier']; // Supplier!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    warranty?: string | null; // String
+  }
+  SupplyItems: { // root type
+    count: number; // Int!
+    data?: NexusGenRootTypes['SupplyItem'][] | null; // [SupplyItem!]
   }
   User: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -723,6 +844,12 @@ export interface NexusGenFieldTypes {
     resendOtp: NexusGenRootTypes['ResendOtpPayload'] | null; // ResendOtpPayload
     selectOrganization: NexusGenRootTypes['UserMembership'] | null; // UserMembership
     signUp: NexusGenRootTypes['SignUpPayload'] | null; // SignUpPayload
+    supplierCreate: boolean | null; // Boolean
+    supplierDelete: boolean | null; // Boolean
+    supplierUpdate: boolean | null; // Boolean
+    supplyItemCreate: boolean | null; // Boolean
+    supplyItemDelete: boolean | null; // Boolean
+    supplyItemUpdate: boolean | null; // Boolean
     userCreate: boolean | null; // Boolean
     userDelete: boolean | null; // Boolean
     userUpdate: boolean | null; // Boolean
@@ -795,6 +922,11 @@ export interface NexusGenFieldTypes {
     pharmacyDetail: NexusGenRootTypes['Pharmacy'] | null; // Pharmacy
     pharmacyDrugs: NexusGenRootTypes['PharmacyDrugs'] | null; // PharmacyDrugs
     pharmacyOption: NexusGenRootTypes['PharmacyOption'][]; // [PharmacyOption!]!
+    supplierDetail: NexusGenRootTypes['Supplier'] | null; // Supplier
+    supplierSupplyItems: NexusGenRootTypes['SupplyItems'] | null; // SupplyItems
+    suppliers: NexusGenRootTypes['Suppliers'] | null; // Suppliers
+    supplyItemDetail: NexusGenRootTypes['SupplyItem'] | null; // SupplyItem
+    supplyItems: NexusGenRootTypes['SupplyItems'] | null; // SupplyItems
     userDetail: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['Users'] | null; // Users
   }
@@ -803,6 +935,52 @@ export interface NexusGenFieldTypes {
   }
   SignUpPayload: { // field return type
     message: string; // String!
+  }
+  Supplier: { // field return type
+    address: NexusGenRootTypes['Address'] | null; // Address
+    categoriesSupplied: string[]; // [String!]!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    description: string | null; // String
+    email: string | null; // String
+    id: string | null; // String
+    logoUrl: string | null; // String
+    name: string; // String!
+    organizationId: string; // String!
+    phone: string | null; // String
+    status: NexusGenEnums['SupplierStatus']; // SupplierStatus!
+    supplyItemCount: number; // Int!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    website: string | null; // String
+  }
+  Suppliers: { // field return type
+    count: number; // Int!
+    data: NexusGenRootTypes['Supplier'][] | null; // [Supplier!]
+  }
+  SupplyItem: { // field return type
+    availability: NexusGenEnums['SupplyAvailabilityStatus']; // SupplyAvailabilityStatus!
+    brand: string | null; // String
+    category: NexusGenEnums['SupplyItemCategory']; // SupplyItemCategory!
+    contactInfo: string | null; // String
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    currency: string | null; // String
+    description: string | null; // String
+    documentUrls: string[]; // [String!]!
+    id: string | null; // String
+    imageUrls: string[]; // [String!]!
+    manufacturer: string | null; // String
+    model: string | null; // String
+    name: string; // String!
+    price: number | null; // Float
+    shortDescription: string | null; // String
+    specifications: NexusGenScalars['JSON'] | null; // JSON
+    supplier: NexusGenRootTypes['Supplier']; // Supplier!
+    supplierId: string; // String!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    warranty: string | null; // String
+  }
+  SupplyItems: { // field return type
+    count: number; // Int!
+    data: NexusGenRootTypes['SupplyItem'][] | null; // [SupplyItem!]
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -1072,6 +1250,12 @@ export interface NexusGenFieldTypeNames {
     resendOtp: 'ResendOtpPayload'
     selectOrganization: 'UserMembership'
     signUp: 'SignUpPayload'
+    supplierCreate: 'Boolean'
+    supplierDelete: 'Boolean'
+    supplierUpdate: 'Boolean'
+    supplyItemCreate: 'Boolean'
+    supplyItemDelete: 'Boolean'
+    supplyItemUpdate: 'Boolean'
     userCreate: 'Boolean'
     userDelete: 'Boolean'
     userUpdate: 'Boolean'
@@ -1144,6 +1328,11 @@ export interface NexusGenFieldTypeNames {
     pharmacyDetail: 'Pharmacy'
     pharmacyDrugs: 'PharmacyDrugs'
     pharmacyOption: 'PharmacyOption'
+    supplierDetail: 'Supplier'
+    supplierSupplyItems: 'SupplyItems'
+    suppliers: 'Suppliers'
+    supplyItemDetail: 'SupplyItem'
+    supplyItems: 'SupplyItems'
     userDetail: 'User'
     users: 'Users'
   }
@@ -1152,6 +1341,52 @@ export interface NexusGenFieldTypeNames {
   }
   SignUpPayload: { // field return type name
     message: 'String'
+  }
+  Supplier: { // field return type name
+    address: 'Address'
+    categoriesSupplied: 'String'
+    createdAt: 'DateTime'
+    description: 'String'
+    email: 'String'
+    id: 'String'
+    logoUrl: 'String'
+    name: 'String'
+    organizationId: 'String'
+    phone: 'String'
+    status: 'SupplierStatus'
+    supplyItemCount: 'Int'
+    updatedAt: 'DateTime'
+    website: 'String'
+  }
+  Suppliers: { // field return type name
+    count: 'Int'
+    data: 'Supplier'
+  }
+  SupplyItem: { // field return type name
+    availability: 'SupplyAvailabilityStatus'
+    brand: 'String'
+    category: 'SupplyItemCategory'
+    contactInfo: 'String'
+    createdAt: 'DateTime'
+    currency: 'String'
+    description: 'String'
+    documentUrls: 'String'
+    id: 'String'
+    imageUrls: 'String'
+    manufacturer: 'String'
+    model: 'String'
+    name: 'String'
+    price: 'Float'
+    shortDescription: 'String'
+    specifications: 'JSON'
+    supplier: 'Supplier'
+    supplierId: 'String'
+    updatedAt: 'DateTime'
+    warranty: 'String'
+  }
+  SupplyItems: { // field return type name
+    count: 'Int'
+    data: 'SupplyItem'
   }
   User: { // field return type name
     createdAt: 'DateTime'
@@ -1268,6 +1503,26 @@ export interface NexusGenArgTypes {
     signUp: { // args
       input: NexusGenInputs['SignUpInput']; // SignUpInput!
     }
+    supplierCreate: { // args
+      input: NexusGenInputs['SupplierCreateInput']; // SupplierCreateInput!
+    }
+    supplierDelete: { // args
+      id: string; // String!
+    }
+    supplierUpdate: { // args
+      id: string; // String!
+      input: NexusGenInputs['SupplierUpdateInput']; // SupplierUpdateInput!
+    }
+    supplyItemCreate: { // args
+      input: NexusGenInputs['SupplyItemCreateInput']; // SupplyItemCreateInput!
+    }
+    supplyItemDelete: { // args
+      id: string; // String!
+    }
+    supplyItemUpdate: { // args
+      id: string; // String!
+      input: NexusGenInputs['SupplyItemUpdateInput']; // SupplyItemUpdateInput!
+    }
     userCreate: { // args
       input: NexusGenInputs['UserCreateInput']; // UserCreateInput!
     }
@@ -1339,6 +1594,27 @@ export interface NexusGenArgTypes {
       skip: number; // Int!
       take: number; // Int!
       where?: NexusGenInputs['PharmacyDrugsWhereInput'] | null; // PharmacyDrugsWhereInput
+    }
+    supplierDetail: { // args
+      id: string; // String!
+    }
+    supplierSupplyItems: { // args
+      skip: number; // Int!
+      supplierId: string; // String!
+      take: number; // Int!
+    }
+    suppliers: { // args
+      skip: number; // Int!
+      take: number; // Int!
+      where?: NexusGenInputs['SuppliersWhereInput'] | null; // SuppliersWhereInput
+    }
+    supplyItemDetail: { // args
+      id: string; // String!
+    }
+    supplyItems: { // args
+      skip: number; // Int!
+      take: number; // Int!
+      where?: NexusGenInputs['SupplyItemsWhereInput'] | null; // SupplyItemsWhereInput
     }
     userDetail: { // args
       id: string; // String!
