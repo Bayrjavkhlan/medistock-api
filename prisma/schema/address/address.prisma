@@ -1,14 +1,16 @@
 model Address {
-  id       String  @id @default(uuid())
-  address1 String
-  address2 String?
-  province String
+  id        String  @id @default(uuid())
+  address1  String
+  address2  String?
+  province  String
+  latitude  Float?
+  longitude Float?
 
-  hospital   Hospital? @relation(fields: [hospitalId], references: [id])
-  hospitalId String?   @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @unique
 
-  createdBy String?
-  updatedBy String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([latitude, longitude])
 }

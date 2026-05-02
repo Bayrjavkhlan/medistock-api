@@ -1,10 +1,9 @@
-import { EnumStaffRole } from "@prisma/client";
 import { TokenExpiredError } from "jsonwebtoken";
 import { mutationField, nonNull, stringArg } from "nexus";
 
 import { env } from "@/config";
 import { Errors } from "@/errors";
-import { findRequestStaff } from "@/graphql/context";
+import { findRequestUser } from "@/graphql/context";
 import {
   generateAccessToken,
   setAuthCookies,
@@ -18,27 +17,19 @@ export const RefreshAccessToken = mutationField("refreshAccessToken", {
   args: { refreshToken: nonNull(stringArg()) },
   resolve: async (_, { refreshToken }, ctx) => {
     try {
-      const { staffId } = verifyAccessToken(refreshToken);
-      const ctxStaff = await findRequestStaff(staffId);
+      const { userId } = verifyAccessToken(refreshToken);
+      const ctxUser = await findRequestUser(userId);
 
-      if (!ctxStaff || !ctxStaff.staff)
+      if (!ctxUser || !ctxUser.user)
         throw Errors.Auth.WRONG_USERNAME_PASSWORD();
 
       const { accessToken, refreshToken: newRefreshToken } =
-        await generateAccessToken(ctxStaff.staff.id);
+        await generateAccessToken(ctxUser.user.id);
 
-      setAuthCookies(ctx.res, true, accessToken);
+      setAuthCookies(ctx.res, env.NODE_ENV === "production", accessToken);
 
       return {
-        staff: {
-          id: ctxStaff.staff.id,
-          name: ctxStaff.staff.name,
-          email: ctxStaff.staff.email,
-          phone: ctxStaff.staff.phone,
-          roles: ctxStaff.staff.roles,
-          roleKey: ctxStaff.staff.roles[0]?.key as EnumStaffRole,
-          hospital: ctxStaff.hospital,
-        },
+        user: ctxUser.user,
         accessToken,
         refreshToken: newRefreshToken,
         accessTokenExpiresAt: String(Date.now() + env.AUTH_TOKEN_EXPIRE),

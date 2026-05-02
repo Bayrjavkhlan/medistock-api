@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 10
+    },
+    "auditLog": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\.571cf5bbabb036599bf715068e4e5f0e0eda38d4-audit.json",
+    "files": [
+        {
+            "date": 1777710608334,
+            "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-05-02.log",
+            "hash": "49c9971b68ca0108dd2e86b3c76b6cbe380499eb7e8a735fb4b66e6f84de9207"
+        }
+    ],
+    "hashType": "sha256"
+}

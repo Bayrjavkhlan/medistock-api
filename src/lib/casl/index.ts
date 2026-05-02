@@ -1,28 +1,55 @@
 import { AbilityBuilder, PureAbility } from "@casl/ability";
 import { createPrismaAbility, PrismaQuery, Subjects } from "@casl/prisma";
 import {
-  EnumStaffRole,
+  Booking,
+  Drug,
   Equipment,
   EquipmentLog,
   Hospital,
-  Staff,
+  Membership,
+  Pharmacy,
+  PharmacyDrug,
+  Supplier,
+  SupplyItem,
+  User,
 } from "@prisma/client";
 
 import { Errors } from "@/errors";
 import { Context } from "@/graphql/context";
 
-export type ModelName = "Staff" | "Equipment" | "EquipmentLog" | "Hospital";
+export type Action = "manage" | "create" | "read" | "update" | "delete";
 
-export type Action = "all" | "create" | "read" | "update" | "delete";
-
-export type AppSubjects = Subjects<{
-  Staff: Staff;
+type PrismaSubjects = Subjects<{
   Equipment: Equipment;
   EquipmentLog: EquipmentLog;
   Hospital: Hospital;
+  Pharmacy: Pharmacy;
+  PharmacyDrug: PharmacyDrug;
+  Supplier: Supplier;
+  SupplyItem: SupplyItem;
+  Booking: Booking;
+  Drug: Drug;
+  User: User;
+  Membership: Membership;
 }>;
 
-export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
+type SubjectMap = {
+  Equipment: Equipment;
+  EquipmentLog: EquipmentLog;
+  Hospital: Hospital;
+  Pharmacy: Pharmacy;
+  PharmacyDrug: PharmacyDrug;
+  Supplier: Supplier;
+  SupplyItem: SupplyItem;
+  Booking: Booking;
+  Drug: Drug;
+  User: User;
+  Membership: Membership;
+};
+
+export type ModelName = keyof SubjectMap;
+
+export type AppAbility = PureAbility<[Action, PrismaSubjects], PrismaQuery>;
 
 export const accessibleBy = (
   ability: AppAbility,
@@ -44,59 +71,172 @@ export const accessibleBy = (
   }, {});
 };
 
-export const createAbilities = (ctx: Pick<Context, "reqStaff">): AppAbility => {
+export const createAbilities = (
+  ctx: Pick<Context, "reqUser" | "activeOrg">
+): AppAbility => {
   const { can, cannot, build } = new AbilityBuilder<AppAbility>(
     createPrismaAbility
   );
 
-  const staff = ctx.reqStaff;
-  const role = staff?.staff?.roles[0]?.key;
-  const hospitalId = staff?.hospital?.id;
+  const user = ctx.reqUser?.user;
+  const org = ctx.activeOrg;
+
+  if (user?.isPlatformAdmin) {
+    can("manage", "Equipment");
+    can("manage", "EquipmentLog");
+    can("manage", "Hospital");
+    can("manage", "Pharmacy");
+    can("manage", "PharmacyDrug");
+    can("manage", "Supplier");
+    can("manage", "SupplyItem");
+    can("manage", "Booking");
+    can("manage", "Drug");
+    can("manage", "User");
+    can("manage", "Membership");
+    return build();
+  }
+
+  if (!org) {
+    can("read", "Hospital");
+    can("read", "Pharmacy");
+    can("read", "Drug");
+    cannot(["create", "read", "update", "delete"], "Supplier");
+    cannot(["create", "read", "update", "delete"], "SupplyItem");
+    cannot(["create", "read", "update", "delete"], "Equipment");
+    cannot(["create", "read", "update", "delete"], "EquipmentLog");
+    cannot(["create", "update", "delete"], "Hospital");
+    cannot(["create", "update", "delete"], "Pharmacy");
+    cannot(["create", "read", "update", "delete"], "PharmacyDrug");
+    cannot(["create", "read", "update", "delete"], "Booking");
+    cannot(["create", "update", "delete"], "Drug");
+    cannot(["create", "read", "update", "delete"], "User");
+    cannot(["create", "read", "update", "delete"], "Membership");
+    return build();
+  }
+
+  const role = org.role;
+  const organizationId = org.organization.id;
 
   switch (role) {
-    case "ADMIN":
-      can(
-        ["create", "read", "update", "delete"],
-        ["Staff", "Equipment", "EquipmentLog", "Hospital"]
-      );
+    case "OWNER":
+      can("manage", "Hospital", { organizationId });
+      can("manage", "Equipment", { hospital: { organizationId } });
+      can("manage", "EquipmentLog", {
+        equipment: { hospital: { organizationId } },
+      });
+      can("manage", "Booking", { hospital: { organizationId } });
+      can("manage", "Pharmacy", { organizationId });
+      can("manage", "PharmacyDrug", { pharmacy: { organizationId } });
+      can("manage", "Supplier", { organizationId });
+      can("manage", "SupplyItem", { supplier: { organizationId } });
+      can("manage", "Membership", { organizationId });
+      can(["read", "create", "update", "delete"], "Drug");
+      can(["create", "read", "update", "delete"], "User", {
+        memberships: { some: { organizationId } },
+      });
       break;
 
-    case "HOSPITAL_ADMIN":
-      if (!hospitalId)
-        throw Errors.Hospital.HOSPITAL_ADMIN_NO_ASSOCIATED_HOSPITAL();
-
-      can("create", "Staff", {
-        hospitalId,
-        roles: { some: { key: EnumStaffRole.STAFF } },
+    case "MANAGER":
+      can(["create", "read", "update"], "Hospital", { organizationId });
+      can(["create", "read", "update"], "Equipment", {
+        hospital: { organizationId },
       });
-      can(["read", "update", "delete"], "Staff", { hospitalId });
-
-      can(["create", "read", "update", "delete"], "Equipment", { hospitalId });
-
-      can(["create", "read", "update", "delete"], "EquipmentLog", {
-        equipment: { hospitalId },
+      can(["create", "read", "update"], "EquipmentLog", {
+        equipment: { hospital: { organizationId } },
       });
-      can(["read", "update"], "Hospital", { id: hospitalId });
+      can(["create", "read", "update"], "Booking", {
+        hospital: { organizationId },
+      });
+      can(["create", "read", "update"], "Pharmacy", { organizationId });
+      can(["create", "read", "update"], "PharmacyDrug", {
+        pharmacy: { organizationId },
+      });
+      can(["create", "read", "update"], "Supplier", { organizationId });
+      can(["create", "read", "update", "delete"], "SupplyItem", {
+        supplier: { organizationId },
+      });
+      can(["read", "create", "update"], "Drug");
+      can(["create", "read", "update"], "User", {
+        memberships: { some: { organizationId } },
+      });
+      can("read", "Membership", { organizationId });
+      cannot(["create", "update", "delete"], "Membership");
+      cannot("delete", "Hospital");
+      cannot("delete", "Equipment");
+      cannot("delete", "EquipmentLog");
+      cannot("delete", "Booking");
+      cannot("delete", "Pharmacy");
+      cannot("delete", "PharmacyDrug");
+      cannot("delete", "Supplier");
+      cannot("delete", "Drug");
+      cannot("delete", "User");
       break;
 
     case "STAFF":
-      if (hospitalId) {
-        can("read", "Equipment", { hospitalId });
-
-        if (staff.staff?.id) {
-          can("update", "Equipment", { staffId: staff.staff.id });
-          can(["create", "read", "update"], "EquipmentLog", {
-            staffId: staff.staff.id,
-          });
-        }
+      if (org.organization.type === "PHARMACY") {
+        can(["create", "read", "update", "delete"], "Drug");
+        can(["create", "read", "update", "delete"], "PharmacyDrug", {
+          pharmacy: { organizationId },
+        });
+      } else {
+        can("read", "Drug");
+        can("read", "PharmacyDrug", { pharmacy: { organizationId } });
       }
-
-      cannot("delete", ["Staff", "Equipment", "EquipmentLog"]);
+      can("read", "Supplier");
+      can("read", "SupplyItem");
+      can("read", "Hospital", { organizationId });
+      can("read", "Equipment", { hospital: { organizationId } });
+      can("read", "Booking", { hospital: { organizationId } });
+      can("read", "Pharmacy", { organizationId });
+      can("read", "EquipmentLog", {
+        equipment: { hospital: { organizationId } },
+      });
+      can("read", "User", {
+        memberships: { some: { organizationId } },
+      });
+      can("create", "EquipmentLog", {
+        equipment: { hospital: { organizationId } },
+      });
+      cannot(["create", "read", "update", "delete"], "Membership");
+      cannot("update", "EquipmentLog");
+      cannot("delete", "EquipmentLog");
+      cannot("create", "Equipment");
+      cannot("update", "Equipment");
+      cannot("delete", "Equipment");
+      cannot("create", "Booking");
+      cannot("update", "Booking");
+      cannot("delete", "Booking");
+      cannot("create", "Pharmacy");
+      cannot("update", "Pharmacy");
+      cannot("delete", "Pharmacy");
+      if (org.organization.type !== "PHARMACY") {
+        cannot("create", "PharmacyDrug");
+        cannot("update", "PharmacyDrug");
+        cannot("delete", "PharmacyDrug");
+      }
+      cannot("create", "Supplier");
+      cannot("update", "Supplier");
+      cannot("delete", "Supplier");
+      cannot("create", "SupplyItem");
+      cannot("update", "SupplyItem");
+      cannot("delete", "SupplyItem");
+      cannot("create", "User");
+      cannot("update", "User");
+      cannot("delete", "User");
       break;
 
     default:
-    case undefined:
-      cannot("all", ["Staff", "Equipment", "EquipmentLog", "Hospital"]);
+      cannot(["create", "read", "update", "delete"], "Equipment");
+      cannot(["create", "read", "update", "delete"], "EquipmentLog");
+      cannot(["create", "read", "update", "delete"], "Hospital");
+      cannot(["create", "read", "update", "delete"], "Pharmacy");
+      cannot(["create", "read", "update", "delete"], "PharmacyDrug");
+      cannot(["create", "read", "update", "delete"], "Supplier");
+      cannot(["create", "read", "update", "delete"], "SupplyItem");
+      cannot(["create", "read", "update", "delete"], "Booking");
+      cannot(["create", "read", "update", "delete"], "Drug");
+      cannot(["create", "read", "update", "delete"], "User");
+      cannot(["create", "read", "update", "delete"], "Membership");
       break;
   }
 

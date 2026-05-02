@@ -10,18 +10,32 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
     input: nonNull(EquipmentCreateInput),
   },
   resolve: async (_parent, { input }, ctx) => {
-    const { name, serialNo, hospitalId, staffId, category, state } = input;
+    const { name, serialNo, hospitalId, assignedToId, category, state } = input;
 
     const hospital = await ctx.prisma.hospital.findUnique({
       where: { id: hospitalId },
+      include: { organization: true },
     });
     if (!hospital) throw Errors.Hospital.HOSPITAL_NOT_FOUND();
 
-    if (staffId) {
-      const staff = await ctx.prisma.staff.findUnique({
-        where: { id: staffId },
+    if (!ctx.reqUser?.user) throw Errors.Auth.NOT_AUTHORIZED();
+
+    if (
+      !ctx.reqUser.user.isPlatformAdmin &&
+      (!ctx.activeOrg ||
+        ctx.activeOrg.organization.id !== hospital.organizationId)
+    ) {
+      throw Errors.System.PERMISSION_DENIED();
+    }
+
+    if (assignedToId) {
+      const membership = await ctx.prisma.membership.findFirst({
+        where: {
+          userId: assignedToId,
+          organizationId: hospital.organizationId,
+        },
       });
-      if (!staff) throw Errors.Staff.STAFF_NOT_FOUND();
+      if (!membership) throw Errors.System.PERMISSION_DENIED();
     }
 
     const existing = await ctx.prisma.equipment.findUnique({
@@ -36,8 +50,9 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
         category,
         state,
         hospital: { connect: { id: hospitalId } },
-        assignedTo: staffId ? { connect: { id: staffId } } : undefined,
-        createdBy: ctx.reqStaff?.staff?.id,
+        assignedTo: assignedToId
+          ? { connect: { id: assignedToId } }
+          : undefined,
       },
     });
 

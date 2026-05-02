@@ -11,7 +11,6 @@ export const EquipmentLogCreateInput = inputObjectType({
   name: "EquipmentLogCreateInput",
   definition(t) {
     t.nonNull.string("equipmentId");
-    t.nonNull.string("staffId");
     t.nonNull.string("description");
   },
 });

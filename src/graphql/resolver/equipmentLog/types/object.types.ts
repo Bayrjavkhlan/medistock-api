@@ -2,7 +2,7 @@ import { objectType } from "nexus";
 import { EquipmentLog } from "nexus-prisma";
 
 import { EquipmentObjectType } from "../../equipment/types";
-import { StaffObjectType } from "../../staff";
+import { UserObjectType } from "../../user";
 
 export const EquipmentLogObjectType = objectType({
   name: EquipmentLog.$name,
@@ -11,11 +11,9 @@ export const EquipmentLogObjectType = objectType({
     t.nullable.field(EquipmentLog.equipment.name, {
       type: EquipmentObjectType,
     });
-    t.nullable.field(EquipmentLog.performedBy.name, { type: StaffObjectType });
-    t.string(EquipmentLog.staffId.name);
+    t.nullable.field(EquipmentLog.performedBy.name, { type: UserObjectType });
     t.string(EquipmentLog.description.name);
     t.dateTime(EquipmentLog.createdAt.name);
-    t.dateTime(EquipmentLog.updatedAt.name);
   },
 });
 

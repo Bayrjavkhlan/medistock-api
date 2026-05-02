@@ -1,0 +1,67 @@
+model User {
+  id       String  @id @default(uuid())
+  email    String? @unique
+  phone    String? @unique
+  password String?
+  name     String?
+
+  emailVerified Boolean   @default(false)
+  otp           String?
+  otpExpiry     DateTime?
+  otpAttempts   Int       @default(0)
+  otpLastSentAt DateTime?
+
+  memberships Membership[]
+
+  isPlatformAdmin Boolean @default(false)
+
+  assignedEquipments Equipment[]    @relation("AssignedEquipment")
+  performedLogs      EquipmentLog[] @relation("PerformedLogs")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Organization {
+  id   String           @id @default(uuid())
+  name String
+  type OrganizationType
+
+  hospital Hospital?
+  pharmacy Pharmacy?
+  supplier Supplier?
+
+  memberships Membership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  address   Address?
+}
+
+model Membership {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  role OrganizationRole
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, organizationId])
+}
+
+enum OrganizationType {
+  HOSPITAL
+  PHARMACY
+  SUPPLIER
+}
+
+enum OrganizationRole {
+  OWNER
+  MANAGER
+  STAFF
+}

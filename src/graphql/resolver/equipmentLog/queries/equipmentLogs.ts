@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { arg, intArg, nonNull, queryField } from "nexus";
 
 import { accessibleBy } from "@/lib/casl";
@@ -14,13 +15,76 @@ export const EquipmentLogs = queryField("equipmentLogs", {
   resolve: async (_parent, _args, ctx) => {
     const { where, take, skip } = _args;
 
+    if (ctx.reqUser?.user?.isPlatformAdmin) {
+      const adminWhere = where?.search
+        ? {
+            OR: [
+              {
+                equipment: {
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                },
+              },
+              {
+                performedBy: {
+                  is: {
+                    name: {
+                      contains: where.search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : undefined;
+
+      const equipmentLogs = await ctx.prisma.equipmentLog.findMany({
+        where: adminWhere,
+        skip,
+        take,
+        include: {
+          equipment: {
+            include: {
+              hospital: {
+                include: { organization: { include: { address: true } } },
+              },
+              assignedTo: true,
+            },
+          },
+          performedBy: true,
+        },
+      });
+
+      const count = await ctx.prisma.equipmentLog.count({
+        where: adminWhere,
+      });
+
+      return {
+        data: equipmentLogs,
+        count,
+      };
+    }
+
     const criteria = accessibleBy(ctx.caslAbility, "read", "EquipmentLog");
 
     if (where?.search) {
       const search = where.search;
       criteria.OR = [
-        { equipment: { name: { contains: search, mode: "insensitive" } } },
-        { performedBy: { name: { contains: search, mode: "insensitive" } } },
+        {
+          equipment: {
+            is: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
+        {
+          performedBy: {
+            is: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
       ];
     }
 
@@ -31,7 +95,9 @@ export const EquipmentLogs = queryField("equipmentLogs", {
       include: {
         equipment: {
           include: {
-            hospital: true,
+            hospital: {
+              include: { organization: { include: { address: true } } },
+            },
             assignedTo: true,
           },
         },

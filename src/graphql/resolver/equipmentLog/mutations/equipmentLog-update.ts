@@ -22,7 +22,6 @@ export const EquipmentLogUpdate = mutationField("equipmentLogUpdate", {
       where: { id },
       data: {
         description: description,
-        updatedBy: ctx.reqStaff?.staff?.id,
       },
     });
 
