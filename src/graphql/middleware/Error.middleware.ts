@@ -44,7 +44,7 @@ export const errorMiddleware: ResolverMiddleware = async (
       args: JSON.stringify(args),
       executionTime: `${(endTime - startTime).toFixed(2)}ms`,
       status: "error",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : "Тодорхойгүй алдаа",
     };
 
     if (env.NODE_ENV !== "local") {

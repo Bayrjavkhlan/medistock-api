@@ -6,7 +6,7 @@ let transporter: nodemailer.Transporter | null = null;
 
 const getTransporter = (): nodemailer.Transporter => {
   if (!env.SMTP_HOST || !env.SMTP_USER || !env.SMTP_PASS || !env.SMTP_FROM) {
-    throw new Error("SMTP configuration is incomplete.");
+    throw new Error("SMTP тохиргоо бүрэн биш байна.");
   }
 
   if (transporter) return transporter;
