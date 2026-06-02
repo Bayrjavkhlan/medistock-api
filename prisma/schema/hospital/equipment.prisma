@@ -1,7 +1,23 @@
 model Equipment {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
-  serialNo String @unique
+  serialNo String  @unique
+  brand    String?
+  model    String?
+
+  manufacturedYear Int?
+  commissionedDate DateTime?
+  endOfLifeDate    DateTime?
+
+  passportDocument               String?
+  usageManualDocument            String?
+  calibrationInstructionDocument String?
+
+  maintenancePlan String?
+
+  requiredParts   String?
+  usedParts       String?
+  sparePartsStock String?
 
   hospital   Hospital @relation(fields: [hospitalId], references: [id])
   hospitalId String
@@ -27,7 +43,12 @@ model EquipmentLog {
   performedBy   User   @relation("PerformedLogs", fields: [performedById], references: [id])
   performedById String
 
-  description String
+  description  String
+  type         EquipmentLogType @default(GENERAL)
+  faultDate    DateTime?
+  problem      String?
+  repairAction String?
+  status       String?
 
   createdAt DateTime @default(now())
 }

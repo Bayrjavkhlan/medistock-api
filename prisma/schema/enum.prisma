@@ -20,3 +20,11 @@ enum EquipmentState {
   OUT_OF_ORDER
   RETIRED
 }
+
+enum EquipmentLogType {
+  GENERAL
+  MAINTENANCE
+  INSPECTION
+  CALIBRATION
+  FAULT
+}

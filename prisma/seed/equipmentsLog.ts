@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma, EquipmentLogType } from "@prisma/client";
 
 export async function seedEquipmentLogs(prisma: PrismaClient) {
   console.log("Seeding equipment logs...");
@@ -9,25 +9,37 @@ export async function seedEquipmentLogs(prisma: PrismaClient) {
       id: "log-1",
       equipment: { connect: { id: "eq-1" } },
       performedBy: { connect: { id: "user-3" } },
-      description: "Initial log entry for equipment eq-1",
+      description: "Улирал тутмын урьдчилан сэргийлэх засвар үйлчилгээ хийгдсэн.",
+      type: EquipmentLogType.MAINTENANCE,
+      status: "Дууссан",
     },
     {
       id: "log-2",
       equipment: { connect: { id: "eq-2" } },
       performedBy: { connect: { id: "user-3" } },
-      description: "Initial log entry for equipment eq-2",
+      description: "Амьсгалын аппаратын тохируулга амжилттай хийгдсэн.",
+      type: EquipmentLogType.CALIBRATION,
+      status: "Тэнцсэн",
     },
     {
       id: "log-3",
       equipment: { connect: { id: "eq-3" } },
       performedBy: { connect: { id: "user-3" } },
-      description: "Initial log entry for equipment eq-3",
+      description: "Цацрагийн аюулгүй байдлын үзлэг хийгдсэн.",
+      type: EquipmentLogType.INSPECTION,
+      status: "Дахин шалгах шаардлагатай",
     },
     {
       id: "log-4",
       equipment: { connect: { id: "eq-2" } },
       performedBy: { connect: { id: "user-3" } },
-      description: "Second log entry for equipment eq-2",
+      description: "Өндөр даралтын дохиолол илэрч засварласан.",
+      type: EquipmentLogType.FAULT,
+      faultDate: new Date("2026-05-04"),
+      problem: "Ажиллагааны үед өндөр даралтын дохиолол тасалдаж гарсан.",
+      repairAction:
+        "Амьсгал гаргалтын хавхлагыг сольж, даралтын мэдрэгчийг шалгасан.",
+      status: "Шийдвэрлэсэн",
     },
   ];
 

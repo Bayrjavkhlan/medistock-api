@@ -12,7 +12,26 @@ export const EquipmentUpdate = mutationField("equipmentUpdate", {
     input: nonNull(EquipmentCreateInput),
   },
   resolve: async (_parent, { id, input }, ctx) => {
-    const { name, serialNo, hospitalId, assignedToId, category, state } = input;
+    const {
+      name,
+      serialNo,
+      brand,
+      model,
+      manufacturedYear,
+      commissionedDate,
+      endOfLifeDate,
+      passportDocument,
+      usageManualDocument,
+      calibrationInstructionDocument,
+      maintenancePlan,
+      requiredParts,
+      usedParts,
+      sparePartsStock,
+      hospitalId,
+      assignedToId,
+      category,
+      state,
+    } = input;
 
     const criteria = accessibleBy(ctx.caslAbility, "update", "Equipment");
 
@@ -70,6 +89,18 @@ export const EquipmentUpdate = mutationField("equipmentUpdate", {
       data: {
         name,
         serialNo,
+        brand,
+        model,
+        manufacturedYear,
+        commissionedDate,
+        endOfLifeDate,
+        passportDocument,
+        usageManualDocument,
+        calibrationInstructionDocument,
+        maintenancePlan,
+        requiredParts,
+        usedParts,
+        sparePartsStock,
         category,
         state,
         hospital: hospitalId ? { connect: { id: hospitalId } } : undefined,

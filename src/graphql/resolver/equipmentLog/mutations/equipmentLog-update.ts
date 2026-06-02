@@ -11,7 +11,8 @@ export const EquipmentLogUpdate = mutationField("equipmentLogUpdate", {
     input: nonNull(EquipmentLogUpdateInput),
   },
   resolve: async (_parent, { id, input }, ctx) => {
-    const { description } = input;
+    const { description, type, faultDate, problem, repairAction, status } =
+      input;
 
     const equipmentLog = await ctx.prisma.equipmentLog.findUnique({
       where: { id },
@@ -21,7 +22,12 @@ export const EquipmentLogUpdate = mutationField("equipmentLogUpdate", {
     await ctx.prisma.equipmentLog.update({
       where: { id },
       data: {
-        description: description,
+        description,
+        type: type ?? undefined,
+        faultDate,
+        problem,
+        repairAction,
+        status,
       },
     });
 

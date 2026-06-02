@@ -216,14 +216,27 @@ enum EnumSortOrder {
 
 type Equipment {
   assignedTo: User
+  brand: String
+  calibrationInstructionDocument: String
   category: String
+  commissionedDate: DateTime
   createdAt: DateTime
+  endOfLifeDate: DateTime
   hospital: Hospital
   id: String
+  logs: [EquipmentLog]
+  maintenancePlan: String
+  manufacturedYear: Int
+  model: String
   name: String
+  passportDocument: String
+  requiredParts: String
   serialNo: String
+  sparePartsStock: String
   state: String
   updatedAt: DateTime
+  usageManualDocument: String
+  usedParts: String
 }
 
 enum EquipmentCategory {
@@ -243,28 +256,63 @@ enum EquipmentCategory {
 
 input EquipmentCreateInput {
   assignedToId: String
+  brand: String
+  calibrationInstructionDocument: String
   category: EquipmentCategory!
+  commissionedDate: DateTime
+  endOfLifeDate: DateTime
   hospitalId: String!
+  maintenancePlan: String
+  manufacturedYear: Int
+  model: String
   name: String!
+  passportDocument: String
+  requiredParts: String
   serialNo: String!
+  sparePartsStock: String
   state: EquipmentState!
+  usageManualDocument: String
+  usedParts: String
 }
 
 type EquipmentLog {
   createdAt: DateTime
   description: String
   equipment: Equipment
+  faultDate: DateTime
   id: String
   performedBy: User
+  problem: String
+  repairAction: String
+  status: String
+  type: String
 }
 
 input EquipmentLogCreateInput {
   description: String!
   equipmentId: String!
+  faultDate: DateTime
+  problem: String
+  repairAction: String
+  status: String
+  type: EquipmentLogType
+}
+
+enum EquipmentLogType {
+  CALIBRATION
+  FAULT
+  GENERAL
+  INSPECTION
+  MAINTENANCE
 }
 
 input EquipmentLogUpdateInput {
   description: String!
+  faultDate: DateTime
+  problem: String
+  repairAction: String
+  status: String
+  type: EquipmentLogType
 }
 
 type EquipmentLogs {

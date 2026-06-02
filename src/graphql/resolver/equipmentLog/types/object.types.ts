@@ -13,6 +13,11 @@ export const EquipmentLogObjectType = objectType({
     });
     t.nullable.field(EquipmentLog.performedBy.name, { type: UserObjectType });
     t.string(EquipmentLog.description.name);
+    t.string(EquipmentLog.type.name);
+    t.nullable.dateTime(EquipmentLog.faultDate.name);
+    t.nullable.string(EquipmentLog.problem.name);
+    t.nullable.string(EquipmentLog.repairAction.name);
+    t.nullable.string(EquipmentLog.status.name);
     t.dateTime(EquipmentLog.createdAt.name);
   },
 });

@@ -77,18 +77,40 @@ export interface NexusGenInputs {
   }
   EquipmentCreateInput: { // input type
     assignedToId?: string | null; // String
+    brand?: string | null; // String
+    calibrationInstructionDocument?: string | null; // String
     category: NexusGenEnums['EquipmentCategory']; // EquipmentCategory!
+    commissionedDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    endOfLifeDate?: NexusGenScalars['DateTime'] | null; // DateTime
     hospitalId: string; // String!
+    maintenancePlan?: string | null; // String
+    manufacturedYear?: number | null; // Int
+    model?: string | null; // String
     name: string; // String!
+    passportDocument?: string | null; // String
+    requiredParts?: string | null; // String
     serialNo: string; // String!
+    sparePartsStock?: string | null; // String
     state: NexusGenEnums['EquipmentState']; // EquipmentState!
+    usageManualDocument?: string | null; // String
+    usedParts?: string | null; // String
   }
   EquipmentLogCreateInput: { // input type
     description: string; // String!
     equipmentId: string; // String!
+    faultDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    problem?: string | null; // String
+    repairAction?: string | null; // String
+    status?: string | null; // String
+    type?: NexusGenEnums['EquipmentLogType'] | null; // EquipmentLogType
   }
   EquipmentLogUpdateInput: { // input type
     description: string; // String!
+    faultDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    problem?: string | null; // String
+    repairAction?: string | null; // String
+    status?: string | null; // String
+    type?: NexusGenEnums['EquipmentLogType'] | null; // EquipmentLogType
   }
   EquipmentLogsWhereInput: { // input type
     search?: string | null; // String
@@ -252,6 +274,7 @@ export interface NexusGenEnums {
   BookingStatus: "CANCELLED" | "COMPLETED" | "CONFIRMED" | "PENDING"
   EnumSortOrder: "asc" | "desc"
   EquipmentCategory: "DEFIBRILLATOR" | "DIALYSIS_MACHINE" | "IMAGING_CT" | "IMAGING_MRI" | "IMAGING_ULTRASOUND" | "IMAGING_X_RAY" | "INFUSION_PUMP" | "LAB_EQUIPMENT" | "OTHER" | "PATIENT_MONITOR" | "SURGICAL_INSTRUMENT" | "VENTILATOR"
+  EquipmentLogType: "CALIBRATION" | "FAULT" | "GENERAL" | "INSPECTION" | "MAINTENANCE"
   EquipmentState: "ASSIGNED" | "AVAILABLE" | "IN_MAINTENANCE" | "OUT_OF_ORDER" | "RETIRED"
   OrganizationRole: "MANAGER" | "OWNER" | "STAFF"
   OrganizationType: "HOSPITAL" | "PHARMACY" | "SUPPLIER"
@@ -403,21 +426,39 @@ export interface NexusGenObjects {
   }
   Equipment: { // root type
     assignedTo?: NexusGenRootTypes['User'] | null; // User
+    brand?: string | null; // String
+    calibrationInstructionDocument?: string | null; // String
     category?: string | null; // String
+    commissionedDate?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    endOfLifeDate?: NexusGenScalars['DateTime'] | null; // DateTime
     hospital?: NexusGenRootTypes['Hospital'] | null; // Hospital
     id?: string | null; // String
+    logs?: Array<NexusGenRootTypes['EquipmentLog'] | null> | null; // [EquipmentLog]
+    maintenancePlan?: string | null; // String
+    manufacturedYear?: number | null; // Int
+    model?: string | null; // String
     name?: string | null; // String
+    passportDocument?: string | null; // String
+    requiredParts?: string | null; // String
     serialNo?: string | null; // String
+    sparePartsStock?: string | null; // String
     state?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    usageManualDocument?: string | null; // String
+    usedParts?: string | null; // String
   }
   EquipmentLog: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     description?: string | null; // String
     equipment?: NexusGenRootTypes['Equipment'] | null; // Equipment
+    faultDate?: NexusGenScalars['DateTime'] | null; // DateTime
     id?: string | null; // String
     performedBy?: NexusGenRootTypes['User'] | null; // User
+    problem?: string | null; // String
+    repairAction?: string | null; // String
+    status?: string | null; // String
+    type?: string | null; // String
   }
   EquipmentLogs: { // root type
     count: number; // Int!
@@ -739,21 +780,39 @@ export interface NexusGenFieldTypes {
   }
   Equipment: { // field return type
     assignedTo: NexusGenRootTypes['User'] | null; // User
+    brand: string | null; // String
+    calibrationInstructionDocument: string | null; // String
     category: string | null; // String
+    commissionedDate: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    endOfLifeDate: NexusGenScalars['DateTime'] | null; // DateTime
     hospital: NexusGenRootTypes['Hospital'] | null; // Hospital
     id: string | null; // String
+    logs: Array<NexusGenRootTypes['EquipmentLog'] | null> | null; // [EquipmentLog]
+    maintenancePlan: string | null; // String
+    manufacturedYear: number | null; // Int
+    model: string | null; // String
     name: string | null; // String
+    passportDocument: string | null; // String
+    requiredParts: string | null; // String
     serialNo: string | null; // String
+    sparePartsStock: string | null; // String
     state: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    usageManualDocument: string | null; // String
+    usedParts: string | null; // String
   }
   EquipmentLog: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
     equipment: NexusGenRootTypes['Equipment'] | null; // Equipment
+    faultDate: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
     performedBy: NexusGenRootTypes['User'] | null; // User
+    problem: string | null; // String
+    repairAction: string | null; // String
+    status: string | null; // String
+    type: string | null; // String
   }
   EquipmentLogs: { // field return type
     count: number; // Int!
@@ -1145,21 +1204,39 @@ export interface NexusGenFieldTypeNames {
   }
   Equipment: { // field return type name
     assignedTo: 'User'
+    brand: 'String'
+    calibrationInstructionDocument: 'String'
     category: 'String'
+    commissionedDate: 'DateTime'
     createdAt: 'DateTime'
+    endOfLifeDate: 'DateTime'
     hospital: 'Hospital'
     id: 'String'
+    logs: 'EquipmentLog'
+    maintenancePlan: 'String'
+    manufacturedYear: 'Int'
+    model: 'String'
     name: 'String'
+    passportDocument: 'String'
+    requiredParts: 'String'
     serialNo: 'String'
+    sparePartsStock: 'String'
     state: 'String'
     updatedAt: 'DateTime'
+    usageManualDocument: 'String'
+    usedParts: 'String'
   }
   EquipmentLog: { // field return type name
     createdAt: 'DateTime'
     description: 'String'
     equipment: 'Equipment'
+    faultDate: 'DateTime'
     id: 'String'
     performedBy: 'User'
+    problem: 'String'
+    repairAction: 'String'
+    status: 'String'
+    type: 'String'
   }
   EquipmentLogs: { // field return type name
     count: 'Int'

@@ -1,0 +1,33 @@
+DO $$
+BEGIN
+  CREATE TYPE "EquipmentLogType" AS ENUM (
+    'GENERAL',
+    'MAINTENANCE',
+    'INSPECTION',
+    'CALIBRATION',
+    'FAULT'
+  );
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+
+ALTER TABLE "Equipment"
+  ADD COLUMN IF NOT EXISTS "brand" TEXT,
+  ADD COLUMN IF NOT EXISTS "model" TEXT,
+  ADD COLUMN IF NOT EXISTS "manufacturedYear" INTEGER,
+  ADD COLUMN IF NOT EXISTS "commissionedDate" TIMESTAMP(3),
+  ADD COLUMN IF NOT EXISTS "endOfLifeDate" TIMESTAMP(3),
+  ADD COLUMN IF NOT EXISTS "passportDocument" TEXT,
+  ADD COLUMN IF NOT EXISTS "usageManualDocument" TEXT,
+  ADD COLUMN IF NOT EXISTS "calibrationInstructionDocument" TEXT,
+  ADD COLUMN IF NOT EXISTS "maintenancePlan" TEXT,
+  ADD COLUMN IF NOT EXISTS "requiredParts" TEXT,
+  ADD COLUMN IF NOT EXISTS "usedParts" TEXT,
+  ADD COLUMN IF NOT EXISTS "sparePartsStock" TEXT;
+
+ALTER TABLE "EquipmentLog"
+  ADD COLUMN IF NOT EXISTS "type" "EquipmentLogType" NOT NULL DEFAULT 'GENERAL',
+  ADD COLUMN IF NOT EXISTS "faultDate" TIMESTAMP(3),
+  ADD COLUMN IF NOT EXISTS "problem" TEXT,
+  ADD COLUMN IF NOT EXISTS "repairAction" TEXT,
+  ADD COLUMN IF NOT EXISTS "status" TEXT;

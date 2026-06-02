@@ -10,7 +10,26 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
     input: nonNull(EquipmentCreateInput),
   },
   resolve: async (_parent, { input }, ctx) => {
-    const { name, serialNo, hospitalId, assignedToId, category, state } = input;
+    const {
+      name,
+      serialNo,
+      brand,
+      model,
+      manufacturedYear,
+      commissionedDate,
+      endOfLifeDate,
+      passportDocument,
+      usageManualDocument,
+      calibrationInstructionDocument,
+      maintenancePlan,
+      requiredParts,
+      usedParts,
+      sparePartsStock,
+      hospitalId,
+      assignedToId,
+      category,
+      state,
+    } = input;
 
     const hospital = await ctx.prisma.hospital.findUnique({
       where: { id: hospitalId },
@@ -47,6 +66,18 @@ export const EquipmentCreate = mutationField("equipmentCreate", {
       data: {
         name,
         serialNo,
+        brand,
+        model,
+        manufacturedYear,
+        commissionedDate,
+        endOfLifeDate,
+        passportDocument,
+        usageManualDocument,
+        calibrationInstructionDocument,
+        maintenancePlan,
+        requiredParts,
+        usedParts,
+        sparePartsStock,
         category,
         state,
         hospital: { connect: { id: hospitalId } },
