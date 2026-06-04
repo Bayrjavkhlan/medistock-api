@@ -6,9 +6,14 @@
     "auditLog": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\.571cf5bbabb036599bf715068e4e5f0e0eda38d4-audit.json",
     "files": [
         {
-            "date": 1777710608334,
-            "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-05-02.log",
-            "hash": "49c9971b68ca0108dd2e86b3c76b6cbe380499eb7e8a735fb4b66e6f84de9207"
+            "date": 1780479038811,
+            "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-06-03.log",
+            "hash": "a618ffc810f15f48c3c92dd7c55c250c4d5901a736ee1c6f10b9f824fda51f37"
+        },
+        {
+            "date": 1780571495678,
+            "name": "C:\\Users\\Bolrcecg\\Documents\\medistock\\medistock-api\\logs\\application-error-2026-06-04.log",
+            "hash": "97a443c31661c99e7584e4640f56b2f31c5b146b79051d567ff789fd0bdeab90"
         }
     ],
     "hashType": "sha256"

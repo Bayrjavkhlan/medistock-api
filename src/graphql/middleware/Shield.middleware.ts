@@ -84,6 +84,16 @@ const permissions: Permissions = {
       accessRequired("read", "Equipment"),
       rl.normal
     ),
+    imagingDeviceAnalytics: and(
+      isAuthenticated,
+      accessRequired("read", "Equipment"),
+      rl.normal
+    ),
+    predictiveMaintenance: and(
+      isAuthenticated,
+      accessRequired("read", "Equipment"),
+      rl.normal
+    ),
     equipmentLogDetail: and(
       isAuthenticated,
       accessRequired("read", "EquipmentLog"),
@@ -167,6 +177,11 @@ const permissions: Permissions = {
       isAuthenticated,
       accessRequired("delete", "Equipment"),
       rl.normal
+    ),
+    generateAnalyticsReport: and(
+      isAuthenticated,
+      accessRequired("read", "Equipment"),
+      rl.heavy
     ),
     equipmentLogCreate: and(
       isAuthenticated,

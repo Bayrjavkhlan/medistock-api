@@ -5,6 +5,7 @@ export * from "./drug";
 export * from "./equipment";
 export * from "./equipmentLog";
 export * from "./hospital";
+export * from "./imagingAnalytics";
 export * from "./location";
 export * from "./membership";
 export * from "./pharmacy";

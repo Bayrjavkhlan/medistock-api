@@ -28,7 +28,9 @@ model Equipment {
   category EquipmentCategory
   state    EquipmentState
 
-  logs EquipmentLog[]
+  logs             EquipmentLog[]
+  imagingStudies   ImagingStudyImage[]
+  analyticsReports AnalyticsReport[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,4 +53,46 @@ model EquipmentLog {
   status       String?
 
   createdAt DateTime @default(now())
+}
+
+model ImagingStudyImage {
+  id String @id @default(uuid())
+
+  device   Equipment @relation(fields: [deviceId], references: [id])
+  deviceId String
+
+  imageId String @unique
+
+  captureDateTime DateTime
+  captureDate     String
+  captureTime     String
+  fileSizeBytes   Int
+  studyType       String
+  department      String
+  patientCode     String
+
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  hospitalId String
+
+  createdAt DateTime @default(now())
+
+  @@index([deviceId, captureDateTime])
+  @@index([hospitalId, captureDateTime])
+}
+
+model AnalyticsReport {
+  id String @id @default(uuid())
+
+  device   Equipment @relation(fields: [deviceId], references: [id])
+  deviceId String
+
+  period      String
+  periodStart DateTime
+  periodEnd   DateTime
+  fileName    String
+  pdfBase64   String
+
+  createdAt DateTime @default(now())
+
+  @@index([deviceId, period, createdAt])
 }

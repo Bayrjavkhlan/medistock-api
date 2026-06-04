@@ -7,6 +7,7 @@ import { seedEquipment } from "./equipment";
 import { seedEquipmentLogs } from "./equipmentsLog";
 import { seedSupplyItems } from "./supplyItems";
 import { seedUser } from "./user";
+import { seedImagingAnalytics } from "./imagingAnalytics";
 
 const prisma = new PrismaClient();
 
@@ -20,6 +21,7 @@ async function main() {
     await seedEquipment(prisma);
     await seedSupplyItems(prisma);
     await seedEquipmentLogs(prisma);
+    await seedImagingAnalytics(prisma);
 
     console.log("All seed data inserted successfully!");
   } catch (error) {

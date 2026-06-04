@@ -35,6 +35,20 @@ type AdminMapLocationsPayload {
   hospitals: [DashboardMapLocation!]!
 }
 
+type AnalyticsPoint {
+  label: String!
+  value: Float!
+}
+
+type AnalyticsReportPayload {
+  createdAt: DateTime!
+  deviceName: String!
+  fileName: String!
+  id: String!
+  pdfBase64: String!
+  period: String!
+}
+
 type AuthUser {
   email: String
   id: String!
@@ -155,6 +169,11 @@ type DashboardStat {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+type DeviceHealth {
+  level: String!
+  reasons: [String!]!
+}
 
 type Drug {
   availability: [DrugAvailability!]!
@@ -384,6 +403,31 @@ input HospitalsWhereInput {
   search: String
 }
 
+type ImagingDeviceAnalytics {
+  department: String!
+  deviceId: String!
+  deviceName: String!
+  deviceSlug: String!
+  health: DeviceHealth!
+  hospital: String!
+  period: String!
+  predictions: [RiskPrediction!]!
+  recommendations: [String!]!
+  stats: ImagingUtilizationStats!
+  workload: WorkloadAnalysis!
+}
+
+type ImagingUtilizationStats {
+  averageStudiesPerPatient: Float!
+  estimatedOperatingHours: Float!
+  imagesPerDay: Float!
+  imagesPerHour: Float!
+  imagesPerMonth: Float!
+  imagesPerWeek: Float!
+  totalImages: Int!
+  utilizationPercentage: Float!
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -445,6 +489,7 @@ type Mutation {
   equipmentLogDelete(id: String!): Boolean
   equipmentLogUpdate(id: String!, input: EquipmentLogUpdateInput!): Boolean
   equipmentUpdate(id: String!, input: EquipmentCreateInput!): Boolean
+  generateAnalyticsReport(deviceSlug: String!, period: String = "MONTHLY"): AnalyticsReportPayload
   hospitalCreate(input: HospitalCreateInput!): Boolean
   hospitalDelete(id: String!): Boolean
   hospitalUpdate(id: String!, input: HospitalCreateInput!): Boolean
@@ -561,6 +606,10 @@ type Pharmacys {
   data: [Pharmacy!]
 }
 
+type PredictiveMaintenanceDashboard {
+  devices: [ImagingDeviceAnalytics!]!
+}
+
 type Query {
   adminMapLocations: AdminMapLocationsPayload
   bookingDetail(id: String!): Booking
@@ -576,12 +625,14 @@ type Query {
   hospitalDetail(id: String!): Hospital
   hospitalOption: [HospitalOption!]!
   hospitals(skip: Int!, take: Int!, where: HospitalsWhereInput): Hospitals
+  imagingDeviceAnalytics(deviceSlug: String!, period: String = "MONTHLY"): ImagingDeviceAnalytics
   me: MePayload
   memberships(skip: Int!, take: Int!): Memberships
   pharmacies(skip: Int!, take: Int!, where: PharmaciesWhereInput): Pharmacys
   pharmacyDetail(id: String!): Pharmacy
   pharmacyDrugs(skip: Int!, take: Int!, where: PharmacyDrugsWhereInput): PharmacyDrugs
   pharmacyOption: [PharmacyOption!]!
+  predictiveMaintenance: PredictiveMaintenanceDashboard
   supplierDetail(id: String!): Supplier
   supplierSupplyItems(skip: Int!, supplierId: String!, take: Int!): SupplyItems
   suppliers(skip: Int!, take: Int!, where: SuppliersWhereInput): Suppliers
@@ -597,6 +648,13 @@ input ResendOtpInput {
 
 type ResendOtpPayload {
   message: String!
+}
+
+type RiskPrediction {
+  label: String!
+  recommendation: String!
+  riskLevel: String!
+  riskScore: Int!
 }
 
 input SignUpInput {
@@ -830,4 +888,16 @@ input VerifyOtpInput {
 
 type VerifyOtpPayload {
   message: String!
+}
+
+type WorkloadAnalysis {
+  busiestDay: String!
+  busiestHour: String!
+  daily: [AnalyticsPoint!]!
+  hourly: [AnalyticsPoint!]!
+  lowestOperatingHours: [String!]!
+  monthly: [AnalyticsPoint!]!
+  peakOperatingHours: [String!]!
+  underutilizedPeriods: [String!]!
+  weekly: [AnalyticsPoint!]!
 }

@@ -320,6 +320,18 @@ export interface NexusGenObjects {
     drugstores: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
     hospitals: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
   }
+  AnalyticsPoint: { // root type
+    label: string; // String!
+    value: number; // Float!
+  }
+  AnalyticsReportPayload: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    deviceName: string; // String!
+    fileName: string; // String!
+    id: string; // String!
+    pdfBase64: string; // String!
+    period: string; // String!
+  }
   AuthUser: { // root type
     email?: string | null; // String
     id: string; // String!
@@ -401,6 +413,10 @@ export interface NexusGenObjects {
     label: string; // String!
     tone?: string | null; // String
     value: number; // Int!
+  }
+  DeviceHealth: { // root type
+    level: string; // String!
+    reasons: string[]; // [String!]!
   }
   Drug: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -493,6 +509,29 @@ export interface NexusGenObjects {
     count: number; // Int!
     data?: NexusGenRootTypes['Hospital'][] | null; // [Hospital!]
   }
+  ImagingDeviceAnalytics: { // root type
+    department: string; // String!
+    deviceId: string; // String!
+    deviceName: string; // String!
+    deviceSlug: string; // String!
+    health: NexusGenRootTypes['DeviceHealth']; // DeviceHealth!
+    hospital: string; // String!
+    period: string; // String!
+    predictions: NexusGenRootTypes['RiskPrediction'][]; // [RiskPrediction!]!
+    recommendations: string[]; // [String!]!
+    stats: NexusGenRootTypes['ImagingUtilizationStats']; // ImagingUtilizationStats!
+    workload: NexusGenRootTypes['WorkloadAnalysis']; // WorkloadAnalysis!
+  }
+  ImagingUtilizationStats: { // root type
+    averageStudiesPerPatient: number; // Float!
+    estimatedOperatingHours: number; // Float!
+    imagesPerDay: number; // Float!
+    imagesPerHour: number; // Float!
+    imagesPerMonth: number; // Float!
+    imagesPerWeek: number; // Float!
+    totalImages: number; // Int!
+    utilizationPercentage: number; // Float!
+  }
   LoginPayload: { // root type
     accessToken: string; // String!
     accessTokenExpiresAt: string; // String!
@@ -560,9 +599,18 @@ export interface NexusGenObjects {
     count: number; // Int!
     data?: NexusGenRootTypes['Pharmacy'][] | null; // [Pharmacy!]
   }
+  PredictiveMaintenanceDashboard: { // root type
+    devices: NexusGenRootTypes['ImagingDeviceAnalytics'][]; // [ImagingDeviceAnalytics!]!
+  }
   Query: {};
   ResendOtpPayload: { // root type
     message: string; // String!
+  }
+  RiskPrediction: { // root type
+    label: string; // String!
+    recommendation: string; // String!
+    riskLevel: string; // String!
+    riskScore: number; // Int!
   }
   SignUpPayload: { // root type
     message: string; // String!
@@ -627,6 +675,17 @@ export interface NexusGenObjects {
   VerifyOtpPayload: { // root type
     message: string; // String!
   }
+  WorkloadAnalysis: { // root type
+    busiestDay: string; // String!
+    busiestHour: string; // String!
+    daily: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    hourly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    lowestOperatingHours: string[]; // [String!]!
+    monthly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    peakOperatingHours: string[]; // [String!]!
+    underutilizedPeriods: string[]; // [String!]!
+    weekly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -663,6 +722,18 @@ export interface NexusGenFieldTypes {
   AdminMapLocationsPayload: { // field return type
     drugstores: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
     hospitals: NexusGenRootTypes['DashboardMapLocation'][]; // [DashboardMapLocation!]!
+  }
+  AnalyticsPoint: { // field return type
+    label: string; // String!
+    value: number; // Float!
+  }
+  AnalyticsReportPayload: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    deviceName: string; // String!
+    fileName: string; // String!
+    id: string; // String!
+    pdfBase64: string; // String!
+    period: string; // String!
   }
   AuthUser: { // field return type
     email: string | null; // String
@@ -745,6 +816,10 @@ export interface NexusGenFieldTypes {
     label: string; // String!
     tone: string | null; // String
     value: number; // Int!
+  }
+  DeviceHealth: { // field return type
+    level: string; // String!
+    reasons: string[]; // [String!]!
   }
   Drug: { // field return type
     availability: NexusGenRootTypes['DrugAvailability'][]; // [DrugAvailability!]!
@@ -849,6 +924,29 @@ export interface NexusGenFieldTypes {
     count: number; // Int!
     data: NexusGenRootTypes['Hospital'][] | null; // [Hospital!]
   }
+  ImagingDeviceAnalytics: { // field return type
+    department: string; // String!
+    deviceId: string; // String!
+    deviceName: string; // String!
+    deviceSlug: string; // String!
+    health: NexusGenRootTypes['DeviceHealth']; // DeviceHealth!
+    hospital: string; // String!
+    period: string; // String!
+    predictions: NexusGenRootTypes['RiskPrediction'][]; // [RiskPrediction!]!
+    recommendations: string[]; // [String!]!
+    stats: NexusGenRootTypes['ImagingUtilizationStats']; // ImagingUtilizationStats!
+    workload: NexusGenRootTypes['WorkloadAnalysis']; // WorkloadAnalysis!
+  }
+  ImagingUtilizationStats: { // field return type
+    averageStudiesPerPatient: number; // Float!
+    estimatedOperatingHours: number; // Float!
+    imagesPerDay: number; // Float!
+    imagesPerHour: number; // Float!
+    imagesPerMonth: number; // Float!
+    imagesPerWeek: number; // Float!
+    totalImages: number; // Int!
+    utilizationPercentage: number; // Float!
+  }
   LoginPayload: { // field return type
     accessToken: string; // String!
     accessTokenExpiresAt: string; // String!
@@ -886,6 +984,7 @@ export interface NexusGenFieldTypes {
     equipmentLogDelete: boolean | null; // Boolean
     equipmentLogUpdate: boolean | null; // Boolean
     equipmentUpdate: boolean | null; // Boolean
+    generateAnalyticsReport: NexusGenRootTypes['AnalyticsReportPayload'] | null; // AnalyticsReportPayload
     hospitalCreate: boolean | null; // Boolean
     hospitalDelete: boolean | null; // Boolean
     hospitalUpdate: boolean | null; // Boolean
@@ -960,6 +1059,9 @@ export interface NexusGenFieldTypes {
     count: number; // Int!
     data: NexusGenRootTypes['Pharmacy'][] | null; // [Pharmacy!]
   }
+  PredictiveMaintenanceDashboard: { // field return type
+    devices: NexusGenRootTypes['ImagingDeviceAnalytics'][]; // [ImagingDeviceAnalytics!]!
+  }
   Query: { // field return type
     adminMapLocations: NexusGenRootTypes['AdminMapLocationsPayload'] | null; // AdminMapLocationsPayload
     bookingDetail: NexusGenRootTypes['Booking'] | null; // Booking
@@ -975,12 +1077,14 @@ export interface NexusGenFieldTypes {
     hospitalDetail: NexusGenRootTypes['Hospital'] | null; // Hospital
     hospitalOption: NexusGenRootTypes['HospitalOption'][]; // [HospitalOption!]!
     hospitals: NexusGenRootTypes['Hospitals'] | null; // Hospitals
+    imagingDeviceAnalytics: NexusGenRootTypes['ImagingDeviceAnalytics'] | null; // ImagingDeviceAnalytics
     me: NexusGenRootTypes['MePayload'] | null; // MePayload
     memberships: NexusGenRootTypes['Memberships'] | null; // Memberships
     pharmacies: NexusGenRootTypes['Pharmacys'] | null; // Pharmacys
     pharmacyDetail: NexusGenRootTypes['Pharmacy'] | null; // Pharmacy
     pharmacyDrugs: NexusGenRootTypes['PharmacyDrugs'] | null; // PharmacyDrugs
     pharmacyOption: NexusGenRootTypes['PharmacyOption'][]; // [PharmacyOption!]!
+    predictiveMaintenance: NexusGenRootTypes['PredictiveMaintenanceDashboard'] | null; // PredictiveMaintenanceDashboard
     supplierDetail: NexusGenRootTypes['Supplier'] | null; // Supplier
     supplierSupplyItems: NexusGenRootTypes['SupplyItems'] | null; // SupplyItems
     suppliers: NexusGenRootTypes['Suppliers'] | null; // Suppliers
@@ -991,6 +1095,12 @@ export interface NexusGenFieldTypes {
   }
   ResendOtpPayload: { // field return type
     message: string; // String!
+  }
+  RiskPrediction: { // field return type
+    label: string; // String!
+    recommendation: string; // String!
+    riskLevel: string; // String!
+    riskScore: number; // Int!
   }
   SignUpPayload: { // field return type
     message: string; // String!
@@ -1061,6 +1171,17 @@ export interface NexusGenFieldTypes {
   VerifyOtpPayload: { // field return type
     message: string; // String!
   }
+  WorkloadAnalysis: { // field return type
+    busiestDay: string; // String!
+    busiestHour: string; // String!
+    daily: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    hourly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    lowestOperatingHours: string[]; // [String!]!
+    monthly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+    peakOperatingHours: string[]; // [String!]!
+    underutilizedPeriods: string[]; // [String!]!
+    weekly: NexusGenRootTypes['AnalyticsPoint'][]; // [AnalyticsPoint!]!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -1087,6 +1208,18 @@ export interface NexusGenFieldTypeNames {
   AdminMapLocationsPayload: { // field return type name
     drugstores: 'DashboardMapLocation'
     hospitals: 'DashboardMapLocation'
+  }
+  AnalyticsPoint: { // field return type name
+    label: 'String'
+    value: 'Float'
+  }
+  AnalyticsReportPayload: { // field return type name
+    createdAt: 'DateTime'
+    deviceName: 'String'
+    fileName: 'String'
+    id: 'String'
+    pdfBase64: 'String'
+    period: 'String'
   }
   AuthUser: { // field return type name
     email: 'String'
@@ -1169,6 +1302,10 @@ export interface NexusGenFieldTypeNames {
     label: 'String'
     tone: 'String'
     value: 'Int'
+  }
+  DeviceHealth: { // field return type name
+    level: 'String'
+    reasons: 'String'
   }
   Drug: { // field return type name
     availability: 'DrugAvailability'
@@ -1273,6 +1410,29 @@ export interface NexusGenFieldTypeNames {
     count: 'Int'
     data: 'Hospital'
   }
+  ImagingDeviceAnalytics: { // field return type name
+    department: 'String'
+    deviceId: 'String'
+    deviceName: 'String'
+    deviceSlug: 'String'
+    health: 'DeviceHealth'
+    hospital: 'String'
+    period: 'String'
+    predictions: 'RiskPrediction'
+    recommendations: 'String'
+    stats: 'ImagingUtilizationStats'
+    workload: 'WorkloadAnalysis'
+  }
+  ImagingUtilizationStats: { // field return type name
+    averageStudiesPerPatient: 'Float'
+    estimatedOperatingHours: 'Float'
+    imagesPerDay: 'Float'
+    imagesPerHour: 'Float'
+    imagesPerMonth: 'Float'
+    imagesPerWeek: 'Float'
+    totalImages: 'Int'
+    utilizationPercentage: 'Float'
+  }
   LoginPayload: { // field return type name
     accessToken: 'String'
     accessTokenExpiresAt: 'String'
@@ -1310,6 +1470,7 @@ export interface NexusGenFieldTypeNames {
     equipmentLogDelete: 'Boolean'
     equipmentLogUpdate: 'Boolean'
     equipmentUpdate: 'Boolean'
+    generateAnalyticsReport: 'AnalyticsReportPayload'
     hospitalCreate: 'Boolean'
     hospitalDelete: 'Boolean'
     hospitalUpdate: 'Boolean'
@@ -1384,6 +1545,9 @@ export interface NexusGenFieldTypeNames {
     count: 'Int'
     data: 'Pharmacy'
   }
+  PredictiveMaintenanceDashboard: { // field return type name
+    devices: 'ImagingDeviceAnalytics'
+  }
   Query: { // field return type name
     adminMapLocations: 'AdminMapLocationsPayload'
     bookingDetail: 'Booking'
@@ -1399,12 +1563,14 @@ export interface NexusGenFieldTypeNames {
     hospitalDetail: 'Hospital'
     hospitalOption: 'HospitalOption'
     hospitals: 'Hospitals'
+    imagingDeviceAnalytics: 'ImagingDeviceAnalytics'
     me: 'MePayload'
     memberships: 'Memberships'
     pharmacies: 'Pharmacys'
     pharmacyDetail: 'Pharmacy'
     pharmacyDrugs: 'PharmacyDrugs'
     pharmacyOption: 'PharmacyOption'
+    predictiveMaintenance: 'PredictiveMaintenanceDashboard'
     supplierDetail: 'Supplier'
     supplierSupplyItems: 'SupplyItems'
     suppliers: 'Suppliers'
@@ -1415,6 +1581,12 @@ export interface NexusGenFieldTypeNames {
   }
   ResendOtpPayload: { // field return type name
     message: 'String'
+  }
+  RiskPrediction: { // field return type name
+    label: 'String'
+    recommendation: 'String'
+    riskLevel: 'String'
+    riskScore: 'Int'
   }
   SignUpPayload: { // field return type name
     message: 'String'
@@ -1485,6 +1657,17 @@ export interface NexusGenFieldTypeNames {
   VerifyOtpPayload: { // field return type name
     message: 'String'
   }
+  WorkloadAnalysis: { // field return type name
+    busiestDay: 'String'
+    busiestHour: 'String'
+    daily: 'AnalyticsPoint'
+    hourly: 'AnalyticsPoint'
+    lowestOperatingHours: 'String'
+    monthly: 'AnalyticsPoint'
+    peakOperatingHours: 'String'
+    underutilizedPeriods: 'String'
+    weekly: 'AnalyticsPoint'
+  }
 }
 
 export interface NexusGenArgTypes {
@@ -1528,6 +1711,10 @@ export interface NexusGenArgTypes {
     equipmentUpdate: { // args
       id: string; // String!
       input: NexusGenInputs['EquipmentCreateInput']; // EquipmentCreateInput!
+    }
+    generateAnalyticsReport: { // args
+      deviceSlug: string; // String!
+      period: string | null; // String
     }
     hospitalCreate: { // args
       input: NexusGenInputs['HospitalCreateInput']; // HospitalCreateInput!
@@ -1654,6 +1841,10 @@ export interface NexusGenArgTypes {
       skip: number; // Int!
       take: number; // Int!
       where?: NexusGenInputs['HospitalsWhereInput'] | null; // HospitalsWhereInput
+    }
+    imagingDeviceAnalytics: { // args
+      deviceSlug: string; // String!
+      period: string | null; // String
     }
     memberships: { // args
       skip: number; // Int!
